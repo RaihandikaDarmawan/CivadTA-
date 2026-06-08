@@ -288,10 +288,13 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         <div class="space-y-8 text-[18px] text-emerald-950/70 leading-[1.8] font-medium">
                             <p class="first-letter:text-5xl first-letter:font-black first-letter:text-emerald-950 first-letter:mr-3 first-letter:float-left">
-                                CV Arya Duta telah mendedikasikan diri selama lebih dari seperempat abad dalam membangun ekosistem literasi di Indonesia. Berdiri sejak 1998, kami menjadi pilar utama dalam penyediaan buku berkualitas.
+                                CV Arya Duta adalah perusahaan yang berdiri sejak tahun 1998 dan bergerak di bidang percetakan dan penerbitan buku, terutama buku-buku pendidikan. Dengan pengalaman lebih dari dua dekade, kami berkomitmen untuk menyediakan buku-buku berkualitas yang mendukung pendidikan di Indonesia.
                             </p>
                             <p>
-                                Komitmen kami tidak hanya mencetak buku, namun memastikan setiap halaman yang kami terbitkan mampu mencerdaskan kehidupan bangsa melalui standar kurikulum yang presisi.
+                               Kami menyediakan berbagai macam buku pendidikan mulai dari tingkat Sekolah Dasar (SD), Sekolah Menengah Pertama (SMP), hingga Sekolah Menengah Atas (SMA) dengan harga yang terjangkau dan kualitas terbaik.
+                            </p>
+                            <p> 
+                                Melalui sistem informasi penjualan online ini, kami memudahkan pelanggan untuk memesan buku-buku pendidikan dengan praktis dan efisien.
                             </p>
                         </div>
                         <div class="bg-emerald-950 rounded-[32px] md:rounded-[48px] p-8 md:p-12 text-white relative overflow-hidden shadow-2xl transform md:rotate-1 hover:rotate-0 transition-transform duration-700">
@@ -304,6 +307,58 @@
                                 <p class="text-[18px] md:text-[20px] font-medium italic leading-relaxed text-emerald-100">"Literasi adalah pondasi terkuat bagi peradaban yang besar."</p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Details Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-12">
+                <!-- Jam Operasional -->
+                <div class="bg-white p-6 md:p-12 rounded-[40px] md:rounded-[56px] border-2 border-emerald-950 shadow-2xl relative group overflow-hidden">
+                    <div class="w-16 h-16 md:w-20 md:h-20 bg-emerald-950 text-white rounded-2xl md:rounded-3xl flex items-center justify-center mb-8 md:mb-10 shadow-xl transform group-hover:rotate-12 transition-transform duration-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8 md:w-10 md:h-10">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-black text-emerald-950 mb-8 md:mb-10 tracking-tight uppercase tracking-[0.3em] text-[14px] md:text-[16px]">Jam Operasional</h3>
+
+                    <div class="space-y-4 md:space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 md:p-6 bg-emerald-50 rounded-[24px] md:rounded-[28px] border border-emerald-100 transition-colors hover:bg-emerald-100 gap-2">
+                            <span class="text-[14px] md:text-[16px] font-bold text-emerald-900">Senin - Jumat</span>
+                            <span class="text-[16px] md:text-[18px] font-black text-emerald-950">08.00 - 16.00</span>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 md:p-6 bg-emerald-50 rounded-[24px] md:rounded-[28px] border border-emerald-100 transition-colors hover:bg-emerald-100 gap-2">
+                            <span class="text-[14px] md:text-[16px] font-bold text-emerald-900">Sabtu</span>
+                            <span class="text-[16px] md:text-[18px] font-black text-emerald-950">08.00 - 15.00</span>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 md:p-6 bg-rose-50 rounded-[24px] md:rounded-[28px] border border-rose-100 gap-2">
+                            <span class="text-[14px] md:text-[16px] font-bold text-rose-500">Minggu</span>
+                            <span class="text-[16px] md:text-[18px] font-black text-rose-600 uppercase tracking-widest">Closed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Area Layanan -->
+                <div class="bg-white p-12 rounded-[56px] border-2 border-emerald-950 shadow-2xl relative group overflow-hidden">
+                    <div class="w-20 h-20 bg-emerald-950 text-white rounded-3xl flex items-center justify-center mb-10 shadow-xl transform group-hover:-rotate-12 transition-transform duration-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-10 h-10">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-black text-emerald-950 mb-10 tracking-tight uppercase tracking-[0.3em] text-[16px]">Jangkauan Pengiriman</h3>
+
+                    <p class="text-[16px] font-medium text-emerald-950/60 mb-8">Kurir internal kami siap melayani pengiriman kilat untuk wilayah:</p>
+
+                    <div class="flex flex-wrap gap-4 mb-10">
+                        <span class="bg-emerald-950 text-white px-8 py-3 rounded-2xl text-[14px] font-black shadow-xl">Jakarta</span>
+                        <span class="bg-emerald-950 text-white px-8 py-3 rounded-2xl text-[14px] font-black shadow-xl">Tangerang</span>
+                        <span class="bg-emerald-950 text-white px-8 py-3 rounded-2xl text-[14px] font-black shadow-xl">Bekasi</span>
+                    </div>
+
+                    <div class="bg-emerald-50 p-8 rounded-[36px] border-2 border-dashed border-emerald-200 group-hover:border-emerald-950 transition-colors duration-500">
+                        <p class="text-[11px] font-black text-emerald-900/40 uppercase tracking-widest mb-2">Flat Rate Delivery</p>
+                        <p class="text-[28px] font-black text-emerald-950 tracking-tight">Rp 2.800 <span class="text-[14px] font-bold text-emerald-950">/ KM</span></p>
                     </div>
                 </div>
             </div>
@@ -331,7 +386,7 @@
                                 </div>
                                 <div>
                                     <p class="text-sm font-black text-emerald-950">Alamat Utama</p>
-                                    <p class="text-sm text-emerald-900/60 font-medium">Jl. Arya Duta No. 123, Jakarta Timur</p>
+                                    <p class="text-sm text-emerald-900/60 font-medium">Jl. Karyawan 1 No.71, Karang Tengah, Banten, Kota Tangerang - 15157</p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-4">
@@ -340,13 +395,14 @@
                                 </div>
                                 <div>
                                     <p class="text-sm font-black text-emerald-950">Jam Operasional</p>
-                                    <p class="text-sm text-emerald-900/60 font-medium">Senin - Jumat: 08.00 - 17.00</p>
+                                    <p class="text-sm text-emerald-900/60 font-medium">Senin - Jumat: 08.00 - 16.00</p>
+                                    <p class="text-sm text-emerald-900/60 font-medium">Sabtu: 08.00 - 15.00 (Minggu Tutup)</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mt-12">
-                            <a href="https://www.google.com/maps?q=-6.4024844,106.7942625" target="_blank" class="inline-flex items-center gap-3 px-8 py-4 bg-emerald-950 text-white rounded-2xl font-black text-sm shadow-xl hover:bg-emerald-800 transition-all active:scale-95 group">
+                            <a href="https://www.google.com/maps?q=-6.216972,106.71125" target="_blank" class="inline-flex items-center gap-3 px-8 py-4 bg-emerald-950 text-white rounded-2xl font-black text-sm shadow-xl hover:bg-emerald-800 transition-all active:scale-95 group">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-emerald-400"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
                                 Buka di Google Maps
                             </a>
@@ -354,7 +410,7 @@
                     </div>
                     <div class="lg:col-span-2 h-[500px] rounded-[40px] overflow-hidden border-4 border-emerald-50">
                         <iframe 
-                            src="https://maps.google.com/maps?q=-6.4024844,106.7942625&hl=id&z=17&output=embed" 
+                            src="https://maps.google.com/maps?q=-6.216972,106.71125&hl=id&z=17&output=embed" 
                             width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                         </iframe>
                     </div>
@@ -389,9 +445,8 @@
                 <div>
                     <h4 class="text-xs font-black uppercase tracking-[0.2em] mb-8 text-emerald-400">Kontak</h4>
                     <p class="text-sm text-white/60 leading-relaxed">
-                        Jl. Arya Duta No. 123<br>
-                        Jakarta Timur, Indonesia<br>
-                        info@aryaduta.co.id
+                        Jl. Karyawan 1 No.71<br>
+                        Karang Tengah. Banten, Kota Tangerang - 15157<br>
                     </p>
                 </div>
             </div>

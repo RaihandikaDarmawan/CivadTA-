@@ -113,6 +113,13 @@
             </div>
             @endif
 
+            @if(session('success'))
+            <div class="mb-8 p-4 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[13px] rounded-2xl font-bold flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                {{ session('success') }}
+            </div>
+            @endif
+
             <form action="{{ route('login.submit') }}" method="POST" class="space-y-6">
                 @csrf
                 <div class="space-y-2">
@@ -137,6 +144,9 @@
                         <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-6 flex items-center text-emerald-950/30">
                             <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
                         </button>
+                    </div>
+                    <div class="flex justify-end mt-2 px-2">
+                        <a href="{{ route('password.request') }}" class="text-[13px] font-bold text-emerald-950/60 hover:text-emerald-950 transition-colors">Lupa Password?</a>
                     </div>
                 </div>
 

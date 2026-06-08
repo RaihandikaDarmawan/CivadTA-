@@ -99,7 +99,7 @@
                             @foreach(session('cart', []) as $item)
                             <div class="flex items-center gap-4 p-4 bg-emerald-50 rounded-2xl border border-emerald-50">
                                 <div class="w-12 h-12 rounded-xl overflow-hidden bg-white shadow-sm border border-emerald-100 flex-shrink-0">
-                                    <img src="{{ $item['image'] ?? asset('logo.jpg') }}" class="w-full h-full object-cover">
+                                    <img src="{{ $item['image'] ?? (\App\Models\Book::find($item['id'])->image ?? asset('logo.jpg')) }}" class="w-full h-full object-cover">
                                 </div>
                                 <div class="flex-grow">
                                     <p class="text-[13px] font-black text-emerald-950 leading-tight line-clamp-1">{{ $item['title'] }}</p>

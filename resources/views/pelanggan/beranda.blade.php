@@ -117,8 +117,8 @@
 
                 <div class="flex flex-wrap gap-4 mb-10">
                     <span class="bg-emerald-950 text-white px-8 py-3 rounded-2xl text-[14px] font-black shadow-xl">Jakarta</span>
-                    <span class="bg-white border-2 border-emerald-950 text-emerald-950 px-8 py-3 rounded-2xl text-[14px] font-black">Tangerang</span>
-                    <span class="bg-white border-2 border-emerald-950 text-emerald-950 px-8 py-3 rounded-2xl text-[14px] font-black">Bekasi</span>
+                    <span class="bg-emerald-950 text-white px-8 py-3 rounded-2xl text-[14px] font-black shadow-xl">Tangerang</span>
+                    <span class="bg-emerald-950 text-white px-8 py-3 rounded-2xl text-[14px] font-black shadow-xl">Bekasi</span>
                 </div>
 
                 <div class="bg-emerald-50 p-8 rounded-[36px] border-2 border-dashed border-emerald-200 group-hover:border-emerald-950 transition-colors duration-500">

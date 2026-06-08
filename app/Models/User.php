@@ -18,6 +18,17 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\ResetPasswordNotification($token));
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

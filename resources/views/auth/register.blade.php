@@ -197,10 +197,8 @@
                         </div>
                         <select name="daerah" class="w-full pl-16 pr-10 py-5 input-dynamic rounded-[28px] text-[16px] font-bold text-emerald-950 appearance-none cursor-pointer">
                             <option value="Jakarta">Jakarta</option>
-                            <option value="Bandung">Bandung</option>
-                            <option value="Surabaya">Surabaya</option>
-                            <option value="Medan">Medan</option>
-                            <option value="Semarang">Semarang</option>
+                            <option value="Bandung">Tangerang</option>
+                            <option value="Surabaya">Bekasi</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 pr-6 flex items-center pointer-events-none text-emerald-950">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>

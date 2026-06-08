@@ -320,7 +320,7 @@
                             @foreach(session('cart', []) as $item)
                             <div class="flex items-center gap-4 bg-white/5 p-4 rounded-[28px] border border-white/10 hover:bg-white/10 transition-all group">
                                 <div class="w-14 h-14 bg-white/10 rounded-2xl overflow-hidden border border-white/10 flex-shrink-0 shadow-sm">
-                                    <img src="{{ $item['image'] ?? (\App\Models\Book::find($id)->image ?? '') }}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
+                                    <img src="{{ $item['image'] ?? (\App\Models\Book::find($item['id'])->image ?? '') }}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
                                 </div>
                                 <div class="flex-grow min-w-0">
                                     <p class="text-[13px] font-black text-emerald-50 truncate leading-tight mb-2">{{ $item['title'] }}</p>
