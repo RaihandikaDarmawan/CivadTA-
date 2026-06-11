@@ -65,8 +65,6 @@
                 </div>
 
                 <h1 class="text-[32px] md:text-[48px] font-black text-emerald-950 leading-[1.1] tracking-tighter mb-4">{{ $book['title'] }}</h1>
-                <p class="text-emerald-900/60 font-bold text-[14px] uppercase tracking-widest mb-8">Penerbit Arya Duta • Kurikulum Merdeka</p>
-
                 <div class="bg-emerald-50/50 rounded-[32px] p-8 border border-emerald-100 mb-10">
                     <p class="text-[12px] font-black text-emerald-800 uppercase tracking-widest mb-2">Harga Per Buku</p>
                     <div class="flex items-baseline gap-2">
@@ -134,7 +132,7 @@
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-[13px] font-bold text-emerald-900/60 uppercase">Penerbit</span>
-                        <span class="text-[15px] font-black text-emerald-950">Arya Duta</span>
+                        <span class="text-[15px] font-black text-emerald-950">CV. Arya Duta</span>
                     </div>
                 </div>
             </div>

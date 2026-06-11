@@ -29,7 +29,7 @@
 
     <script>
         let map, marker;
-        const GUDANG_COORDS = [-6.1754, 106.8272]; // Monas Area as example warehouse
+        const GUDANG_COORDS = [-6.216968, 106.711253]; // Arya Duta Tangerang
 
         function initMap() {
             map = L.map('map').setView(GUDANG_COORDS, 13);
@@ -65,16 +65,8 @@
             let distance = map.distance(latlng, GUDANG_COORDS) / 1000;
             let roundedDist = Math.max(1, Math.round(distance));
             
-            let select = document.getElementById('jarak');
-            let found = false;
-            for (let i = 0; i < select.options.length; i++) {
-                if (parseInt(select.options[i].value) === roundedDist) {
-                    select.selectedIndex = i;
-                    found = true;
-                    break;
-                }
-            }
-            if(!found) select.selectedIndex = select.options.length - 1;
+            let jarakInput = document.getElementById('jarak');
+            jarakInput.value = roundedDist;
             
             updateSummary();
 
@@ -162,8 +154,7 @@
 
         function updateSummary() {
             let jarakInput = document.getElementById('jarak');
-            let jarakText = jarakInput.options[jarakInput.selectedIndex].text;
-            let jarak = parseInt(jarakText) || 0;
+            let jarak = parseInt(jarakInput.value) || 0;
             let biayaPerKm = 2800;
             let biayaPengiriman = jarak * biayaPerKm;
             
@@ -185,6 +176,17 @@
             document.getElementById('poin_didapat').innerText = basePoin + " Poin";
             
             let diskon = {{ session('active_discount', 0) }};
+            
+            const usePointsCheckbox = document.getElementById('use_points');
+            if (usePointsCheckbox && usePointsCheckbox.checked) {
+                diskon += 10000;
+                document.getElementById('poin_discount_row').classList.remove('hidden');
+            } else {
+                if (document.getElementById('poin_discount_row')) {
+                    document.getElementById('poin_discount_row').classList.add('hidden');
+                }
+            }
+            
             let totalBayarNominal = Math.max(0, totalProduk + biayaPengiriman - diskon);
             
             document.getElementById('ongkir_total').innerText = 'Rp ' + biayaPengiriman.toLocaleString('id-ID');
@@ -204,8 +206,7 @@
 
 @section('content')
     <div class="mb-12 text-center md:text-left">
-        <h1 class="text-[32px] md:text-[48px] font-black text-emerald-950 tracking-tighter leading-none mb-3">Informasi Pengiriman</h1>
-        <p class="text-emerald-900 font-bold text-[12px] md:text-[14px] uppercase tracking-[0.3em]">Selesaikan Pesanan Anda dengan Detail Akurat</p>
+        <h1 class="text-[32px] md:text-[48px] font-black text-emerald-950 tracking-tighter leading-none mb-3">Informasi Pesanan</h1>
     </div>
 
     <form action="{{ url('/pelanggan/pembayaran') }}" method="POST">
@@ -222,8 +223,7 @@
                         </div>
                         <div>
                             <h3 class="text-[18px] font-black text-emerald-950 tracking-tight">Identitas Penerima</h3>
-                            <p class="text-[11px] font-bold text-emerald-900 uppercase tracking-widest mt-0.5">Kontak Pengiriman</p>
-                        </div>
+                            </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -273,13 +273,9 @@
                         <div class="space-y-3">
                             <label class="text-[12px] font-black text-emerald-900 uppercase tracking-widest ml-1">Estimasi Jarak</label>
                             <div class="relative">
-                                <select id="jarak" name="distance_km" onchange="updateSummary()" class="w-full px-6 py-4 rounded-2xl bg-white border-2 border-emerald-950 focus:outline-none text-[15px] font-black text-emerald-950 appearance-none cursor-pointer transition-all">
-                                    @for($i=1; $i<=20; $i++)
-                                    <option value="{{ $i }}" {{ $i == 3 ? 'selected' : '' }}>{{ $i }} km</option>
-                                    @endfor
-                                </select>
-                                <div class="absolute inset-y-0 right-6 flex items-center pointer-events-none text-emerald-950/30">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                                <input type="number" id="jarak" name="distance_km" min="1" value="3" oninput="updateSummary()" onchange="updateSummary()" class="w-full px-6 py-4 rounded-2xl bg-white border-2 border-emerald-950 focus:outline-none text-[15px] font-black text-emerald-950 pr-16 transition-all" required>
+                                <div class="absolute inset-y-0 right-6 flex items-center pointer-events-none text-emerald-950/40">
+                                    <span class="text-[14px] font-black">km</span>
                                 </div>
                             </div>
                             <p class="text-[11px] font-bold text-emerald-900 mt-2 ml-1 italic">*Biaya kirim: Rp 2.800 / KM</p>
@@ -302,6 +298,34 @@
                     <div id="poin_didapat" class="text-[18px] md:text-[24px] font-black text-white bg-white/10 px-6 py-3 rounded-2xl border border-white/10 shadow-inner relative z-10">
                         0 Poin
                     </div>
+                </div>
+
+                <!-- Gunakan Poin Loyalty -->
+                <div class="bg-white p-6 md:p-10 rounded-[40px] border border-emerald-100 shadow-xl">
+                    <div class="flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-emerald-50 text-emerald-950 rounded-2xl flex items-center justify-center border-2 border-emerald-100 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-emerald-950"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0-1.268-.63-2.39-1.593-3.068a3.745 3.745 0 00-1.043-3.296 3.745 3.745 0 00-3.296-1.043A3.745 3.745 0 0012 3c-1.268 0-2.39.63-3.068 1.593a3.746 3.746 0 00-3.296 1.043 3.745 3.745 0 00-1.043 3.296A3.745 3.745 0 003 12c0 1.268.63 2.39 1.593 3.068a3.745 3.745 0 001.043 3.296 3.746 3.746 0 003.296 1.043A3.746 3.746 0 0012 21c1.268 0 2.39-.63 3.068-1.593a3.746 3.746 0 003.296-1.043 3.745 3.745 0 001.043-3.296A3.745 3.745 0 0021 12z" /></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-[18px] font-black text-emerald-950 tracking-tight">Gunakan Poin</h3>
+                                <p class="text-[11px] font-bold text-emerald-900 uppercase tracking-widest mt-0.5">Poin Anda: {{ Auth::user()->points ?? 0 }} Poin</p>
+                            </div>
+                        </div>
+                        <div>
+                            @if((Auth::user()->points ?? 0) >= 100)
+                                <label class="inline-flex items-center cursor-pointer gap-3 bg-emerald-50 px-5 py-3 rounded-2xl border border-emerald-100 hover:bg-emerald-100/50 transition-all select-none">
+                                    <input type="checkbox" id="use_points" name="use_points" value="1" onchange="updateSummary()" class="w-5 h-5 rounded-lg border-2 border-emerald-950 text-emerald-950 focus:ring-emerald-500 focus:ring-2 focus:ring-offset-0 cursor-pointer">
+                                    <span class="text-[12px] font-black text-emerald-950 uppercase tracking-wider">Gunakan 100 Poin</span>
+                                </label>
+                            @else
+                                <span class="text-[11px] font-bold text-emerald-900/50 italic bg-emerald-50 px-4 py-2.5 rounded-xl border border-emerald-50/50">Butuh min. 100 Poin</span>
+                            @endif
+                        </div>
+                    </div>
+                    @if((Auth::user()->points ?? 0) >= 100)
+                        <p class="text-[11px] font-bold text-emerald-900 mt-3 ml-1 italic">*Menggunakan 100 poin akan memotong total belanja Anda sebesar Rp 10.000</p>
+                    @endif
                 </div>
             </div>
 
@@ -358,6 +382,10 @@
                                 <span class="font-black text-rose-400 text-[16px]">- Rp {{ number_format(session('active_discount'), 0, ',', '.') }}</span>
                             </div>
                             @endif
+                            <div id="poin_discount_row" class="flex justify-between items-center text-[14px] hidden">
+                                <span class="font-bold text-rose-400 uppercase tracking-widest text-[11px]">Potongan Poin</span>
+                                <span class="font-black text-rose-400 text-[16px]">- Rp 10.000</span>
+                            </div>
                         </div>
 
                         <div class="bg-white/5 backdrop-blur-md p-8 rounded-[40px] mb-10 border border-white/10 shadow-inner">
@@ -366,7 +394,7 @@
                         </div>
 
                         <button type="submit" class="w-full flex items-center justify-center gap-4 bg-white text-emerald-950 py-5 rounded-2xl text-[16px] font-black shadow-xl hover:bg-emerald-50 hover:scale-[1.02] transition-all active:scale-95 group">
-                            Bayar Sekarang
+                            Buat Pesanan
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5 group-hover:translate-x-1 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
                         </button>
                     </div>

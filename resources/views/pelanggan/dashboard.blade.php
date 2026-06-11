@@ -12,10 +12,10 @@
         <div class="relative z-10 max-w-2xl text-left">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/20 rounded-full border border-emerald-400/20 mb-6">
                 <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                <p class="text-[11px] uppercase tracking-[0.4em] font-black text-emerald-400">Official Catalog</p>
+                <p class="text-[11px] uppercase tracking-[0.4em] font-black text-emerald-400">Katalog Buku</p>
             </div>
-            <h1 class="text-4xl md:text-6xl font-black text-white leading-[1.1] tracking-tighter mb-6 font-serif">Temukan buku pendidikan <br>terbaik untuk <span class="italic text-emerald-400">setiap jenjang</span>.</h1>
-            <p class="text-emerald-100/70 text-lg leading-relaxed max-w-xl font-medium">Jelajahi katalog lengkap kami dengan pilihan buku berkualitas untuk SD, SMP, SMA, serta dukungan layanan pengiriman cepat dan aman.</p>
+            <h1 class="text-4xl md:text-6xl font-black text-white leading-[1.1] tracking-tighter mb-6 font-serif">Temukan buku pendidikan <br>terbaik untuk setiap jenjang.</h1>
+            <p class="text-emerald-100/70 text-lg leading-relaxed max-w-xl font-medium">Jelajahi katalog lengkap kami dengan pilihan buku berkualitas untuk SD/MI, SMP/MTs, MA/SMA/SMK.</p>
         </div>
 
         <div class="relative z-10 hidden lg:block w-[480px] floating">

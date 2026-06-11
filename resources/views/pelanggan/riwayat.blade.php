@@ -29,7 +29,6 @@
 @section('content')
     <div class="mb-12 text-center md:text-left">
         <h1 class="text-[32px] md:text-[48px] font-black text-emerald-950 tracking-tighter mb-3 leading-none">Riwayat Transaksi</h1>
-        <p class="text-emerald-900 font-bold text-[12px] md:text-[14px] uppercase tracking-[0.3em]">Arsip Literasi & Jejak Belanja Anda</p>
     </div>
     
     <div class="max-w-5xl mx-auto w-full flex flex-col gap-8 md:gap-16">
@@ -129,7 +128,7 @@
 
                     <!-- Logistics -->
                     <div>
-                        <h4 class="text-[11px] font-black text-emerald-950 uppercase tracking-[0.3em] mb-6">Info Logistik</h4>
+                        <h4 class="text-[11px] font-black text-emerald-950 uppercase tracking-[0.3em] mb-6">Info Pengiriman</h4>
                         <div class="bg-white p-6 md:p-8 rounded-[32px] border border-emerald-950/5">
                             <div class="flex items-start gap-4">
                                 <div class="w-10 h-10 bg-emerald-50 text-emerald-950 rounded-xl flex items-center justify-center shrink-0 border border-emerald-100">

@@ -20,9 +20,8 @@
 
     <main class="max-w-[1280px] mx-auto px-6 py-12">
         <header class="mb-12">
-            <h1 class="text-[36px] font-black text-emerald-950 tracking-tighter mb-3 leading-none">Konfirmasi Pesanan</h1>
-            <p class="text-emerald-950 font-bold text-[14px] uppercase tracking-widest">Tinjau Pesanan Anda Sebelum Membayar</p>
-        </header>
+            <h1 class="text-[36px] font-black text-emerald-950 tracking-tighter mb-3 leading-none">Pembayaran</h1>
+            </header>
 
         @if(session('error'))
         <div class="mb-8 p-6 bg-red-50 border border-red-100 rounded-[24px] flex items-center gap-4 text-red-600">
@@ -42,6 +41,7 @@
             <input type="hidden" name="latitude" value="{{ $request->latitude }}">
             <input type="hidden" name="longitude" value="{{ $request->longitude }}">
             <input type="hidden" name="distance_km" value="{{ $request->distance_km ?? 3 }}">
+            <input type="hidden" name="use_points" value="{{ $request->use_points ?? 0 }}">
 
             <div class="flex flex-col xl:flex-row gap-12">
                 <div class="flex-grow space-y-8">
@@ -86,6 +86,8 @@
                                     </div>
                                 </div>
                             </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -119,13 +121,28 @@
                                 <span class="font-bold text-emerald-900">Biaya Pengiriman ({{ $request->distance_km ?? 3 }} km)</span>
                                 <span class="font-black text-emerald-500">Rp {{ number_format(($request->distance_km ?? 3) * 2800, 0, ',', '.') }}</span>
                             </div>
+                            @if($request->use_points == '1' && Auth::user()->points >= 100)
+                            <div class="flex justify-between items-center text-[14px]">
+                                <span class="font-bold text-rose-600 uppercase tracking-widest text-[11px]">Potongan Poin Loyalty</span>
+                                <span class="font-black text-rose-600">- Rp 10.000</span>
+                            </div>
+                            @endif
                         </div>
 
                         <div class="bg-emerald-950 p-8 rounded-[32px] text-white mb-10 shadow-xl relative overflow-hidden">
                             <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-emerald-600 rounded-full blur-[60px] opacity-30"></div>
                             <p class="text-[11px] font-black text-emerald-300 uppercase tracking-[0.2em] mb-2 text-center relative z-10">Total Harus Dibayar</p>
                             <p id="total_pembayaran" class="text-[32px] font-black tracking-tighter text-center leading-none relative z-10">
-                                Rp {{ number_format(collect(session('cart', []))->sum(fn($i) => $i['price'] * $i['qty']) + (($request->distance_km ?? 3) * 2800), 0, ',', '.') }}
+                                @php
+                                    $subtotal = collect(session('cart', []))->sum(fn($i) => $i['price'] * $i['qty']);
+                                    $shipping = ($request->distance_km ?? 3) * 2800;
+                                    $discount = session('active_discount', 0);
+                                    if ($request->use_points == '1' && Auth::user()->points >= 100) {
+                                        $discount += 10000;
+                                    }
+                                    $grandTotal = max(0, $subtotal + $shipping - $discount);
+                                @endphp
+                                Rp {{ number_format($grandTotal, 0, ',', '.') }}
                             </p>
                         </div>
 

@@ -21,12 +21,35 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\RegistrationSuccess;
 use Illuminate\Auth\Events\PasswordReset;
 
+// Disable SSL verification on local environment for Midtrans requests
+if (env('APP_ENV', 'local') === 'local') {
+    Config::$curlOptions = [
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+        ],
+    ];
+}
+
 // Landing Page
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
     $banners = Banner::where('is_active', true)->orderBy('order_priority', 'asc')->get();
+    $search = $request->input('search');
+    
+    $query = Book::query();
+    if ($search) {
+        $query->where(function($q) use ($search) {
+            $q->where('title', 'like', '%' . $search . '%')
+              ->orWhere('author', 'like', '%' . $search . '%')
+              ->orWhere('category', 'like', '%' . $search . '%');
+        });
+    }
+    
     return view('welcome', [
-        'dummyBooks' => Book::all(),
-        'banners' => $banners
+        'dummyBooks' => $query->get(),
+        'banners' => $banners,
+        'search' => $search
     ]);
 });
 
@@ -44,7 +67,21 @@ Route::post('/register', function (Request $request) {
         'name' => 'required|string|max:255',
         'username' => 'required|string|max:255|unique:users',
         'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:4|confirmed',
+        'password' => [
+            'required',
+            'string',
+            'confirmed',
+            \Illuminate\Validation\Rules\Password::min(8)
+                ->letters()
+                ->mixedCase()
+                ->numbers(),
+        ],
+    ], [
+        'password.confirmed' => 'Konfirmasi kolom kata sandi tidak sesuai.',
+        'password.min' => 'Kata sandi minimal harus 8 karakter.',
+        'password.letters' => 'Kata sandi harus mengandung setidaknya satu huruf.',
+        'password.mixed' => 'Kata sandi harus mengandung setidaknya 1 huruf besar.',
+        'password.numbers' => 'Kata sandi harus mengandung setidaknya satu angka.',
     ]);
 
     $user = User::create([
@@ -75,22 +112,25 @@ Route::post('/login-submit', function (Request $request) {
 
     $username = $request->input('username');
     $password = $request->input('password');
+    $role = $request->input('role', 'pelanggan');
 
-    // Check admin account first
-    $admin = Admin::where('username', $username)->first();
-    if ($admin && Hash::check($password, $admin->password)) {
-        $request->session()->put('username', $admin->name);
-        $request->session()->put('admin_id', $admin->id);
-        $request->session()->put('role', 'admin');
-        return redirect('/admin/dashboard')->with('success', 'Selamat datang, ' . $admin->name . '!');
-    }
-
-    // Then check customer account
-    if (Auth::attempt(['username' => $username, 'password' => $password])) {
-        $user = Auth::user();
-        $request->session()->put('username', $user->name);
-        $request->session()->put('role', 'pelanggan');
-        return redirect('/pelanggan/dashboard')->with('success', 'Selamat datang, ' . $user->name . '!');
+    if ($role === 'admin') {
+        // Check admin account first
+        $admin = Admin::where('username', $username)->first();
+        if ($admin && Hash::check($password, $admin->password)) {
+            $request->session()->put('username', $admin->name);
+            $request->session()->put('admin_id', $admin->id);
+            $request->session()->put('role', 'admin');
+            return redirect('/admin/dashboard')->with('success', 'Selamat datang, ' . $admin->name . '!');
+        }
+    } else {
+        // Check customer account
+        if (Auth::attempt(['username' => $username, 'password' => $password])) {
+            $user = Auth::user();
+            $request->session()->put('username', $user->name);
+            $request->session()->put('role', 'pelanggan');
+            return redirect('/pelanggan/dashboard')->with('success', 'Selamat datang, ' . $user->name . '!');
+        }
     }
 
     return redirect()->back()->with('error', 'Username atau password salah!');
@@ -111,7 +151,9 @@ Route::get('/forgot-password', function () {
 Route::post('/forgot-password', function (Request $request) {
     $request->validate(['email' => 'required|email']);
 
-    $status = Password::sendResetLink(
+    $broker = \App\Models\Admin::where('email', $request->email)->exists() ? 'admins' : 'users';
+
+    $status = Password::broker($broker)->sendResetLink(
         $request->only('email')
     );
 
@@ -128,10 +170,25 @@ Route::post('/reset-password', function (Request $request) {
     $request->validate([
         'token' => 'required',
         'email' => 'required|email',
-        'password' => 'required|min:4|confirmed',
+        'password' => [
+            'required',
+            'confirmed',
+            \Illuminate\Validation\Rules\Password::min(8)
+                ->letters()
+                ->mixedCase()
+                ->numbers(),
+        ],
+    ], [
+        'password.confirmed' => 'Konfirmasi kolom kata sandi tidak sesuai.',
+        'password.min' => 'Kata sandi minimal harus 8 karakter.',
+        'password.letters' => 'Kata sandi harus mengandung setidaknya satu huruf.',
+        'password.mixed' => 'Kata sandi harus mengandung setidaknya 1 huruf besar.',
+        'password.numbers' => 'Kata sandi harus mengandung setidaknya satu angka.',
     ]);
 
-    $status = Password::reset(
+    $broker = \App\Models\Admin::where('email', $request->email)->exists() ? 'admins' : 'users';
+
+    $status = Password::broker($broker)->reset(
         $request->only('email', 'password', 'password_confirmation', 'token'),
         function ($user, $password) {
             $user->forceFill([
@@ -214,7 +271,7 @@ Route::post('/admin/user/update-points', function (Request $request) {
     $user->increment('points', $pointsToAdd);
     
     // Notify Customer about point addition
-    Notification::send('pelanggan', 'Poin Loyalty Bertambah!', 'Admin telah menambahkan ' . $pointsToAdd . ' poin ke akun Anda.', $user->id, 'success', '/pelanggan/rewards');
+    Notification::send('pelanggan', 'Poin Loyalty Bertambah!', 'Admin telah menambahkan ' . $pointsToAdd . ' poin ke akun Anda.', $user->id, 'success', '/pelanggan/riwayat');
     
     return redirect()->back()->with('success', 'Poin loyalty untuk ' . $user->name . ' berhasil ditambahkan!');
 })->name('admin.user.update-points');
@@ -225,12 +282,27 @@ Route::post('/admin/tambah-admin/submit', function (Request $request) {
     $request->validate([
         'name' => 'required|string|max:255',
         'username' => 'required|string|max:255|unique:admins',
-        'password' => 'required|string|min:4',
+        'email' => 'required|string|email|max:255|unique:admins',
+        'password' => [
+            'required',
+            'string',
+            \Illuminate\Validation\Rules\Password::min(8)
+                ->letters()
+                ->mixedCase()
+                ->numbers(),
+        ],
+    ], [
+        'password.confirmed' => 'Konfirmasi kolom kata sandi tidak sesuai.',
+        'password.min' => 'Kata sandi minimal harus 8 karakter.',
+        'password.letters' => 'Kata sandi harus mengandung setidaknya satu huruf.',
+        'password.mixed' => 'Kata sandi harus mengandung setidaknya 1 huruf besar.',
+        'password.numbers' => 'Kata sandi harus mengandung setidaknya satu angka.',
     ]);
 
     Admin::create([
         'name' => $request->name,
         'username' => $request->username,
+        'email' => $request->email,
         'password' => Hash::make($request->password),
         'daerah' => $request->daerah ?? 'Pusat',
     ]);
@@ -335,35 +407,43 @@ Route::get('/admin/laporan-penjualan/export', function (Request $request) {
     $orders = $query->get();
     $totalRevenue = $orders->where('status', '!=', 'Cancelled')->sum('total_amount');
     
-    $filename = "Laporan_Penjualan_CIVAD_" . date('Y-m-d') . ".doc";
+    $filename = "Laporan_Penjualan_CIVAD_" . date('Y-m-d') . ".csv";
     
-    header("Content-type: application/vnd.ms-word");
-    header("Content-Disposition: attachment;Filename=$filename");
+    header("Content-Type: text/csv; charset=UTF-8");
+    header("Content-Disposition: attachment; filename=$filename");
     header("Pragma: no-cache");
     header("Expires: 0");
 
-    echo "<html>";
-    echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=Windows-1252\">";
-    echo "<body>";
-    echo "<h1 style='text-align:center'>LAPORAN PENJUALAN CIVAD</h1>";
-    echo "<p style='text-align:center'>Periode: " . $periodLabel . "</p>";
-    echo "<hr>";
-    echo "<table border='1' cellpadding='10' cellspacing='0' style='width:100%; border-collapse:collapse'>";
-    echo "<tr style='background:#f4f4f4'><th>No. Pesanan</th><th>Tanggal</th><th>Pelanggan</th><th>Total</th><th>Status</th></tr>";
+    $output = fopen('php://output', 'w');
+    
+    // Add UTF-8 BOM for Excel support
+    fwrite($output, "\xEF\xBB\xBF");
+    
+    // Tell Excel to use comma as separator
+    fwrite($output, "sep=,\r\n");
+
+    fputcsv($output, ["LAPORAN PENJUALAN CIVAD"]);
+    fputcsv($output, ["Periode: " . $periodLabel]);
+    fputcsv($output, []); // Empty spacer line
+
+    // Header row
+    fputcsv($output, ["No. Pesanan", "Tanggal", "Pelanggan", "Total", "Status"]);
+
+    // Data rows
     foreach($orders as $order) {
-        echo "<tr>";
-        echo "<td>#" . $order->order_number . "</td>";
-        echo "<td>" . $order->created_at->format('d/m/Y H:i') . "</td>";
-        echo "<td>" . ($order->user->name ?? 'Guest') . "</td>";
-        echo "<td>Rp " . number_format($order->total_amount, 0, ',', '.') . "</td>";
-        echo "<td>" . $order->status . "</td>";
-        echo "</tr>";
+        fputcsv($output, [
+            "#" . $order->order_number,
+            $order->created_at->format('d/m/Y H:i'),
+            $order->user->name ?? 'Guest',
+            "Rp " . number_format($order->total_amount, 0, ',', '.'),
+            $order->status
+        ]);
     }
-    echo "</table>";
-    echo "<br>";
-    echo "<h3>TOTAL PENDAPATAN: Rp " . number_format($totalRevenue, 0, ',', '.') . "</h3>";
-    echo "</body>";
-    echo "</html>";
+
+    fputcsv($output, []); // Empty spacer line
+    fputcsv($output, ["TOTAL PENDAPATAN", "", "", "Rp " . number_format($totalRevenue, 0, ',', '.')]);
+
+    fclose($output);
     exit;
 });
 
@@ -418,7 +498,7 @@ Route::get('/admin/manajemen-buku', function (\Illuminate\Http\Request $request)
 Route::post('/admin/buku/store', function (Request $request) {
     if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
     
-    $basePrice = (int) $request->input('price');
+    $basePrice = (int) str_replace('.', '', $request->input('price'));
     Book::create([
         'title' => $request->input('title'),
         'author' => $request->input('author') ?? 'Admin',
@@ -438,7 +518,7 @@ Route::post('/admin/buku/update', function (Request $request) {
     if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
     
     $book = Book::findOrFail($request->input('id'));
-    $basePrice = (int) $request->input('price');
+    $basePrice = (int) str_replace('.', '', $request->input('price'));
     
     $book->update([
         'title' => $request->input('title'),
@@ -464,47 +544,6 @@ Route::post('/admin/buku/delete', function (Request $request) {
     return redirect()->back()->with('success', 'Buku telah dihapus dari database!');
 });
 
-// ADMIN BANNER MANAGEMENT
-Route::get('/admin/manajemen-banner', function () {
-    if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
-    return view('admin.manajemen_banner', ['banners' => Banner::orderBy('order_priority', 'asc')->get()]);
-});
-
-Route::post('/admin/banner/store', function (Request $request) {
-    if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
-    
-    Banner::create([
-        'image' => $request->input('image'),
-        'link' => $request->input('link'),
-        'order_priority' => (int) $request->input('order_priority', 0),
-        'is_active' => $request->has('is_active')
-    ]);
-    
-    return redirect()->back()->with('success', 'Banner baru berhasil ditambahkan!');
-});
-
-Route::post('/admin/banner/update', function (Request $request) {
-    if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
-    
-    $banner = Banner::findOrFail($request->input('id'));
-    $banner->update([
-        'image' => $request->input('image'),
-        'link' => $request->input('link'),
-        'order_priority' => (int) $request->input('order_priority', 0),
-        'is_active' => $request->has('is_active')
-    ]);
-    
-    return redirect()->back()->with('success', 'Banner berhasil diperbarui!');
-});
-
-Route::post('/admin/banner/delete', function (Request $request) {
-    if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
-    
-    $banner = Banner::findOrFail($request->input('id'));
-    $banner->delete();
-    
-    return redirect()->back()->with('success', 'Banner berhasil dihapus!');
-});
 
 // CUSTOMER ROUTES
 Route::get('/pelanggan/dashboard', function () {
@@ -609,6 +648,10 @@ Route::post('/pelanggan/konfirmasi-pembayaran', function (Request $request) {
     $shipping = $distanceKm * 2800;
     
     $discount = session('active_discount', 0);
+    $usePoints = $request->input('use_points') == '1';
+    if ($usePoints && $user->points >= 100) {
+        $discount += 10000;
+    }
     $total = max(0, $subtotal + $shipping - $discount);
 
     // Konfigurasi Midtrans
@@ -618,7 +661,7 @@ Route::post('/pelanggan/konfirmasi-pembayaran', function (Request $request) {
     Config::$is3ds = true;
 
     $order = null;
-    DB::transaction(function () use ($user, $orderNumber, $total, $cart, &$order, $request, $shipping) {
+    DB::transaction(function () use ($user, $orderNumber, $total, $cart, &$order, $request, $shipping, $usePoints) {
         $order = Order::create([
             'user_id' => $user->id,
             'order_number' => $orderNumber,
@@ -633,6 +676,10 @@ Route::post('/pelanggan/konfirmasi-pembayaran', function (Request $request) {
             'distance_km' => $request->input('distance_km'),
             'shipping_cost' => $shipping,
         ]);
+
+        if ($usePoints && $user->points >= 100) {
+            $user->decrement('points', 100);
+        }
 
         foreach ($cart as $item) {
             OrderItem::create([
@@ -820,7 +867,18 @@ Route::post('/admin/profil/update', function (Request $request) {
 
 Route::get('/pelanggan/beranda', function () { return view('pelanggan.beranda'); });
 Route::get('/pelanggan/keranjang', function () { return view('pelanggan.keranjang'); });
-Route::get('/pelanggan/pesanan', function () { return view('pelanggan.pesanan'); });
+Route::get('/pelanggan/pesanan', function () {
+    if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
+    
+    $cart = session('cart', []);
+    foreach ($cart as $id => $item) {
+        $book = App\Models\Book::find($id);
+        if (!$book || $item['qty'] > $book->stock) {
+            return redirect('/pelanggan/keranjang')->with('error', 'stok tidak mencukupi, tolong ubah jumlah stok');
+        }
+    }
+    return view('pelanggan.pesanan');
+});
 Route::match(['get', 'post'], '/pelanggan/pembayaran', function (Request $request) { 
     return view('pelanggan.pembayaran', ['request' => $request]); 
 });
@@ -908,57 +966,6 @@ Route::get('/pelanggan/status', function () {
     return view('pelanggan.status', ['orders' => $orders]);
 });
 
-// Reward Routes
-Route::get('/admin/rewards', function() {
-    if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
-    return view('admin.rewards', ['rewards' => App\Models\Reward::all()]);
-});
-
-Route::post('/admin/rewards/store', function(Request $request) {
-    App\Models\Reward::create($request->all());
-    return back()->with('success', 'Penawaran reward berhasil ditambahkan!');
-});
-
-Route::post('/admin/rewards/update', function(Request $request) {
-    $reward = App\Models\Reward::find($request->id);
-    $reward->update($request->all());
-    return back()->with('success', 'Penawaran reward berhasil diperbarui!');
-});
-
-Route::post('/admin/rewards/delete', function(Request $request) {
-    App\Models\Reward::find($request->id)->delete();
-    return back()->with('success', 'Penawaran reward berhasil dihapus!');
-});
-
-Route::get('/pelanggan/rewards', function() {
-    if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
-    return view('pelanggan.rewards', ['rewards' => App\Models\Reward::orderBy('points_required', 'asc')->get()]);
-});
-
-Route::post('/pelanggan/tukar-poin', function(Request $request) {
-    if (session('role') !== 'pelanggan') return response()->json(['success' => false, 'message' => 'Akses ditolak!']);
-    
-    $user = Auth::user();
-    $reward = App\Models\Reward::find($request->input('reward_id'));
-    
-    if (!$reward || $user->points < $reward->points_required) {
-        return response()->json(['success' => false, 'message' => 'Poin tidak mencukupi atau penawaran tidak valid!']);
-    }
-    
-    $user->decrement('points', $reward->points_required);
-    
-    // Store discount in session
-    $currentDiscount = session('active_discount', 0);
-    session(['active_discount' => $currentDiscount + $reward->discount_amount]);
-    
-    // Notify Customer about reward redemption
-    Notification::send('pelanggan', 'Reward Berhasil Ditukar!', 'Potongan harga Rp ' . number_format($reward->discount_amount, 0, ',', '.') . ' telah ditambahkan ke sesi Anda.', $user->id, 'success', '/pelanggan/rewards');
-    
-    return response()->json([
-        'success' => true, 
-        'message' => 'Poin berhasil ditukar! Potongan Rp ' . number_format($reward->discount_amount, 0, ',', '.') . ' akan otomatis terpakai pada pesanan Anda.'
-    ]);
-});
 
 // Notification Routes
 Route::get('/pelanggan/notifications/read-all', function() {

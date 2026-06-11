@@ -56,25 +56,13 @@
                     <img src="{{ asset('logo.jpg') }}" alt="Logo AD" class="h-12 w-auto">
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-white font-black text-3xl tracking-tighter leading-none">Arya Duta</span>
-                    <span class="text-emerald-400 font-bold text-[10px] uppercase tracking-[0.4em] mt-1.5">Official Platform</span>
-                </div>
+                    <span class="text-white font-black text-3xl tracking-tighter leading-none">Arya Duta Tangerang</span></div>
             </div>
 
             <div class="max-w-xl">
-                <div class="mb-10 inline-flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur-md border border-white/10 rounded-full text-emerald-400 text-[11px] font-black uppercase tracking-[0.2em]">
-                    <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_#4ade80]"></span>
-                    Premium Education Since 1998
-                </div>
                 <h2 class="text-6xl font-black text-white leading-[1.1] tracking-tighter mb-10 font-serif">
-                    Gerbang Menuju <br><span class="italic text-emerald-400">Pengetahuan</span> Tanpa Batas.
+                    Gerbang Menuju Ilmu Pengetahuan Tanpa Batas.
                 </h2>
-                <div class="relative pl-12 border-l-4 border-emerald-500/40">
-                    <p class="text-2xl text-emerald-100 font-medium italic leading-relaxed mb-6">
-                        "Membaca adalah alat paling dasar untuk meraih kehidupan yang baik."
-                    </p>
-                    <cite class="text-emerald-400 font-black text-sm uppercase tracking-[0.25em] block">— Joseph Addison</cite>
-                </div>
             </div>
 
             <div class="flex items-center gap-16">
@@ -85,7 +73,7 @@
                 <div class="h-12 w-px bg-white/10"></div>
                 <div>
                     <span class="text-white font-black text-3xl tracking-tight block">10k+</span>
-                    <span class="text-emerald-400 font-bold text-[10px] uppercase tracking-widest opacity-80">Mitra Sekolah</span>
+                    <span class="text-emerald-400 font-bold text-[10px] uppercase tracking-widest opacity-80">Sekolah Terlayani</span>
                 </div>
             </div>
         </div>
@@ -104,7 +92,7 @@
 
             <div class="mb-12">
                 <h1 class="text-4xl font-black text-emerald-950 tracking-tight mb-3">Selamat Datang</h1>
-                <p class="text-emerald-950 font-medium opacity-70">Masuk ke akun Arya Duta Anda.</p>
+                <p class="text-emerald-950 font-medium opacity-70">Masuk ke akun pengguna anda.</p>
             </div>
 
             @if(session('error'))
@@ -122,8 +110,30 @@
 
             <form action="{{ route('login.submit') }}" method="POST" class="space-y-6">
                 @csrf
+                <input type="hidden" name="role" id="login-role" value="pelanggan">
+
                 <div class="space-y-2">
-                    <label class="text-[12px] font-black text-emerald-950 uppercase tracking-[0.2em] ml-2">Username Pengguna</label>
+                    <label class="text-[12px] font-black text-emerald-950 uppercase tracking-[0.2em] ml-2 block mb-3">Login Sebagai</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Column 1: Admin -->
+                        <div id="btn-role-admin" onclick="selectRole('admin')" class="flex flex-col items-center justify-center p-5 rounded-3xl border-2 cursor-pointer transition-all duration-300 bg-white border-emerald-100 text-emerald-900/40 hover:border-emerald-950/20">
+                            <div class="w-10 h-10 bg-emerald-50 text-emerald-950 rounded-xl flex items-center justify-center mb-2 opacity-40">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.248-8.25-3.286zm0 13.036h.008v.008H12v-.008z" /></svg>
+                            </div>
+                            <span class="text-[14px] font-black tracking-tight">Admin</span>
+                        </div>
+                        <!-- Column 2: Pelanggan -->
+                        <div id="btn-role-pelanggan" onclick="selectRole('pelanggan')" class="flex flex-col items-center justify-center p-5 rounded-3xl border-2 cursor-pointer transition-all duration-300 bg-emerald-50 border-emerald-950 text-emerald-950 shadow-md">
+                            <div class="w-10 h-10 bg-emerald-950 text-white rounded-xl flex items-center justify-center mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+                            </div>
+                            <span class="text-[14px] font-black tracking-tight">Pelanggan</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[12px] font-black text-emerald-950 uppercase tracking-[0.2em] ml-2">Username</label>
                     <div class="relative group">
                         <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-emerald-950/30 group-focus-within:text-emerald-950 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
@@ -176,6 +186,28 @@
             } else {
                 pass.type = 'password';
                 icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />';
+            }
+        }
+        function selectRole(role) {
+            document.getElementById('login-role').value = role;
+            
+            const btnAdmin = document.getElementById('btn-role-admin');
+            const btnPelanggan = document.getElementById('btn-role-pelanggan');
+            
+            if (role === 'admin') {
+                btnAdmin.className = "flex flex-col items-center justify-center p-5 rounded-3xl border-2 cursor-pointer transition-all duration-300 bg-emerald-50 border-emerald-950 text-emerald-950 shadow-md";
+                btnAdmin.querySelector('div').className = "w-10 h-10 bg-emerald-950 text-white rounded-xl flex items-center justify-center mb-2";
+                btnAdmin.querySelector('div').classList.remove('opacity-40');
+                
+                btnPelanggan.className = "flex flex-col items-center justify-center p-5 rounded-3xl border-2 cursor-pointer transition-all duration-300 bg-white border-emerald-100 text-emerald-900/40 hover:border-emerald-950/20";
+                btnPelanggan.querySelector('div').className = "w-10 h-10 bg-emerald-50 text-emerald-950 rounded-xl flex items-center justify-center mb-2 opacity-40";
+            } else {
+                btnPelanggan.className = "flex flex-col items-center justify-center p-5 rounded-3xl border-2 cursor-pointer transition-all duration-300 bg-emerald-50 border-emerald-950 text-emerald-950 shadow-md";
+                btnPelanggan.querySelector('div').className = "w-10 h-10 bg-emerald-950 text-white rounded-xl flex items-center justify-center mb-2";
+                btnPelanggan.querySelector('div').classList.remove('opacity-40');
+                
+                btnAdmin.className = "flex flex-col items-center justify-center p-5 rounded-3xl border-2 cursor-pointer transition-all duration-300 bg-white border-emerald-100 text-emerald-900/40 hover:border-emerald-950/20";
+                btnAdmin.querySelector('div').className = "w-10 h-10 bg-emerald-50 text-emerald-950 rounded-xl flex items-center justify-center mb-2 opacity-40";
             }
         }
     </script>

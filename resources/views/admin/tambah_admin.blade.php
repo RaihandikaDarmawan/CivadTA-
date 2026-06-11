@@ -72,24 +72,16 @@
                             </div>
 
                             <div class="space-y-3">
-                                <label class="text-[13px] font-black text-emerald-900 uppercase tracking-widest ml-1 opacity-60">Wilayah Penugasan</label>
+                                <label class="text-[13px] font-black text-emerald-900 uppercase tracking-widest ml-1 opacity-60">Alamat Email Admin</label>
                                 <div class="relative group">
                                     <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-emerald-900/30 group-focus-within:text-emerald-950 transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
                                     </div>
-                                    <select name="daerah" class="w-full pl-15 pr-8 py-5 bg-emerald-50/50 border border-emerald-100 rounded-[28px] text-[15px] font-black text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-950 transition-all appearance-none cursor-pointer">
-                                        <option value="Pusat">Pusat (Headquarters)</option>
-                                        <option value="Jakarta">Jakarta</option>
-                                        <option value="Tangerang">Tangerang</option>
-                                        <option value="Bandung">Bandung</option>
-                                    </select>
-                                    <div class="absolute inset-y-0 right-8 flex items-center pointer-events-none text-emerald-950">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
-                                    </div>
+                                    <input type="email" name="email" placeholder="raihan@civad.com" required class="w-full pl-15 pr-8 py-5 bg-emerald-50/50 border border-emerald-100 rounded-[28px] text-[15px] font-black text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-950 transition-all placeholder:text-emerald-900/20">
                                 </div>
                             </div>
                         </div>
-
+                            
                         <div class="flex items-center gap-6 pt-10">
                             <button type="submit" class="flex-2 bg-emerald-950 text-white py-5 px-10 rounded-[28px] text-[16px] font-black hover:bg-emerald-900 transition-all shadow-2xl shadow-emerald-950/20 active:scale-95 flex items-center justify-center gap-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>

@@ -58,24 +58,14 @@
                     <img src="{{ asset('logo.jpg') }}" alt="Logo AD" class="h-12 w-auto">
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-white font-black text-3xl tracking-tighter leading-none">Arya Duta</span>
-                    <span class="text-emerald-400 font-bold text-[10px] uppercase tracking-[0.4em] mt-1.5">Official Platform</span>
+                    <span class="text-white font-black text-3xl tracking-tighter leading-none">Arya Duta Tangerang</span>
                 </div>
             </div>
 
             <div class="max-w-xl">
                 <div class="mb-10 inline-flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur-md border border-white/10 rounded-full text-emerald-400 text-[11px] font-black uppercase tracking-[0.2em]">
                     <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_#4ade80]"></span>
-                    Premium Education Since 1998
-                </div>
-                <h2 class="text-6xl font-black text-white leading-[1.1] tracking-tighter mb-10 font-serif">
-                    Mulai Perjalanan <br><span class="italic text-emerald-400">Literasi</span> Anda Sekarang.
-                </h2>
-                <div class="relative pl-12 border-l-4 border-emerald-500/40">
-                    <p class="text-2xl text-emerald-100 font-medium italic leading-relaxed mb-6">
-                        "Investasi terbaik untuk masa depan adalah melalui ilmu pengetahuan."
-                    </p>
-                    <cite class="text-emerald-400 font-black text-sm uppercase tracking-[0.25em] block">— Arya Duta Publishing</cite>
+                    Yuk Bergabung Sebagai Pelanggan Arya Duta Tangerang Sekarang
                 </div>
             </div>
 
@@ -116,8 +106,7 @@
 
             <div class="mb-12">
                 <h1 class="text-4xl font-black text-emerald-950 tracking-tighter mb-4">Daftar Akun</h1>
-                <p class="text-emerald-950/70 font-semibold text-lg leading-relaxed">Bergabunglah dengan komunitas literasi terbesar di Indonesia.</p>
-            </div>
+               </div>
 
             @if($errors->any())
             <div class="mb-8 p-6 bg-red-50 border border-red-100 text-red-600 text-[13px] rounded-3xl font-bold animate-in fade-in slide-in-from-top-2">

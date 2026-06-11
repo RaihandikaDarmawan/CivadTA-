@@ -6,9 +6,8 @@
     <div class="hidden md:flex items-center gap-3 text-[12px] font-black text-emerald-500 uppercase tracking-widest mb-2">
         <a href="{{ url('/admin/dashboard') }}" class="hover:text-white transition-colors text-emerald-500">Admin</a>
         <span class="text-white/20">/</span>
-        <span class="text-white">Marketing</span>
+        <span class="text-white">Manajemen Banner</span>
     </div>
-    <h2 class="text-base md:text-[28px] font-black text-white tracking-tighter leading-none truncate max-w-[180px] md:max-w-none">Manajemen Banner</h2>
 @endsection
 
 @section('topbar_actions')

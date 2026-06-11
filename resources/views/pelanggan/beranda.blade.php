@@ -50,7 +50,7 @@
             <div class="relative z-10">
                 <div class="flex items-center gap-4 mb-12">
                     <span class="w-20 h-2 bg-emerald-950 rounded-full"></span>
-                    <h2 class="text-[32px] font-black text-emerald-950 tracking-tight uppercase tracking-widest">Identitas Arya Duta</h2>
+                    <h2 class="text-[32px] font-black text-emerald-950 tracking-tight uppercase tracking-widest">Identitas Arya Duta Tangerang</h2>
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">

@@ -76,8 +76,7 @@
                     <img src="{{ asset('logo.jpg') }}" alt="Logo AD" class="h-8 w-auto">
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-white font-black text-xl tracking-tighter leading-none">Arya Duta</span>
-                    <span class="text-emerald-400 font-black text-[9px] uppercase tracking-[0.3em] mt-1">Publishing</span>
+                    <span class="text-white font-black text-xl tracking-tighter leading-none">Arya Duta Tangerang</span>
                 </div>
             </div>
             
@@ -115,16 +114,11 @@
             <div class="animate-in fade-in slide-in-from-left duration-1000 text-center lg:text-left flex flex-col items-center lg:items-start">
                 <div class="inline-flex items-center gap-3 px-4 py-2 bg-emerald-100 rounded-full text-emerald-700 text-[10px] font-black uppercase tracking-[0.2em] mb-8">
                     <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Solusi Literasi Nasional
+                    Yuk Belanja Sekarang
                 </div>
                 <h1 class="text-3xl md:text-6xl lg:text-8xl font-black text-emerald-950 leading-[0.9] tracking-tighter mb-8">
-                    Mencerdaskan <br>
-                    <span class="italic font-serif text-emerald-600">Generasi</span> <br>
-                    Bangsa.
+                    Mencerdaskan Generasi Bangsa.
                 </h1>
-                <p class="text-lg text-emerald-900/80 max-w-[500px] leading-relaxed mb-10 font-medium">
-                    Mitra terpercaya dalam penyediaan buku pendidikan berkualitas untuk seluruh jenjang sekolah di Indonesia sejak 1998.
-                </p>
 
                 <div class="flex flex-wrap items-center gap-6 justify-center lg:justify-start">
                         <a href="{{ url('/login') }}" class="px-10 py-5 bg-emerald-950 text-white rounded-[24px] font-black text-[16px] shadow-2xl hover:bg-emerald-800 transition-all active:scale-95 flex items-center gap-4 group">
@@ -142,11 +136,6 @@
                     <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1740&auto=format&fit=crop" class="w-full h-full object-cover" alt="Arya Duta Education">
                     <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/60 to-transparent"></div>
                     <div class="absolute bottom-10 left-10 right-10">
-                        <div class="glass p-6 rounded-[32px] text-white">
-                            <p class="text-xs font-black uppercase tracking-widest opacity-80 mb-2">Penerbit Terpercaya</p>
-                            <h3 class="text-2xl font-black tracking-tight">Kualitas Materi Terbaik untuk Kurikulum Merdeka</h3>
-                        </div>
-                    </div>
                 </div>
                 <!-- Decorative Circles -->
                 <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-accent-amber rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
@@ -168,11 +157,11 @@
                 </div>
                 <div class="text-center group pt-6 md:pt-0">
                     <p class="text-3xl md:text-5xl font-black text-emerald-950 mb-2 group-hover:text-emerald-500 transition-colors">10k+</p>
-                    <p class="text-[9px] md:text-[10px] font-black text-emerald-900/60 uppercase tracking-[0.2em] md:tracking-[0.3em]">Mitra Sekolah</p>
+                    <p class="text-[9px] md:text-[10px] font-black text-emerald-900/60 uppercase tracking-[0.2em] md:tracking-[0.3em]">Sekolah Terlayani</p>
                 </div>
                 <div class="text-center group pt-6 md:pt-0">
                     <p class="text-3xl md:text-5xl font-black text-emerald-950 mb-2 group-hover:text-emerald-500 transition-colors">100%</p>
-                    <p class="text-[9px] md:text-[10px] font-black text-emerald-900/60 uppercase tracking-[0.2em] md:tracking-[0.3em]">Integritas</p>
+                    <p class="text-[9px] md:text-[10px] font-black text-emerald-900/60 uppercase tracking-[0.2em] md:tracking-[0.3em]">Terpercaya</p>
                 </div>
             </div>
         </div>
@@ -207,7 +196,7 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
                 <div>
-                    <h2 class="text-5xl font-black text-emerald-950 tracking-tighter leading-none mb-4">Katalog Unggulan</h2>
+                    <h2 class="text-5xl font-black text-emerald-950 tracking-tighter leading-none mb-4">Katalog Buku</h2>
                     <p class="text-emerald-600 font-bold uppercase tracking-[0.2em] text-xs">Temukan referensi belajar terbaik untuk siswa</p>
                 </div>
                 <a href="{{ url('/login?role=pelanggan') }}" class="group inline-flex items-center gap-3 text-sm font-black text-emerald-950 hover:text-emerald-600 transition-colors">
@@ -218,8 +207,29 @@
                 </a>
             </div>
 
+            <!-- Search Bar -->
+            <form action="{{ url('/#katalog') }}" method="GET" class="mb-12 max-w-2xl">
+                <div class="relative flex items-center group">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 absolute left-6 text-emerald-950/40 group-focus-within:text-emerald-600 transition-colors">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari judul buku, penulis, atau jenjang..." class="w-full bg-white border-2 border-emerald-950 rounded-[24px] py-5 pl-16 pr-[200px] text-[15px] font-bold text-emerald-950 focus:outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/5 transition-all placeholder:text-emerald-950/30">
+                    
+                    <div class="absolute right-3 flex items-center gap-3">
+                        @if(request('search'))
+                            <a href="{{ url('/#katalog') }}" class="text-emerald-950/50 hover:text-rose-500 transition-colors font-black text-xs uppercase tracking-widest mr-2">
+                                ✕ Reset
+                            </a>
+                        @endif
+                        <button type="submit" class="bg-emerald-950 hover:bg-emerald-900 text-white font-black text-xs uppercase tracking-widest px-6 py-3.5 rounded-[18px] transition-all duration-300">
+                            Cari
+                        </button>
+                    </div>
+                </div>
+            </form>
+
             <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-10">
-                @foreach($dummyBooks as $book)
+                @forelse($dummyBooks as $book)
                 <div class="bg-white border-2 border-emerald-950 rounded-[36px] p-5 shadow-2xl flex flex-col relative overflow-hidden group hover:-translate-y-3 transition-all duration-500 hover:shadow-emerald-900/20 h-full">
 
                     <!-- Image Wrapper -->
@@ -267,7 +277,16 @@
                         </div>
                     </div>
                 </div>
-                @endforeach
+                @empty
+                <div class="col-span-full py-16 text-center">
+                    <div class="w-24 h-24 bg-white rounded-3xl border-2 border-emerald-950 flex items-center justify-center mx-auto mb-6 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-12 h-12 text-emerald-950/40"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" /></svg>
+                    </div>
+                    <p class="text-emerald-950 font-black text-2xl mb-2 tracking-tight">Buku Tidak Ditemukan</p>
+                    <p class="text-emerald-600/70 font-bold text-sm">Tidak ada buku yang cocok dengan pencarian "{{ request('search') }}".</p>
+                    <a href="{{ url('/#katalog') }}" class="inline-block mt-6 px-6 py-3 bg-emerald-950 text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-emerald-900 transition-colors">Tampilkan Semua Buku</a>
+                </div>
+                @endforelse
             </div>
         </div>
     </section>
@@ -291,10 +310,9 @@
                                 CV Arya Duta adalah perusahaan yang berdiri sejak tahun 1998 dan bergerak di bidang percetakan dan penerbitan buku, terutama buku-buku pendidikan. Dengan pengalaman lebih dari dua dekade, kami berkomitmen untuk menyediakan buku-buku berkualitas yang mendukung pendidikan di Indonesia.
                             </p>
                             <p>
-                               Kami menyediakan berbagai macam buku pendidikan mulai dari tingkat Sekolah Dasar (SD), Sekolah Menengah Pertama (SMP), hingga Sekolah Menengah Atas (SMA) dengan harga yang terjangkau dan kualitas terbaik.
-                            </p>
+                               Tersedia berbagai macam buku pendidikan untuk jenjang pendidikan dasar, menengah, hingga menengah atas sederajat, dengan harga yang terjangkau dan kualitas terbaik.</p>
                             <p> 
-                                Melalui sistem informasi penjualan online ini, kami memudahkan pelanggan untuk memesan buku-buku pendidikan dengan praktis dan efisien.
+                                Melalui website ini memudahkan pelanggan untuk memesan buku-buku pendidikan dengan praktis dan efisien.
                             </p>
                         </div>
                         <div class="bg-emerald-950 rounded-[32px] md:rounded-[48px] p-8 md:p-12 text-white relative overflow-hidden shadow-2xl transform md:rotate-1 hover:rotate-0 transition-transform duration-700">
@@ -304,7 +322,7 @@
                             <div class="relative z-10">
                                 <div class="text-4xl md:text-[64px] font-black leading-none mb-4 text-emerald-400">25+</div>
                                 <p class="text-[14px] md:text-[16px] font-black uppercase tracking-[0.3em] mb-6 md:mb-8 text-white/50">Tahun Pengalaman</p>
-                                <p class="text-[18px] md:text-[20px] font-medium italic leading-relaxed text-emerald-100">"Literasi adalah pondasi terkuat bagi peradaban yang besar."</p>
+                                <p class="text-[18px] md:text-[20px] font-medium italic leading-relaxed text-emerald-100">"Setiap buku adalah gerbang menuju ilmu, wawasan, dan masa depan yang lebih baik."</p>
                             </div>
                         </div>
                     </div>
@@ -333,7 +351,7 @@
                         </div>
                         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 md:p-6 bg-rose-50 rounded-[24px] md:rounded-[28px] border border-rose-100 gap-2">
                             <span class="text-[14px] md:text-[16px] font-bold text-rose-500">Minggu</span>
-                            <span class="text-[16px] md:text-[18px] font-black text-rose-600 uppercase tracking-widest">Closed</span>
+                            <span class="text-[16px] md:text-[18px] font-black text-rose-600 uppercase tracking-widest">Tutup</span>
                         </div>
                     </div>
                 </div>
@@ -348,7 +366,7 @@
                     </div>
                     <h3 class="font-black text-emerald-950 mb-10 tracking-tight uppercase tracking-[0.3em] text-[16px]">Jangkauan Pengiriman</h3>
 
-                    <p class="text-[16px] font-medium text-emerald-950/60 mb-8">Kurir internal kami siap melayani pengiriman kilat untuk wilayah:</p>
+                    <p class="text-[16px] font-medium text-emerald-950/60 mb-8">Siap melayani pengiriman untuk wilayah:</p>
 
                     <div class="flex flex-wrap gap-4 mb-10">
                         <span class="bg-emerald-950 text-white px-8 py-3 rounded-2xl text-[14px] font-black shadow-xl">Jakarta</span>
@@ -357,7 +375,7 @@
                     </div>
 
                     <div class="bg-emerald-50 p-8 rounded-[36px] border-2 border-dashed border-emerald-200 group-hover:border-emerald-950 transition-colors duration-500">
-                        <p class="text-[11px] font-black text-emerald-900/40 uppercase tracking-widest mb-2">Flat Rate Delivery</p>
+                        <p class="text-[11px] font-black text-emerald-900/40 uppercase tracking-widest mb-2">Biaya Pengiriman</p>
                         <p class="text-[28px] font-black text-emerald-950 tracking-tight">Rp 2.800 <span class="text-[14px] font-bold text-emerald-950">/ KM</span></p>
                     </div>
                 </div>
@@ -371,14 +389,7 @@
             <div class="bg-white p-8 rounded-[56px] border-2 border-emerald-950 shadow-2xl overflow-hidden relative group">
                 <div class="grid lg:grid-cols-3 gap-12 items-center">
                     <div class="lg:col-span-1 p-8">
-                        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-100 rounded-full text-emerald-700 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
-                            <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                            Headquarters
-                        </div>
-                        <h2 class="text-4xl font-black text-emerald-950 tracking-tight mb-6">Kunjungi Kantor Kami</h2>
-                        <p class="text-emerald-900/60 mb-8 font-medium leading-relaxed">
-                            Kami berlokasi di pusat strategis untuk melayani seluruh kebutuhan literasi Anda. Silakan kunjungi kantor kami untuk konsultasi langsung.
-                        </p>
+                        <h2 class="text-4xl font-black text-emerald-950 tracking-tight mb-6">Kunjungi Toko</h2>
                         <div class="space-y-6">
                             <div class="flex items-start gap-4">
                                 <div class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
@@ -396,7 +407,8 @@
                                 <div>
                                     <p class="text-sm font-black text-emerald-950">Jam Operasional</p>
                                     <p class="text-sm text-emerald-900/60 font-medium">Senin - Jumat: 08.00 - 16.00</p>
-                                    <p class="text-sm text-emerald-900/60 font-medium">Sabtu: 08.00 - 15.00 (Minggu Tutup)</p>
+                                    <p class="text-sm text-emerald-900/60 font-medium">Sabtu: 08.00 - 15.00</p>
+                                    <p class="text-sm text-emerald-900/60 font-medium">Minggu & Libur Nasional: Tutup</p>
                                 </div>
                             </div>
                         </div>
@@ -431,8 +443,8 @@
                         <span class="text-3xl font-black tracking-tighter">Arya Duta</span>
                     </div>
                     <p class="text-emerald-100/60 max-w-sm leading-relaxed font-medium">
-                        Membangun masa depan Indonesia melalui literasi berkualitas dan teknologi pencetakan modern.
-                    </p>
+                     Jl. Karyawan 1 No.71 Karang Tengah. Banten, Kota Tangerang - 15157  
+                </p>
                 </div>
                 <div>
                     <h4 class="text-xs font-black uppercase tracking-[0.2em] mb-8 text-emerald-400">Navigasi</h4>
@@ -445,8 +457,7 @@
                 <div>
                     <h4 class="text-xs font-black uppercase tracking-[0.2em] mb-8 text-emerald-400">Kontak</h4>
                     <p class="text-sm text-white/60 leading-relaxed">
-                        Jl. Karyawan 1 No.71<br>
-                        Karang Tengah. Banten, Kota Tangerang - 15157<br>
+                        0858-1119-7530
                     </p>
                 </div>
             </div>

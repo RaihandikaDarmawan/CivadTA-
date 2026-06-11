@@ -6,8 +6,10 @@
     <script>
         function openDetailModal(order) {
             document.getElementById('modal-order-number').innerText = order.order_number;
-            document.getElementById('modal-customer-name').innerText = order.user.name;
+            document.getElementById('modal-customer-name').innerText = order.recipient_name || (order.user ? order.user.name : '-');
+            document.getElementById('modal-phone-number').innerText = order.phone_number || '-';
             document.getElementById('modal-order-date').innerText = new Date(order.created_at).toLocaleString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' WIB';
+            document.getElementById('modal-distance').innerText = order.distance_km ? order.distance_km + ' km' : '-';
             document.getElementById('modal-total-payment').innerText = 'Rp ' + new Number(order.total_amount).toLocaleString('id-ID');
             document.getElementById('modal-order-id-input').value = order.id;
             document.getElementById('modal-rejection-reason').value = order.rejection_reason || '';
@@ -91,10 +93,9 @@
     <div class="hidden md:flex items-center gap-3 text-[12px] font-black text-emerald-500 uppercase tracking-widest mb-2">
         <a href="{{ url('/admin/dashboard') }}" class="hover:text-white transition-colors">Admin</a>
         <span class="text-white/20">/</span>
-        <span class="text-white">Pesanan</span>
+        <span class="text-white">Manajemen Pesanan</span>
     </div>
-    <h2 class="text-base md:text-[28px] font-black text-white tracking-tighter leading-none truncate max-w-[180px] md:max-w-none">Daftar Transaksi</h2>
-@endsection
+    @endsection
 
 @section('content')
     <!-- Search & Filter -->
@@ -165,7 +166,7 @@
                         $accentColor = $statusColors[$displayStatus] ?? 'emerald';
                     @endphp
                     <tr class="order-row hover:bg-emerald-50/50 transition-all duration-300 group border-b-2 border-emerald-50/80 last:border-0 relative"
-                        data-search="{{ $order->order_number }} {{ $order->user->name ?? '' }}"
+                        data-search="{{ $order->order_number }} {{ $order->user->name ?? '' }} {{ $order->recipient_name ?? '' }} {{ $order->phone_number ?? '' }}"
                         data-status="{{ $displayStatus }}">
                         <td class="px-10 py-8 relative">
                             <!-- Status Indicator Bar -->
@@ -179,7 +180,6 @@
                                 </div>
                                 <div>
                                     <p class="font-black text-emerald-950 text-[15px] leading-tight">{{ $order->user->name ?? 'Unknown' }}</p>
-                                    <p class="text-[10px] font-black text-emerald-950 uppercase tracking-widest mt-1 italic">Loyal Customer</p>
                                 </div>
                             </div>
                         </td>
@@ -249,7 +249,6 @@
             <div class="px-12 py-10 border-b border-emerald-50 bg-emerald-50/20 flex items-center justify-between">
                 <div>
                     <h3 class="text-[28px] font-black text-emerald-950 tracking-tighter leading-none">Rincian Transaksi <span id="modal-order-number" class="text-emerald-600 italic"></span></h3>
-                    <p class="text-[12px] font-black text-emerald-600 uppercase tracking-[0.2em] mt-2">Logistik & Verifikasi Pesanan</p>
                 </div>
                 <button onclick="closeDetailModal()" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white shadow-xl border border-emerald-100 text-emerald-950 hover:bg-rose-500 hover:text-white transition-all transform hover:rotate-90 duration-500 font-bold">✕</button>
             </div>
@@ -260,7 +259,7 @@
                     <div class="space-y-6">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-2 h-6 bg-emerald-950 rounded-full"></div>
-                            <h4 class="text-[14px] font-black text-emerald-950 uppercase tracking-[0.2em]">Koleksi Buku Dipesan</h4>
+                            <h4 class="text-[14px] font-black text-emerald-950 uppercase tracking-[0.2em]">Buku yang Dipesan</h4>
                         </div>
                         <div id="modal-items-container" class="space-y-4">
                             <!-- JS Injection -->
@@ -280,7 +279,7 @@
                         <div class="space-y-6">
                             <div class="flex items-center gap-3 mb-4">
                                 <div class="w-2 h-6 bg-emerald-950 rounded-full"></div>
-                                <h4 class="text-[14px] font-black text-emerald-950 uppercase tracking-[0.2em]">Informasi Logistik</h4>
+                                <h4 class="text-[14px] font-black text-emerald-950 uppercase tracking-[0.2em]">Informasi Penerima</h4>
                             </div>
                             
                             <div class="bg-white p-8 rounded-[40px] border-2 border-emerald-100 shadow-sm space-y-6">
@@ -289,8 +288,16 @@
                                     <p id="modal-customer-name" class="text-[18px] font-black text-emerald-950">-</p>
                                 </div>
                                 <div class="space-y-1">
+                                    <span class="text-[11px] font-black text-emerald-600 uppercase tracking-widest opacity-60">No. Handphone</span>
+                                    <p id="modal-phone-number" class="text-[18px] font-black text-emerald-950">-</p>
+                                </div>
+                                <div class="space-y-1">
                                     <span class="text-[11px] font-black text-emerald-600 uppercase tracking-widest opacity-60">Waktu Pembelian</span>
                                     <p id="modal-order-date" class="text-[14px] font-bold text-emerald-900">-</p>
+                                </div>
+                                <div class="space-y-1">
+                                    <span class="text-[11px] font-black text-emerald-600 uppercase tracking-widest opacity-60">Estimasi Jarak</span>
+                                    <p id="modal-distance" class="text-[14px] font-bold text-emerald-900">-</p>
                                 </div>
                                 <div class="pt-6 border-t border-emerald-50">
                                     <span class="text-[11px] font-black text-emerald-600 uppercase tracking-widest opacity-60 block mb-3">Titik Navigasi</span>

@@ -1,14 +1,13 @@
 @extends('layouts.admin_premium')
 
-@section('title', 'Kelola User')
+@section('title', 'Data Pelanggan')
 
 @section('header')
     <div class="hidden md:flex items-center gap-3 text-[12px] font-black text-emerald-500 uppercase tracking-widest mb-2">
         <a href="{{ url('/admin/dashboard') }}" class="hover:text-white transition-colors text-emerald-500">Admin</a>
         <span class="text-white/20">/</span>
-        <span class="text-white">Users</span>
+        <span class="text-white">Data Pelanggan</span>
     </div>
-    <h2 class="text-base md:text-[28px] font-black text-white tracking-tighter leading-none truncate max-w-[180px] md:max-w-none">Manajemen Pengguna</h2>
 @endsection
 
 @section('content')
@@ -64,7 +63,6 @@
         <div class="flex items-center justify-between mb-8 px-4">
             <div>
                 <h3 class="text-[24px] font-black text-emerald-950 tracking-tighter">Daftar Admin</h3>
-                <p class="text-[12px] font-bold text-emerald-950 uppercase tracking-widest mt-1">Staf dengan hak akses sistem</p>
             </div>
             <button onclick="openAddAdminModal()" class="bg-emerald-950 text-white px-8 py-4 rounded-[22px] text-[13px] font-black hover:bg-emerald-900 transition-all shadow-xl shadow-emerald-950/20 flex items-center gap-3 active:scale-95 group">
                 <div class="w-6 h-6 bg-white/10 rounded-lg flex items-center justify-center group-hover:rotate-90 transition-transform duration-500">
@@ -81,7 +79,6 @@
                         <tr class="text-[11px] font-black uppercase tracking-[0.2em] text-emerald-100 bg-emerald-950">
                             <th class="px-10 py-6">Profil Admin</th>
                             <th class="px-10 py-6">ID Username</th>
-                            <th class="px-10 py-6">Wilayah Tugas</th>
                             <th class="px-10 py-6 text-center">Tindakan</th>
                         </tr>
                     </thead>
@@ -103,12 +100,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-10 py-7 font-black text-emerald-950 tracking-tight">@ {{ $admin->username }}</td>
-                            <td class="px-10 py-7">
-                                <span class="inline-block px-4 py-1.5 bg-emerald-950 text-emerald-100 text-[10px] font-black rounded-xl border border-emerald-800 uppercase tracking-widest shadow-sm">
-                                    {{ $admin->daerah ?? 'Pusat' }}
-                                </span>
-                            </td>
+                            <td class="px-10 py-7 font-black text-emerald-950 tracking-tight">{{ $admin->username }}</td>
                             <td class="px-10 py-7">
                                 <div class="flex items-center justify-center gap-3">
                                     <button onclick="openDeleteModal('{{ $admin->id }}', '{{ $admin->name }}', 'admin')" class="w-11 h-11 flex items-center justify-center text-rose-500 bg-rose-50 hover:bg-rose-500 hover:text-white rounded-xl transition-all duration-300 shadow-sm">
@@ -118,7 +110,7 @@
                             </td>
                         </tr>
                         @empty
-                        <tr><td colspan="4" class="px-10 py-16 text-center text-emerald-900/30 font-bold italic">Tidak ada administrator ditemukan.</td></tr>
+                        <tr><td colspan="3" class="px-10 py-16 text-center text-emerald-900/30 font-bold italic">Tidak ada administrator ditemukan.</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -129,19 +121,19 @@
     <!-- CUSTOMER TABLE SECTION -->
     <div>
         <div class="mb-8 px-4">
-            <h3 class="text-[24px] font-black text-emerald-950 tracking-tighter">Database Pelanggan</h3>
-            <p class="text-[12px] font-bold text-emerald-950 uppercase tracking-widest mt-1">Manajemen poin & profil anggota aktif</p>
-        </div>
+            <h3 class="text-[24px] font-black text-emerald-950 tracking-tighter">Data Pelanggan</h3>
+            </div>
         
         <div class="bg-white rounded-[48px] border-2 border-emerald-950 shadow-sm overflow-hidden mb-12">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="text-[11px] font-black uppercase tracking-[0.2em] text-emerald-100 bg-emerald-950">
-                            <th class="px-10 py-6">Profil Pelanggan</th>
-                            <th class="px-10 py-6">ID Username</th>
+                            <th class="px-10 py-6">Nama Lengkap</th>
+                            <th class="px-10 py-6">Username</th>
+                            <th class="px-10 py-6">Email</th>
                             <th class="px-10 py-6">Wilayah</th>
-                            <th class="px-10 py-6 text-center">Loyalty Points</th>
+                            <th class="px-10 py-6 text-center">Point</th>
                             <th class="px-10 py-6 text-center">Tindakan</th>
                         </tr>
                     </thead>
@@ -157,18 +149,12 @@
                                             {{ substr($customer->name, 0, 1) }}
                                         @endif
                                     </div>
-                                    <div>
-                                        <p class="font-black text-emerald-950 text-[16px] tracking-tight">{{ $customer->name }}</p>
-                                        <p class="text-[10px] font-bold text-emerald-950">{{ $customer->email }}</p>
-                                    </div>
+                                    <p class="font-black text-emerald-950 text-[16px] tracking-tight">{{ $customer->name }}</p>
                                 </div>
                             </td>
-                            <td class="px-10 py-7 font-black text-emerald-950 tracking-tight">@ {{ $customer->username }}</td>
-                            <td class="px-10 py-7">
-                                <span class="inline-block px-4 py-1.5 bg-white text-emerald-900 text-[11px] font-black rounded-xl border border-emerald-100 uppercase tracking-tighter shadow-sm">
-                                    {{ $customer->daerah ?? 'Luar Wilayah' }}
-                                </span>
-                            </td>
+                            <td class="px-10 py-7 font-black text-emerald-950 tracking-tight">{{ $customer->username }}</td>
+                            <td class="px-10 py-7 text-emerald-950 tracking-tight">{{ $customer->email }}</td>
+                            <td class="px-10 py-7 text-emerald-950 tracking-tight font-black uppercase text-[12px]">{{ $customer->daerah ?? '-' }}</td>
                             <td class="px-10 py-7">
                                 <div class="flex flex-col items-center gap-3">
                                     <span class="px-5 py-2.5 bg-emerald-950 text-white text-[14px] font-black rounded-2xl shadow-xl min-w-[120px] text-center tracking-tighter border-2 border-emerald-800">
@@ -193,7 +179,7 @@
                             </td>
                         </tr>
                         @empty
-                        <tr><td colspan="5" class="px-10 py-16 text-center text-emerald-900/30 font-bold italic">Tidak ada pelanggan ditemukan.</td></tr>
+                        <tr><td colspan="6" class="px-10 py-16 text-center text-emerald-900/30 font-bold italic">Tidak ada pelanggan ditemukan.</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -209,7 +195,6 @@
             <div class="p-10 border-b-2 border-emerald-950 bg-emerald-50/20 flex items-center justify-between">
                 <div>
                     <h3 class="text-[24px] font-black text-emerald-950 tracking-tight">Registrasi Admin</h3>
-                    <p class="text-[11px] font-black text-emerald-900 uppercase tracking-widest mt-1">Otoritas Baru CIVAD</p>
                 </div>
                 <button onclick="closeAddAdminModal()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white border-2 border-emerald-950 text-emerald-950 hover:bg-rose-500 hover:text-white transition-all transform hover:rotate-90">✕</button>
             </div>
@@ -224,18 +209,14 @@
                     <input type="text" name="username" required class="w-full px-6 py-4 bg-emerald-50/50 border-2 border-emerald-950 rounded-[22px] text-[15px] font-black text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 transition-all">
                 </div>
                 <div class="space-y-2">
+                    <label class="text-[12px] font-black text-emerald-950 uppercase tracking-widest ml-1">Email</label>
+                    <input type="email" name="email" required class="w-full px-6 py-4 bg-emerald-50/50 border-2 border-emerald-950 rounded-[22px] text-[15px] font-black text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 transition-all">
+                </div>
+                <div class="space-y-2">
                     <label class="text-[12px] font-black text-emerald-950 uppercase tracking-widest ml-1">Kata Sandi</label>
                     <input type="password" name="password" required class="w-full px-6 py-4 bg-emerald-50/50 border-2 border-emerald-950 rounded-[22px] text-[15px] font-black text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 transition-all">
                 </div>
-                <div class="space-y-2">
-                    <label class="text-[12px] font-black text-emerald-950 uppercase tracking-widest ml-1">Wilayah Penugasan</label>
-                    <select name="daerah" class="w-full px-6 py-4 bg-emerald-50/50 border-2 border-emerald-950 rounded-[22px] text-[15px] font-black text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 transition-all appearance-none cursor-pointer">
-                        <option value="Pusat">Pusat</option>
-                        <option value="Jakarta">Jakarta</option>
-                        <option value="Tangerang">Tangerang</option>
-                        <option value="Bandung">Bandung</option>
-                    </select>
-                </div>
+            
                 <button type="submit" class="w-full bg-emerald-950 text-white py-5 rounded-[22px] text-[16px] font-black hover:bg-emerald-900 transition-all shadow-xl shadow-emerald-950/20 active:scale-95 mt-4 border-2 border-emerald-950">Aktifkan Akses Admin</button>
             </form>
         </div>

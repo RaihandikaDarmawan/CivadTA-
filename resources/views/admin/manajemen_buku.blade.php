@@ -6,17 +6,16 @@
     <div class="hidden md:flex items-center gap-3 text-[12px] font-black text-emerald-500 uppercase tracking-widest mb-2">
         <a href="{{ url('/admin/dashboard') }}" class="hover:text-white transition-colors">Admin</a>
         <span class="text-white/20">/</span>
-        <span class="text-white">Katalog</span>
+        <span class="text-white">Manajemen Buku</span>
     </div>
-    <h2 class="text-base md:text-[28px] font-black text-white tracking-tighter leading-none truncate max-w-[180px] md:max-w-none">Manajemen Katalog</h2>
-@endsection
+    @endsection
 
 @section('topbar_actions')
     <button onclick="openAddModal()" class="bg-emerald-950 text-white px-8 py-4 rounded-[22px] text-[14px] font-black hover:bg-emerald-900 transition-all shadow-xl shadow-emerald-950/20 flex items-center gap-3 active:scale-95 group">
         <div class="w-6 h-6 bg-white/10 rounded-lg flex items-center justify-center group-hover:rotate-90 transition-transform duration-500">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
         </div>
-        Tambah Koleksi Buku
+        Tambah Buku
     </button>
 @endsection
 
@@ -45,10 +44,10 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="text-[12px] font-black uppercase tracking-[0.2em] text-white bg-emerald-950">
-                        <th class="px-8 py-6 w-32 text-center">Sampul</th>
-                        <th class="px-8 py-6">Detail Informasi</th>
+                        <th class="px-8 py-6 w-32 text-center">Gambar</th>
+                        <th class="px-8 py-6">Judul Buku</th>
                         <th class="px-8 py-6">Jenjang / Kelas</th>
-                        <th class="px-8 py-6 text-center">Harga Jual</th>
+                        <th class="px-8 py-6 text-center">Harga</th>
                         <th class="px-8 py-6 text-center">Stok</th>
                         <th class="px-8 py-6 text-center">Tindakan</th>
                     </tr>
@@ -116,8 +115,8 @@
         <div id="modal-card" class="bg-white w-full max-w-[800px] rounded-[48px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-500 my-auto">
             <div class="flex items-center justify-between px-12 py-10 border-b border-emerald-50 bg-emerald-50/20">
                 <div>
-                    <h3 id="modal-title" class="text-[28px] font-black text-emerald-950 tracking-tighter leading-none">Tambah Buku Baru</h3>
-                    <p class="text-[12px] font-black text-emerald-600 uppercase tracking-[0.2em] mt-2">Lengkapi informasi katalog literasi</p>
+                    <h3 id="modal-title" class="text-[28px] font-black text-emerald-950 tracking-tighter leading-none">Tambah Buku</h3>
+                    <p class="text-[12px] font-black text-emerald-600 uppercase tracking-[0.2em] mt-2">Lengkapi informasi katalog buku</p>
                 </div>
                 <button onclick="closeModal()" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white shadow-xl border border-emerald-100 text-emerald-950 hover:bg-rose-500 hover:text-white transition-all transform hover:rotate-90 duration-500 font-bold">✕</button>
             </div>
@@ -128,7 +127,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                     <!-- Image Area -->
                     <div class="space-y-4">
-                        <label class="text-[13px] font-black text-emerald-950 uppercase tracking-widest ml-1 block">Foto Sampul Katalog</label>>Foto Sampul Katalog</label>
+                        <label class="text-[13px] font-black text-emerald-950 uppercase tracking-widest ml-1 block">Gambar Buku</label>
                         <div class="relative group h-[340px] bg-emerald-50/50 rounded-[40px] border-3 border-dashed border-emerald-100 overflow-hidden flex flex-col items-center justify-center gap-5 transition-all hover:border-emerald-950/20 hover:bg-emerald-50">
                             <img id="preview-image" src="" class="absolute inset-0 w-full h-full object-cover hidden">
                             <div id="upload-placeholder" class="flex flex-col items-center gap-4 text-center px-6">
@@ -148,7 +147,7 @@
                     <!-- Inputs Area -->
                     <div class="space-y-6">
                         <div class="space-y-2">
-                            <label class="text-[13px] font-black text-emerald-950 uppercase tracking-widest ml-1">Judul Katalog</label>
+                            <label class="text-[13px] font-black text-emerald-950 uppercase tracking-widest ml-1">Judul Buku</label>
                             <input type="text" name="title" id="input-title" required class="w-full px-6 py-4.5 bg-emerald-50/50 border border-emerald-100 rounded-[24px] text-[15px] font-black text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-950 transition-all placeholder:text-emerald-900/30">
                         </div>
                         <div class="space-y-2">
@@ -172,7 +171,7 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div class="space-y-2">
                                 <label class="text-[13px] font-black text-emerald-950 uppercase tracking-widest ml-1">Harga (Rp)</label>
-                                <input type="number" name="price" id="input-price" required class="w-full px-6 py-4.5 bg-emerald-50/50 border border-emerald-100 rounded-[24px] text-[16px] font-black text-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-950">
+                                <input type="text" name="price" id="input-price" required class="w-full px-6 py-4.5 bg-emerald-50/50 border border-emerald-100 rounded-[24px] text-[16px] font-black text-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-950" placeholder="Contoh: 22.800">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[13px] font-black text-emerald-950 uppercase tracking-widest ml-1">Stok</label>
@@ -182,14 +181,14 @@
                     </div>
 
                     <div class="col-span-1 md:col-span-2 space-y-2">
-                        <label class="text-[13px] font-black text-emerald-950 uppercase tracking-widest ml-1">Deskripsi Katalog</label>
-                        <textarea name="desc" id="input-desc" rows="4" class="w-full px-8 py-6 bg-emerald-50/50 border border-emerald-100 rounded-[32px] text-[15px] font-medium text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-950 resize-none transition-all" placeholder="Tuliskan ringkasan materi atau keunggulan buku ini..."></textarea>
+                        <label class="text-[13px] font-black text-emerald-950 uppercase tracking-widest ml-1">Deskripsi </label>
+                        <textarea name="desc" id="input-desc" rows="4" class="w-full px-8 py-6 bg-emerald-50/50 border border-emerald-100 rounded-[32px] text-[15px] font-medium text-emerald-950 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-950 resize-none transition-all" placeholder="Tuliskan ringkasan buku..."></textarea>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-6 mt-12">
-                    <button type="button" onclick="closeModal()" class="flex-1 py-5 rounded-[24px] border-2 border-emerald-100 text-[15px] font-black text-emerald-950 hover:bg-emerald-50 transition-all">Batal & Tutup</button>
-                    <button type="submit" class="flex-2 py-5 px-10 rounded-[24px] bg-emerald-950 text-white text-[15px] font-black hover:bg-emerald-900 transition-all shadow-2xl shadow-emerald-950/20 active:scale-95">Simpan Katalog Literasi</button>
+                    <button type="button" onclick="closeModal()" class="flex-1 py-5 rounded-[24px] border-2 border-emerald-100 text-[15px] font-black text-emerald-950 hover:bg-emerald-50 transition-all">Batal</button>
+                    <button type="submit" class="flex-2 py-5 px-10 rounded-[24px] bg-emerald-950 text-white text-[15px] font-black hover:bg-emerald-900 transition-all shadow-2xl shadow-emerald-950/20 active:scale-95">Simpan</button>
                 </div>
             </form>
         </div>
@@ -217,6 +216,21 @@
 
 @section('scripts')
     <script>
+        const priceInput = document.getElementById('input-price');
+
+        function formatNumberInput(value) {
+            let numberString = value.replace(/\D/g, '');
+            return numberString.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        priceInput.addEventListener('input', function(e) {
+            this.value = formatNumberInput(this.value);
+        });
+
+        document.getElementById('book-form').addEventListener('submit', function(e) {
+            priceInput.value = priceInput.value.replace(/\./g, '');
+        });
+
         function openAddModal() {
             document.getElementById('modal-title').innerText = "Tambah Buku Baru";
             document.getElementById('book-form').action = "{{ url('/admin/buku/store') }}";
@@ -242,7 +256,7 @@
             document.getElementById('input-author').value = author;
             document.getElementById('input-category').value = category;
             document.getElementById('input-class').value = classLevel;
-            document.getElementById('input-price').value = price;
+            document.getElementById('input-price').value = formatNumberInput(price.toString());
             document.getElementById('input-stock').value = stock;
             document.getElementById('input-desc').value = desc;
             document.getElementById('input-image').value = image;

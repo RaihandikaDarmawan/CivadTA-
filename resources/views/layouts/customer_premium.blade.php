@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield('title') - Arya Duta</title>
+    <title>@yield('title') - Arya Duta Tangerang</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -147,8 +147,7 @@
                         <img src="{{ asset('logo.jpg') }}" alt="Logo AD" class="h-6 sm:h-8 w-auto">
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-white font-black text-lg sm:text-xl tracking-tighter leading-none">Arya Duta</span>
-                        <span class="text-emerald-400 font-black text-[8px] sm:text-[9px] uppercase tracking-[0.3em] mt-1">Portal</span>
+                        <span class="text-white font-black text-lg sm:text-xl tracking-tighter leading-none">Arya Duta Tangerang</span>
                     </div>
                 </a>
             </div>
@@ -161,7 +160,6 @@
                         ['url' => '/pelanggan/beranda', 'label' => 'Beranda'],
                         ['url' => '/pelanggan/dashboard', 'label' => 'Katalog'],
                         ['url' => '/pelanggan/riwayat', 'label' => 'Riwayat Transaksi'],
-                        ['url' => '/pelanggan/rewards', 'label' => 'Rewards'],
                     ];
                 @endphp
 
@@ -341,7 +339,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
                 </div>
                 <div>
-                    <p class="text-[10px] uppercase tracking-[0.3em] text-emerald-400 font-black mb-1">{{ session('title') ?? 'Berhasil' }}</p>
+                    <p class="text-[10px] uppercase tracking-[0.3em] text-emerald-400 font-black mb-1">{{ session('title') ?? 'Login Berhasil' }}</p>
                     <p class="text-white font-bold text-base">{{ session('success') }}</p>
                 </div>
             </div>

@@ -7,18 +7,61 @@
         function updateCart() {
             let totalProduk = 0;
             let items = document.querySelectorAll('.cart-item');
+            let hasStockIssue = false;
             
             items.forEach(item => {
                 let id = item.dataset.id;
                 let price = parseInt(item.dataset.price);
+                let stock = parseInt(item.dataset.stock) || 0;
                 let qty = parseInt(document.getElementById('qty-' + id).value) || 0;
                 let subtotal = price * qty;
                 
                 document.getElementById('subtotal-' + id).innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
                 totalProduk += subtotal;
+
+                // Check if qty exceeds stock
+                let stockWarning = document.getElementById('stock-warning-' + id);
+                if (qty > stock) {
+                    hasStockIssue = true;
+                    if (stockWarning) {
+                        stockWarning.classList.remove('hidden');
+                    }
+                } else {
+                    if (stockWarning) {
+                        stockWarning.classList.add('hidden');
+                    }
+                }
             });
             
             document.getElementById('side_total_produk').innerText = 'Rp ' + totalProduk.toLocaleString('id-ID');
+
+            // Handle checkout button and global warning
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const globalStockAlert = document.getElementById('global-stock-alert');
+            
+            if (hasStockIssue) {
+                if (globalStockAlert) {
+                    globalStockAlert.classList.remove('hidden');
+                }
+                if (checkoutBtn) {
+                    checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    checkoutBtn.setAttribute('href', '#');
+                    checkoutBtn.onclick = function(e) {
+                        e.preventDefault();
+                        alert('stok tidak mencukupi, tolong ubah jumlah stok');
+                        return false;
+                    };
+                }
+            } else {
+                if (globalStockAlert) {
+                    globalStockAlert.classList.add('hidden');
+                }
+                if (checkoutBtn) {
+                    checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    checkoutBtn.setAttribute('href', '{{ url("/pelanggan/pesanan") }}');
+                    checkoutBtn.onclick = null;
+                }
+            }
         }
 
         function changeQty(id, delta) {
@@ -62,12 +105,28 @@
         <p class="text-emerald-900 font-bold text-[12px] md:text-[14px] uppercase tracking-[0.3em]">Tersimpan <span class="text-emerald-600">{{ count(session('cart', [])) }}</span> Item Pilihan</p>
     </div>
 
+    @if(session('error'))
+    <div class="mb-8 p-6 bg-red-50 border border-red-200 rounded-[24px] flex items-center gap-4 text-red-700 font-bold">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>
+        <span>{{ session('error') }}</span>
+    </div>
+    @endif
+
+    <div id="global-stock-alert" class="mb-8 p-6 bg-red-50 border border-red-200 rounded-[24px] flex items-center gap-4 text-red-700 font-bold hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>
+        <span>stok tidak mencukupi, tolong ubah jumlah stok</span>
+    </div>
+
     <div class="flex flex-col xl:flex-row gap-8 md:gap-16">
         
         <!-- Items Column -->
         <div class="flex-grow flex flex-col gap-6">
             @forelse(session('cart', []) as $id => $item)
-            <div class="cart-item bg-white p-4 md:p-8 rounded-[32px] md:rounded-[48px] border border-emerald-100 shadow-xl flex flex-col sm:flex-row gap-6 md:gap-10 relative overflow-hidden hover:border-emerald-200 transition-all" data-id="{{ $id }}" data-price="{{ $item['price'] }}">
+            @php
+                $book = \App\Models\Book::find($id);
+                $stock = $book ? $book->stock : 0;
+            @endphp
+            <div class="cart-item bg-white p-4 md:p-8 rounded-[32px] md:rounded-[48px] border border-emerald-100 shadow-xl flex flex-col sm:flex-row gap-6 md:gap-10 relative overflow-hidden hover:border-emerald-200 transition-all" data-id="{{ $id }}" data-price="{{ $item['price'] }}" data-stock="{{ $stock }}">
                 <!-- Delete Button -->
                 <form action="{{ url('/pelanggan/keranjang/hapus') }}" method="POST" class="absolute top-4 right-4 md:top-8 md:right-8">
                     @csrf
@@ -78,7 +137,7 @@
                 </form>
 
                 <div class="w-full sm:w-32 md:w-40 h-48 sm:h-auto rounded-[24px] md:rounded-[32px] overflow-hidden bg-emerald-50 flex-shrink-0 shadow-inner border border-emerald-50">
-                    <img src="{{ \App\Models\Book::find($id)->image }}" class="w-full h-full object-cover">
+                    <img src="{{ $book ? $book->image : '' }}" class="w-full h-full object-cover">
                 </div>
 
                 <div class="flex-grow flex flex-col py-1">
@@ -91,6 +150,10 @@
                         </div>
                         <h3 class="font-black text-emerald-950 text-[20px] md:text-[24px] tracking-tight leading-tight mb-2 max-w-[80%]">{{ $item['title'] }}</h3>
                         <p class="text-[14px] font-bold text-emerald-950">Rp {{ number_format($item['price'], 0, ',', '.') }} <span class="text-[11px] text-emerald-900/60 font-medium">/ unit</span></p>
+                        <div class="mt-2 flex items-center gap-3">
+                            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Stok: {{ $stock }}</span>
+                            <span id="stock-warning-{{ $id }}" class="text-[11px] font-black text-red-500 uppercase tracking-widest hidden">(Stok tidak mencukupi!)</span>
+                        </div>
                     </div>
                     
                     <div class="mt-auto flex flex-wrap items-center justify-between gap-4">
@@ -117,7 +180,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-12 h-12"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg>
                 </div>
                 <h2 class="text-[24px] md:text-[32px] font-black text-emerald-950 mb-4 tracking-tight">Keranjang Anda Kosong</h2>
-                <p class="text-emerald-700/60 font-bold mb-10 max-w-sm mx-auto">Mulailah petualangan literasi Anda dengan memilih koleksi buku terbaik dari Arya Duta.</p>
+                <p class="text-emerald-700/60 font-bold mb-10 max-w-sm mx-auto">Tingkatkan pengetahuan anda dengan membeli buku terbaik dari CV. Arya Duta.</p>
                 <a href="{{ url('/pelanggan/dashboard') }}" class="inline-flex items-center justify-center px-12 py-5 bg-emerald-950 text-white rounded-2xl font-black shadow-2xl shadow-emerald-950/20 hover:bg-emerald-800 transition-all active:scale-95">Lihat Katalog Utama</a>
             </div>
             @endforelse
@@ -162,8 +225,8 @@
                         <p class="text-[12px] text-emerald-200/60 leading-relaxed font-bold">Biaya pengiriman dihitung otomatis berdasarkan jarak tempuh ke lokasi Anda.</p>
                     </div>
 
-                    <a href="{{ url('/pelanggan/pesanan') }}" class="w-full block text-center bg-white text-emerald-950 py-5 rounded-2xl text-[16px] font-black hover:bg-emerald-50 transition-all shadow-xl active:scale-95 group">
-                        Checkout Sekarang
+                    <a href="{{ url('/pelanggan/pesanan') }}" id="checkout-btn" class="w-full block text-center bg-white text-emerald-950 py-5 rounded-2xl text-[16px] font-black hover:bg-emerald-50 transition-all shadow-xl active:scale-95 group">
+                        Pesan
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 inline-block ml-2 group-hover:translate-x-1 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
                     </a>
                 </div>
