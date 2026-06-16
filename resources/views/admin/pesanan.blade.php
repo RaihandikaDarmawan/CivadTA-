@@ -14,6 +14,7 @@
             document.getElementById('modal-order-id-input').value = order.id;
             document.getElementById('modal-rejection-reason').value = order.rejection_reason || '';
             document.getElementById('modal-customer-address').innerText = order.address || '-';
+            document.getElementById('modal-tracking-link-input').value = order.tracking_link || '';
 
             const mapsBtn = document.getElementById('modal-maps-link');
             const noMaps = document.getElementById('no-maps-link');
@@ -49,9 +50,43 @@
                 itemsContainer.insertAdjacentHTML('beforeend', itemHtml);
             });
 
+            // Toggle buttons based on status
+            const btnVerifikasi = document.getElementById('btn-verifikasi');
+            const btnSedangDikirim = document.getElementById('btn-sedang-dikirim');
+            const btnSelesai = document.getElementById('btn-selesai');
+            const btnReject = document.getElementById('reject-btn');
+            const btnConfirmReject = document.getElementById('confirm-reject-btn');
+            
+            btnVerifikasi.classList.remove('hidden');
+            btnSedangDikirim.classList.remove('hidden');
+            btnSelesai.classList.remove('hidden');
+            btnReject.classList.remove('hidden');
+
+            if (order.status !== 'Pending') {
+                btnVerifikasi.classList.add('hidden');
+            }
+
+            if (order.status === 'Selesai' || order.status === 'Dibatalkan' || order.status === 'Cancelled' || order.status === 'Dikembalikan') {
+                btnVerifikasi.classList.add('hidden');
+                btnSedangDikirim.classList.add('hidden');
+                btnSelesai.classList.add('hidden');
+                btnReject.classList.add('hidden');
+                btnConfirmReject.classList.add('hidden');
+            }
+
             document.getElementById('detailModal').classList.remove('hidden');
             document.getElementById('detailModal').classList.add('flex');
             document.body.style.overflow = 'hidden';
+        }
+
+        function validateTrackingLink() {
+            const trackingInput = document.getElementById('modal-tracking-link-input');
+            if (!trackingInput.value.trim()) {
+                alert('Link Perjalanan Pelacakan (Tracking Link) wajib diisi sebelum memproses status "Sedang Dikirim"!');
+                trackingInput.focus();
+                return false;
+            }
+            return true;
         }
 
         function showRejectionBox() {
@@ -218,10 +253,14 @@
                             </span>
                         </td>
                         <td class="px-10 py-8 text-center">
-                            <button onclick='openDetailModal(@json($order))' class="px-8 py-3.5 bg-emerald-950 text-white font-black text-[13px] rounded-2xl shadow-xl hover:bg-emerald-900 transition-all active:scale-95 flex items-center gap-2 mx-auto uppercase tracking-tighter">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-9.75 0h9.75" /></svg>
-                                Kelola
-                            </button>
+                            @if(strtolower($order->status) === 'pengajuan pending')
+                                <span class="text-emerald-950 font-bold">-</span>
+                            @else
+                                <button onclick='openDetailModal(@json($order))' class="px-8 py-3.5 bg-emerald-950 text-white font-black text-[13px] rounded-2xl shadow-xl hover:bg-emerald-900 transition-all active:scale-95 flex items-center gap-2 mx-auto uppercase tracking-tighter">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-9.75 0h9.75" /></svg>
+                                    Kelola
+                                </button>
+                            @endif
                         </td>
                     </tr>
                     @empty
@@ -328,10 +367,15 @@
                             <textarea name="rejection_reason" id="modal-rejection-reason" class="w-full bg-rose-50 border border-rose-100 rounded-[32px] p-8 text-[15px] font-bold text-rose-950 focus:outline-none focus:ring-4 focus:ring-rose-500/10 focus:border-rose-400 transition-all resize-none" rows="4" placeholder="Tuliskan alasan mengapa pesanan ini ditolak atau dibatalkan..."></textarea>
                         </div>
 
+                        <div class="mb-8">
+                            <label for="modal-tracking-link-input" class="block text-[11px] font-black text-emerald-950 uppercase tracking-widest mb-2 ml-1">Link Perjalanan Pelacakan (Tracking Link)</label>
+                            <input type="text" name="tracking_link" id="modal-tracking-link-input" class="w-full bg-emerald-50/50 border-2 border-emerald-950/10 focus:border-emerald-950 rounded-2xl py-3.5 px-5 text-[14px] font-bold text-emerald-950 focus:outline-none transition-all placeholder:text-emerald-950/20" placeholder="Masukkan link perjalanan pelacakan (misal: https://resi.com/123)">
+                        </div>
+
                         <div class="flex flex-wrap items-center gap-4">
-                            <button type="submit" name="status" value="Verifikasi" class="px-10 py-5 bg-emerald-600 text-white text-[15px] font-black rounded-[24px] hover:bg-emerald-700 transition-all shadow-2xl shadow-emerald-500/20 active:scale-95">Verifikasi</button>
-                            <button type="submit" name="status" value="Sedang Dikirim" class="px-10 py-5 bg-blue-600 text-white text-[15px] font-black rounded-[24px] hover:bg-blue-700 transition-all shadow-2xl shadow-blue-500/20 active:scale-95">Sedang Dikirim</button>
-                            <button type="submit" name="status" value="Selesai" class="px-10 py-5 bg-emerald-950 text-white text-[15px] font-black rounded-[24px] hover:bg-emerald-900 transition-all shadow-2xl shadow-emerald-950/20 active:scale-95">Selesai</button>
+                            <button type="submit" id="btn-verifikasi" name="status" value="Verifikasi" class="px-10 py-5 bg-emerald-600 text-white text-[15px] font-black rounded-[24px] hover:bg-emerald-700 transition-all shadow-2xl shadow-emerald-500/20 active:scale-95">Verifikasi</button>
+                            <button type="submit" id="btn-sedang-dikirim" name="status" value="Sedang Dikirim" onclick="return validateTrackingLink()" class="px-10 py-5 bg-blue-600 text-white text-[15px] font-black rounded-[24px] hover:bg-blue-700 transition-all shadow-2xl shadow-blue-500/20 active:scale-95">Sedang Dikirim</button>
+                            <button type="submit" id="btn-selesai" name="status" value="Selesai" class="px-10 py-5 bg-emerald-950 text-white text-[15px] font-black rounded-[24px] hover:bg-emerald-900 transition-all shadow-2xl shadow-emerald-950/20 active:scale-95">Selesai</button>
                             
                             <div class="flex-grow"></div>
                             

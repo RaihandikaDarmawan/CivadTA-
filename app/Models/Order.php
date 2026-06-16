@@ -25,6 +25,7 @@ class Order extends Model
         'distance_km',
         'shipping_cost',
         'points_awarded',
+        'tracking_link',
     ];
 
     public function user(): BelongsTo
@@ -35,5 +36,10 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function returnRequest(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(ReturnRequest::class);
     }
 }

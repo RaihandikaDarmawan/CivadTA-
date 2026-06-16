@@ -19,15 +19,15 @@
             </div>
 
             <h1 class="text-4xl md:text-[56px] lg:text-[72px] font-black text-white tracking-tighter mb-8 leading-[0.9] font-serif">
-                Membuka Jendela <br><span class="italic text-emerald-400">Dunia</span>.
+                Membuka Jendela Dunia.
             </h1>
             <p class="text-base md:text-[20px] text-white/60 mb-12 font-medium max-w-2xl leading-relaxed">
-                Mitra literasi terpercaya Anda sejak 1998. Temukan koleksi buku pendidikan terlengkap dan layanan terbaik dalam satu platform premium.
+                CV. Arya Duta terpercaya Anda sejak 1998. Temukan koleksi buku pendidikan terlengkap dan layanan terbaik anda!!!.
             </p>
 
             <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 md:gap-6">
                 <a href="{{ url('/pelanggan/dashboard') }}" class="inline-flex items-center justify-center bg-white text-emerald-950 px-8 md:px-12 py-4 md:py-6 rounded-[20px] md:rounded-[28px] text-[16px] md:text-[18px] font-black shadow-2xl hover:bg-emerald-400 transition-all active:scale-95 group">
-                    Eksplorasi Katalog
+                    Katalog
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5 md:w-6 md:h-6 ml-4 group-hover:translate-x-2 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
                 </a>
                 <a href="#tentang" class="px-8 md:px-12 py-4 md:py-6 rounded-[20px] md:rounded-[28px] bg-white/5 border-2 border-white/10 text-[16px] md:text-[18px] font-black text-white hover:bg-white/10 transition-all backdrop-blur-md">Tentang</a>
@@ -57,9 +57,6 @@
                     <div class="space-y-8 text-[18px] text-emerald-950/70 leading-[1.8] font-medium">
                         <p class="first-letter:text-5xl first-letter:font-black first-letter:text-emerald-950 first-letter:mr-3 first-letter:float-left">
                             CV Arya Duta telah mendedikasikan diri selama lebih dari seperempat abad dalam membangun ekosistem literasi di Indonesia. Berdiri sejak 1998, kami menjadi pilar utama dalam penyediaan buku berkualitas.
-                        </p>
-                        <p>
-                            Komitmen kami tidak hanya mencetak buku, namun memastikan setiap halaman yang kami terbitkan mampu mencerdaskan kehidupan bangsa melalui standar kurikulum yang presisi.
                         </p>
                     </div>
                     <div class="bg-emerald-950 rounded-[48px] p-12 text-white relative overflow-hidden shadow-2xl transform rotate-1 hover:rotate-0 transition-transform duration-700">
@@ -97,8 +94,8 @@
                         <span class="text-[16px] md:text-[18px] font-black text-emerald-950">08.00 - 15.00</span>
                     </div>
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 md:p-6 bg-rose-50 rounded-[24px] md:rounded-[28px] border border-rose-100 gap-2">
-                        <span class="text-[14px] md:text-[16px] font-bold text-rose-500">Minggu</span>
-                        <span class="text-[16px] md:text-[18px] font-black text-rose-600 uppercase tracking-widest">Closed</span>
+                        <span class="text-[14px] md:text-[16px] font-bold text-rose-500">Minggu & Libur Nasional</span>
+                        <span class="text-[16px] md:text-[18px] font-black text-rose-600 uppercase tracking-widest">Tutup</span>
                     </div>
                 </div>
             </div>
@@ -113,7 +110,7 @@
                 </div>
                 <h3 class="font-black text-emerald-950 mb-10 tracking-tight uppercase tracking-[0.3em] text-[16px]">Jangkauan Pengiriman</h3>
 
-                <p class="text-[16px] font-medium text-emerald-950/60 mb-8">Kurir internal kami siap melayani pengiriman kilat untuk wilayah:</p>
+                <p class="text-[16px] font-medium text-emerald-950/60 mb-8">Siap melayani pengiriman kilat untuk wilayah:</p>
 
                 <div class="flex flex-wrap gap-4 mb-10">
                     <span class="bg-emerald-950 text-white px-8 py-3 rounded-2xl text-[14px] font-black shadow-xl">Jakarta</span>
@@ -133,7 +130,7 @@
             <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center shadow-inner text-emerald-400 shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0-10.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.248-8.25-3.286zm0 13.036h.008v.008H12v-.008z" /></svg>
             </div>
-            <p class="text-[15px] font-black tracking-tight italic opacity-80 leading-relaxed text-center lg:text-left">Pastikan lokasi pengiriman Anda berada di area jangkauan kami untuk menikmati layanan pengiriman kilat internal.</p>
+            <p class="text-[15px] font-black tracking-tight italic opacity-80 leading-relaxed text-center lg:text-left">Pastikan lokasi pengiriman Anda berada di area jangkauan kami untuk menikmati layanan pengiriman kilat.</p>
         </div>
     </div>
     </div>

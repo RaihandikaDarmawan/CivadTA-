@@ -70,11 +70,6 @@
                     <span class="text-white font-black text-3xl tracking-tight block">25+</span>
                     <span class="text-emerald-400 font-bold text-[10px] uppercase tracking-widest opacity-80">Tahun Melayani</span>
                 </div>
-                <div class="h-12 w-px bg-white/10"></div>
-                <div>
-                    <span class="text-white font-black text-3xl tracking-tight block">10k+</span>
-                    <span class="text-emerald-400 font-bold text-[10px] uppercase tracking-widest opacity-80">Sekolah Terlayani</span>
-                </div>
             </div>
         </div>
     </div>

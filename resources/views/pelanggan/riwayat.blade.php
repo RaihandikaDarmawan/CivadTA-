@@ -51,6 +51,9 @@
                                     'Sedang Dikirim' => 'bg-blue-500',
                                     'Selesai' => 'bg-emerald-500',
                                     'Dibatalkan' => 'bg-rose-500',
+                                    'Dikembalikan' => 'bg-rose-600',
+                                    'Pengajuan Pending' => 'bg-amber-500',
+                                    'Pengembalian Ditolak' => 'bg-rose-600',
                                 ];
                                 $statusColor = $statusColors[$order->status] ?? 'bg-slate-500';
                             @endphp
@@ -59,6 +62,14 @@
                                 <h3 class="font-black text-white text-[18px] md:text-[24px] tracking-tighter leading-none">#{{ $order->order_number }}</h3>
                             </div>
                             <p class="text-emerald-300/50 font-bold text-[11px] uppercase tracking-widest">{{ $order->created_at->format('d M Y • H:i') }}</p>
+                            @if($order->tracking_link)
+                                <div class="mt-2.5 flex items-center gap-1.5 text-emerald-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>
+                                    <a href="{{ $order->tracking_link }}" target="_blank" class="font-black text-[11px] tracking-tight underline hover:text-emerald-300 transition-colors truncate max-w-[200px] sm:max-w-xs block" title="{{ $order->tracking_link }}">
+                                        {{ $order->tracking_link }}
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
 
@@ -88,14 +99,44 @@
                 
                 <div class="flex flex-col sm:flex-row items-stretch gap-3 w-full sm:w-auto">
                     @if($order->status == 'Dikirim' || $order->status == 'Sedang Dikirim' || $order->status == 'Pesanan Sedang Dikirim')
-                    <form action="{{ route('pelanggan.pesanan.selesai') }}" method="POST" class="w-full sm:w-auto" onsubmit="return confirm('Sudah menerima pesanan ini?')">
-                        @csrf
-                        <input type="hidden" name="id" value="{{ $order->id }}">
-                        <button type="submit" class="w-full px-6 py-4 bg-emerald-950 text-white rounded-2xl font-black text-[13px] uppercase tracking-widest flex items-center justify-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" /></svg>
-                            Diterima
-                        </button>
-                    </form>
+                        @if($order->returnRequest)
+                            @php
+                                $retStatus = $order->returnRequest->status;
+                                $retColor = $retStatus === 'Pending' ? 'bg-amber-500' : ($retStatus === 'Disetujui' ? 'bg-emerald-600' : 'bg-rose-600');
+                            @endphp
+                            <span class="px-5 py-4 {{ $retColor }} text-white text-[11px] font-black rounded-2xl uppercase tracking-widest text-center shadow-md whitespace-nowrap">
+                                Retur: {{ $retStatus }}
+                            </span>
+                        @else
+                            <form action="{{ route('pelanggan.pesanan.selesai') }}" method="POST" class="w-full sm:w-auto" onsubmit="return confirm('Sudah menerima pesanan ini? Pengembalian barang tidak dapat diajukan setelah pesanan diselesaikan.')">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $order->id }}">
+                                <button type="submit" class="w-full px-6 py-4 bg-emerald-950 text-white rounded-2xl font-black text-[13px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-emerald-900 transition-all">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" /></svg>
+                                    Diterima
+                                </button>
+                            </form>
+                            <a href="{{ route('pelanggan.pengembalian.buat', ['order_id' => $order->id]) }}" class="w-full sm:w-auto px-6 py-4 bg-amber-500 text-white rounded-2xl font-black text-[13px] uppercase tracking-widest hover:bg-amber-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" /></svg>
+                                Pengajuan Pengembalian
+                            </a>
+                        @endif
+                    @elseif($order->status == 'Selesai' || $order->status == 'Dikembalikan')
+                        @if($order->returnRequest)
+                            @php
+                                $retStatus = $order->returnRequest->status;
+                                $retColor = $retStatus === 'Pending' ? 'bg-amber-500' : ($retStatus === 'Disetujui' ? 'bg-emerald-600' : 'bg-rose-600');
+                            @endphp
+                            <span class="px-5 py-4 {{ $retColor }} text-white text-[11px] font-black rounded-2xl uppercase tracking-widest text-center shadow-md whitespace-nowrap">
+                                Retur: {{ $retStatus }}
+                            </span>
+                        @endif
+                    @endif
+                    @if($order->status === 'Selesai')
+                        <a href="{{ route('pelanggan.invoice.unduh', $order->id) }}" class="w-full sm:w-auto px-6 py-4 bg-emerald-950 text-white rounded-2xl font-black text-[13px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-emerald-900 transition-all shadow-lg shadow-emerald-950/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                            Invoice
+                        </a>
                     @endif
                     
                     <button id="btn-{{ $order->id }}" onclick="toggleDetail('{{ $order->id }}')" class="w-full sm:w-auto px-6 py-4 bg-emerald-50 text-emerald-950 rounded-2xl font-black text-[13px] uppercase tracking-widest border border-emerald-100 flex items-center justify-center gap-3 group/btn">
@@ -142,6 +183,34 @@
                         </div>
                     </div>
                 </div>
+                
+                @if($order->returnRequest)
+                <div class="mt-8 pt-8 border-t border-emerald-950/5">
+                    <h4 class="text-[11px] font-black text-emerald-950 uppercase tracking-[0.3em] mb-4">Informasi Pengembalian Barang</h4>
+                    <div class="bg-white p-6 rounded-[32px] border border-emerald-950/5 space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <span class="text-[9px] uppercase tracking-widest font-black text-emerald-400 block mb-1">Alasan Pengembalian</span>
+                                <p class="text-[13px] font-bold text-emerald-950 leading-relaxed">{{ $order->returnRequest->reason }}</p>
+                            </div>
+                            <div>
+                                <span class="text-[9px] uppercase tracking-widest font-black text-emerald-400 block mb-2">Bukti Video</span>
+                                <a href="{{ $order->returnRequest->video_proof }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-50 text-emerald-950 rounded-xl text-[11px] font-black uppercase tracking-wider hover:bg-emerald-100 transition-all border border-emerald-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4.5 h-4.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" /></svg>
+                                    Putar Video Bukti
+                                </a>
+                            </div>
+                        </div>
+                        
+                        @if($order->returnRequest->admin_notes)
+                        <div class="pt-4 border-t border-emerald-50">
+                            <span class="text-[9px] uppercase tracking-widest font-black text-rose-500 block mb-1">Catatan Admin / Alasan Penolakan</span>
+                            <p class="text-[13px] font-bold text-rose-700 leading-relaxed">{{ $order->returnRequest->admin_notes }}</p>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
         @empty

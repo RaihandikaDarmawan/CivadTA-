@@ -451,10 +451,20 @@ Route::post('/admin/pesanan/update-status', function (Request $request) {
     if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
     
     $order = Order::findOrFail($request->input('id'));
-    $order->status = $request->input('status');
+    
+    $newStatus = $request->input('status');
+    if ($newStatus === 'Sedang Dikirim' && !$request->filled('tracking_link')) {
+        return redirect()->back()->with('error', 'Link perjalanan pelacakan (tracking link) wajib diisi sebelum mengubah status menjadi Sedang Dikirim!');
+    }
+    
+    $order->status = $newStatus;
     
     if ($request->filled('rejection_reason')) {
         $order->rejection_reason = $request->input('rejection_reason');
+    }
+    
+    if ($request->has('tracking_link')) {
+        $order->tracking_link = $request->input('tracking_link');
     }
     
     if ($request->input('status') === 'Selesai' && !$order->points_awarded) {
@@ -543,6 +553,48 @@ Route::post('/admin/buku/delete', function (Request $request) {
     
     return redirect()->back()->with('success', 'Buku telah dihapus dari database!');
 });
+
+// Admin Return Routes
+Route::get('/admin/manajemen-pengembalian', function () {
+    if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
+    
+    $returns = App\Models\ReturnRequest::with(['order', 'user'])->orderBy('created_at', 'desc')->get();
+    
+    return view('admin.pengembalian', ['returns' => $returns]);
+})->name('admin.manajemen-pengembalian');
+
+Route::post('/admin/pengembalian/update-status', function (Request $request) {
+    if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
+    
+    $request->validate([
+        'id' => 'required|exists:return_requests,id',
+        'status' => 'required|in:Disetujui,Ditolak',
+        'admin_notes' => 'nullable|string',
+    ]);
+    
+    $returnRequest = App\Models\ReturnRequest::findOrFail($request->id);
+    $returnRequest->status = $request->status;
+    $returnRequest->admin_notes = $request->admin_notes;
+    $returnRequest->save();
+    
+    $order = $returnRequest->order;
+    
+    if ($request->status === 'Disetujui') {
+        $order->status = 'Dikembalikan'; // Update order status to 'Dikembalikan'
+        $order->save();
+        
+        // Notify Customer
+        Notification::send('pelanggan', 'Pengembalian Disetujui', 'Pengajuan pengembalian untuk Pesanan #' . $order->order_number . ' telah DISETUJUI.', $order->user_id, 'success', '/pelanggan/riwayat');
+    } else {
+        $order->status = 'Pengembalian Ditolak'; // Update order status to 'Pengembalian Ditolak'
+        $order->save();
+        
+        // Notify Customer
+        Notification::send('pelanggan', 'Pengembalian Ditolak', 'Pengajuan pengembalian untuk Pesanan #' . $order->order_number . ' telah DITOLAK: ' . ($request->admin_notes ?? 'Tidak ada catatan tambahan.'), $order->user_id, 'warning', '/pelanggan/riwayat');
+    }
+    
+    return redirect()->back()->with('success', 'Status pengembalian untuk Pesanan #' . $order->order_number . ' berhasil diubah menjadi ' . $request->status);
+})->name('admin.pengembalian.update-status');
 
 
 // CUSTOMER ROUTES
@@ -886,7 +938,7 @@ Route::get('/pelanggan/riwayat', function () {
     if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
     
     $orders = Order::where('user_id', Auth::id())
-                   ->with('items.book')
+                   ->with(['items.book', 'returnRequest'])
                    ->orderBy('created_at', 'desc')
                    ->get();
 
@@ -922,9 +974,10 @@ Route::get('/pelanggan/riwayat', function () {
         session()->now('title', 'Pembayaran Berhasil');
         session()->now('success', 'Pesanan akan di proses dan segera dikirim');
     }
-                   
+    
     return view('pelanggan.riwayat', ['orders' => $orders]);
 });
+
 Route::post('/pelanggan/pesanan/selesai', function (Request $request) {
     if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
     
@@ -956,6 +1009,19 @@ Route::post('/pelanggan/pesanan/selesai', function (Request $request) {
     return redirect()->back()->with('error', 'Hanya pesanan yang sedang dikirim yang dapat dikonfirmasi.');
 })->name('pelanggan.pesanan.selesai');
 
+Route::get('/pelanggan/invoice/{id}/unduh', function ($id) {
+    if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
+    
+    $order = Order::where('id', $id)
+                  ->where('user_id', Auth::id())
+                  ->where('status', 'Selesai')
+                  ->with(['items.book'])
+                  ->firstOrFail();
+
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pelanggan.invoice_pdf', ['order' => $order]);
+    return $pdf->download('invoice-' . $order->order_number . '.pdf');
+})->name('pelanggan.invoice.unduh');
+
 Route::get('/pelanggan/status', function () {
     if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
     
@@ -965,6 +1031,70 @@ Route::get('/pelanggan/status', function () {
                    
     return view('pelanggan.status', ['orders' => $orders]);
 });
+
+// Customer Return Routes
+Route::get('/pelanggan/pengembalian/buat', function (Request $request) {
+    if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
+    
+    $orderId = $request->query('order_id');
+    $order = Order::where('id', $orderId)
+                  ->where('user_id', Auth::id())
+                  ->whereIn('status', ['Dikirim', 'Sedang Dikirim', 'Pesanan Sedang Dikirim'])
+                  ->with('items.book')
+                  ->firstOrFail();
+                  
+    // Check if return request already exists
+    if ($order->returnRequest) {
+        return redirect('/pelanggan/riwayat')->with('error', 'Pengajuan pengembalian untuk pesanan ini sudah dibuat.');
+    }
+                  
+    return view('pelanggan.pengembalian', ['order' => $order]);
+})->name('pelanggan.pengembalian.buat');
+
+Route::post('/pelanggan/pengembalian/simpan', function (Request $request) {
+    if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
+    
+    $request->validate([
+        'order_id' => 'required|exists:orders,id',
+        'reason' => 'required|string|min:10',
+        'video_proof' => 'required|mimes:mp4,mov,avi,webm|max:51200', // max 50MB
+    ], [
+        'reason.required' => 'Alasan pengembalian wajib diisi.',
+        'reason.min' => 'Alasan pengembalian minimal harus 10 karakter.',
+        'video_proof.required' => 'Bukti video wajib diunggah.',
+        'video_proof.mimes' => 'Format video harus berupa mp4, mov, avi, atau webm.',
+        'video_proof.max' => 'Video gagal diunggah karena ukuran file melebihi 50 MB',
+    ]);
+    
+    $order = Order::where('id', $request->order_id)
+                  ->where('user_id', Auth::id())
+                  ->whereIn('status', ['Dikirim', 'Sedang Dikirim', 'Pesanan Sedang Dikirim'])
+                  ->firstOrFail();
+                  
+    if ($order->returnRequest) {
+        return redirect('/pelanggan/riwayat')->with('error', 'Pengajuan pengembalian untuk pesanan ini sudah dibuat.');
+    }
+    
+    $videoPath = $request->file('video_proof')->store('returns', 'public');
+    $videoUrl = '/storage/' . $videoPath;
+    
+    App\Models\ReturnRequest::create([
+        'order_id' => $order->id,
+        'user_id' => Auth::id(),
+        'reason' => $request->reason,
+        'video_proof' => $videoUrl,
+        'status' => 'Pending'
+    ]);
+    
+    // Update order status to 'Pengajuan Pending'
+    $order->status = 'Pengajuan Pending';
+    $order->save();
+    
+    // Notify Admins
+    Notification::send('admin', 'Pengajuan Pengembalian Baru', 'Pelanggan ' . Auth::user()->name . ' mengajukan pengembalian untuk Pesanan #' . $order->order_number, null, 'warning', '/admin/manajemen-pengembalian');
+    
+    return redirect('/pelanggan/riwayat')->with('success', 'Pengajuan pengembalian berhasil dikirim! Menunggu konfirmasi admin.')->with('title', 'Pengajuan Berhasil');
+})->name('pelanggan.pengembalian.simpan');
 
 
 // Notification Routes

@@ -206,7 +206,7 @@
 
 @section('content')
     <div class="mb-12 text-center md:text-left">
-        <h1 class="text-[32px] md:text-[48px] font-black text-emerald-950 tracking-tighter leading-none mb-3">Informasi Pesanan</h1>
+        <h1 class="text-[32px] md:text-[48px] font-black text-emerald-950 tracking-tighter leading-none mb-3">Informasi Pengiriman</h1>
     </div>
 
     <form action="{{ url('/pelanggan/pembayaran') }}" method="POST">

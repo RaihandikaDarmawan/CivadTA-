@@ -48,7 +48,7 @@
     <header class="mb-12 flex flex-col md:flex-row justify-between items-center md:items-end gap-6 text-center md:text-left">
         <div>
             <h1 class="text-[32px] md:text-[48px] font-black text-emerald-950 tracking-tighter mb-3 leading-none">Profil Saya</h1>
-            <p class="text-emerald-900 font-bold text-[12px] md:text-[14px] uppercase tracking-[0.3em]">Informasi Pribadi & Keanggotaan</p>
+            <p class="text-emerald-900 font-bold text-[12px] md:text-[14px] uppercase tracking-[0.3em]">Informasi Pribadi</p>
         </div>
         <button @click="editing = !editing" 
                 class="w-full md:w-auto px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-[12px] transition-all duration-300 shadow-xl"

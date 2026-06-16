@@ -146,20 +146,16 @@
     <!-- Stats Bar -->
     <section class="py-20 bg-white relative z-10">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 border-y border-emerald-100 py-12 md:py-16">
-                <div class="text-center group border-b border-emerald-50 md:border-b-0 pb-6 md:pb-0">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-12 border-y border-emerald-100 py-12 md:py-16">
+                <div class="text-center group border-b border-emerald-50 sm:border-b-0 pb-6 sm:pb-0">
                     <p class="text-3xl md:text-5xl font-black text-emerald-950 mb-2 group-hover:text-emerald-500 transition-colors">1998</p>
                     <p class="text-[9px] md:text-[10px] font-black text-emerald-900/60 uppercase tracking-[0.2em] md:tracking-[0.3em]">Tahun Berdiri</p>
                 </div>
-                <div class="text-center group border-b border-emerald-50 md:border-b-0 pb-6 md:pb-0">
+                <div class="text-center group border-b border-emerald-50 sm:border-b-0 pb-6 sm:pb-0">
                     <p class="text-3xl md:text-5xl font-black text-emerald-950 mb-2 group-hover:text-emerald-500 transition-colors">500+</p>
                     <p class="text-[9px] md:text-[10px] font-black text-emerald-900/60 uppercase tracking-[0.2em] md:tracking-[0.3em]">Judul Terbitan</p>
                 </div>
-                <div class="text-center group pt-6 md:pt-0">
-                    <p class="text-3xl md:text-5xl font-black text-emerald-950 mb-2 group-hover:text-emerald-500 transition-colors">10k+</p>
-                    <p class="text-[9px] md:text-[10px] font-black text-emerald-900/60 uppercase tracking-[0.2em] md:tracking-[0.3em]">Sekolah Terlayani</p>
-                </div>
-                <div class="text-center group pt-6 md:pt-0">
+                <div class="text-center group pt-6 sm:pt-0">
                     <p class="text-3xl md:text-5xl font-black text-emerald-950 mb-2 group-hover:text-emerald-500 transition-colors">100%</p>
                     <p class="text-[9px] md:text-[10px] font-black text-emerald-900/60 uppercase tracking-[0.2em] md:tracking-[0.3em]">Terpercaya</p>
                 </div>
