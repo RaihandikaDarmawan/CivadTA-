@@ -66,7 +66,7 @@
                 btnVerifikasi.classList.add('hidden');
             }
 
-            if (order.status === 'Selesai' || order.status === 'Dibatalkan' || order.status === 'Cancelled' || order.status === 'Dikembalikan') {
+            if (order.status === 'Selesai' || order.status === 'Dibatalkan' || order.status === 'Cancelled' || order.status === 'Dikembalikan' || order.status === 'Pengembalian Ditolak') {
                 btnVerifikasi.classList.add('hidden');
                 btnSedangDikirim.classList.add('hidden');
                 btnSelesai.classList.add('hidden');
@@ -258,7 +258,7 @@
                             @else
                                 <button onclick='openDetailModal(@json($order))' class="px-8 py-3.5 bg-emerald-950 text-white font-black text-[13px] rounded-2xl shadow-xl hover:bg-emerald-900 transition-all active:scale-95 flex items-center gap-2 mx-auto uppercase tracking-tighter">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-9.75 0h9.75" /></svg>
-                                    Kelola
+                                    {{ in_array($order->status, ['Selesai', 'Dikembalikan', 'Pengembalian Ditolak']) ? 'Lihat Detail' : 'Kelola' }}
                                 </button>
                             @endif
                         </td>

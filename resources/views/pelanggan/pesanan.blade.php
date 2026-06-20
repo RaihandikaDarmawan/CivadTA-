@@ -206,8 +206,18 @@
 
 @section('content')
     <div class="mb-12 text-center md:text-left">
-        <h1 class="text-[32px] md:text-[48px] font-black text-emerald-950 tracking-tighter leading-none mb-3">Informasi Pengiriman</h1>
+        <h1 class="text-[32px] md:text-[48px] font-black text-emerald-950 tracking-tighter leading-none mb-3">Informasi Pesanan</h1>
     </div>
+
+    @if($errors->any())
+    <div class="mb-8 p-6 bg-red-50 border border-red-100 text-red-600 text-[13px] rounded-3xl font-bold animate-in fade-in slide-in-from-top-2">
+        <ul class="list-disc pl-5 space-y-1">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
 
     <form action="{{ url('/pelanggan/pembayaran') }}" method="POST">
         @csrf
@@ -229,11 +239,14 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2.5">
                             <label class="text-[12px] font-black text-emerald-900 uppercase tracking-widest ml-1">Nama Lengkap</label>
-                            <input type="text" name="recipient_name" placeholder="Nama penerima..." class="w-full px-6 py-4 rounded-2xl bg-white border-2 border-emerald-950 focus:outline-none text-[15px] font-bold text-emerald-950 transition-all placeholder:text-emerald-950/20" required>
+                            <input type="text" name="recipient_name" value="{{ old('recipient_name', Auth::user()->name ?? '') }}" placeholder="Nama penerima..." class="w-full px-6 py-4 rounded-2xl bg-white border-2 border-emerald-950 focus:outline-none text-[15px] font-bold text-emerald-950 transition-all placeholder:text-emerald-950/20" required>
                         </div>
                         <div class="space-y-2.5">
                             <label class="text-[12px] font-black text-emerald-900 uppercase tracking-widest ml-1">No. Handphone</label>
-                            <input type="text" name="phone_number" placeholder="Contoh: 0812..." class="w-full px-6 py-4 rounded-2xl bg-white border-2 border-emerald-950 focus:outline-none text-[15px] font-bold text-emerald-950 transition-all placeholder:text-emerald-950/20" required>
+                            <input type="tel" name="phone_number" value="{{ old('phone_number', Auth::user()->phone ?? '') }}" placeholder="Contoh: 0812..." 
+                                   minlength="10" maxlength="13" pattern="[0-9]{10,13}" inputmode="numeric"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                   class="w-full px-6 py-4 rounded-2xl bg-white border-2 border-emerald-950 focus:outline-none text-[15px] font-bold text-emerald-950 transition-all placeholder:text-emerald-950/20" required>
                         </div>
                     </div>
                 </div>
@@ -267,13 +280,13 @@
 
                         <div class="space-y-3">
                             <label class="text-[12px] font-black text-emerald-900 uppercase tracking-widest ml-1">Alamat Lengkap</label>
-                            <textarea id="alamat_lengkap" name="address" class="w-full px-6 py-4 rounded-[28px] bg-white border-2 border-emerald-950 focus:outline-none text-[15px] font-bold text-emerald-950 h-32 resize-none transition-all placeholder:text-emerald-950/20" placeholder="Masukkan alamat pengiriman selengkap mungkin..." required></textarea>
+                            <textarea id="alamat_lengkap" name="address" class="w-full px-6 py-4 rounded-[28px] bg-white border-2 border-emerald-950 focus:outline-none text-[15px] font-bold text-emerald-950 h-32 resize-none transition-all placeholder:text-emerald-950/20" placeholder="Masukkan alamat pengiriman selengkap mungkin..." required>{{ old('address', Auth::user()->address ?? '') }}</textarea>
                         </div>
                         
                         <div class="space-y-3">
                             <label class="text-[12px] font-black text-emerald-900 uppercase tracking-widest ml-1">Estimasi Jarak</label>
                             <div class="relative">
-                                <input type="number" id="jarak" name="distance_km" min="1" value="3" oninput="updateSummary()" onchange="updateSummary()" class="w-full px-6 py-4 rounded-2xl bg-white border-2 border-emerald-950 focus:outline-none text-[15px] font-black text-emerald-950 pr-16 transition-all" required>
+                                <input type="number" id="jarak" name="distance_km" min="1" value="-" oninput="updateSummary()" onchange="updateSummary()" class="w-full px-6 py-4 rounded-2xl bg-white border-2 border-emerald-950 focus:outline-none text-[15px] font-black text-emerald-950 pr-16 transition-all" required>
                                 <div class="absolute inset-y-0 right-6 flex items-center pointer-events-none text-emerald-950/40">
                                     <span class="text-[14px] font-black">km</span>
                                 </div>

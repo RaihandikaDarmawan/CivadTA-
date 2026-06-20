@@ -32,6 +32,26 @@ if (env('APP_ENV', 'local') === 'local') {
     ];
 }
 
+function auto_complete_old_orders() {
+    $shippingOrders = App\Models\Order::whereIn('status', ['Dikirim', 'Sedang Dikirim', 'Pesanan Sedang Dikirim'])->get();
+    foreach ($shippingOrders as $o) {
+        if ($o->updated_at->addDays(2)->isPast()) {
+            $o->status = 'Selesai';
+            if (!$o->points_awarded) {
+                $user = $o->user;
+                if ($user) {
+                    $pointsEarned = floor($o->total_amount / 10000);
+                    $user->increment('points', $pointsEarned);
+                    $o->points_awarded = true;
+                }
+            }
+            $o->save();
+            App\Models\Notification::send('pelanggan', 'Pesanan Otomatis Selesai', 'Pesanan #' . $o->order_number . ' telah diselesaikan oleh sistem secara otomatis.', $o->user_id, 'success', '/pelanggan/riwayat');
+            App\Models\Notification::send('admin', 'Pesanan Otomatis Selesai #' . $o->order_number, 'Pesanan telah otomatis diselesaikan sistem setelah 2 hari pengiriman.', null, 'success', '/admin/manajemen-pesanan');
+        }
+    }
+}
+
 // Landing Page
 Route::get('/', function (Request $request) {
     $banners = Banner::where('is_active', true)->orderBy('order_priority', 'asc')->get();
@@ -332,6 +352,8 @@ Route::post('/admin/user/delete', function (Request $request) {
 Route::get('/admin/manajemen-pesanan', function () {
     if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
     
+    auto_complete_old_orders();
+    
     $orders = Order::with(['user', 'items.book'])->orderBy('created_at', 'desc')->get();
     
     return view('admin.pesanan', [
@@ -346,7 +368,7 @@ Route::get('/admin/laporan-penjualan', function (Request $request) {
     $startDate = $request->input('start_date');
     $endDate = $request->input('end_date');
     
-    $query = Order::with(['user', 'items.book'])->orderBy('created_at', 'desc');
+    $query = Order::where('status', 'Selesai')->with(['user', 'items.book'])->orderBy('created_at', 'desc');
 
     if ($startDate && $endDate) {
         $query->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
@@ -364,9 +386,9 @@ Route::get('/admin/laporan-penjualan', function (Request $request) {
     }
 
     $orders = $query->get();
-    $totalRevenue = $orders->where('status', '!=', 'Cancelled')->sum('total_amount');
+    $totalRevenue = $orders->sum('total_amount');
     $totalOrders = $orders->count();
-    $totalBooks = $orders->where('status', '!=', 'Cancelled')->flatMap->items->sum('quantity');
+    $totalBooks = $orders->flatMap->items->sum('quantity');
 
     return view('admin.laporan', [
         'orders' => $orders,
@@ -386,7 +408,7 @@ Route::get('/admin/laporan-penjualan/export', function (Request $request) {
     $startDate = $request->input('start_date');
     $endDate = $request->input('end_date');
     
-    $query = Order::with(['user', 'items.book'])->orderBy('created_at', 'desc');
+    $query = Order::where('status', 'Selesai')->with(['user', 'items.book'])->orderBy('created_at', 'desc');
 
     if ($startDate && $endDate) {
         $query->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
@@ -405,7 +427,7 @@ Route::get('/admin/laporan-penjualan/export', function (Request $request) {
     }
 
     $orders = $query->get();
-    $totalRevenue = $orders->where('status', '!=', 'Cancelled')->sum('total_amount');
+    $totalRevenue = $orders->sum('total_amount');
     
     $filename = "Laporan_Penjualan_CIVAD_" . date('Y-m-d') . ".csv";
     
@@ -451,6 +473,10 @@ Route::post('/admin/pesanan/update-status', function (Request $request) {
     if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
     
     $order = Order::findOrFail($request->input('id'));
+    
+    if ($order->status === 'Pengembalian Ditolak') {
+        return redirect()->back()->with('error', 'Pesanan dengan status Pengembalian Ditolak tidak dapat diubah statusnya!');
+    }
     
     $newStatus = $request->input('status');
     if ($newStatus === 'Sedang Dikirim' && !$request->filled('tracking_link')) {
@@ -694,6 +720,18 @@ Route::post('/pelanggan/konfirmasi-pembayaran', function (Request $request) {
     $user = Auth::user();
     if (!$user) return redirect('/login')->with('error', 'Silakan login terlebih dahulu');
 
+    $request->validate([
+        'recipient_name' => 'required|string|max:255',
+        'phone_number' => 'required|digits_between:10,13',
+        'address' => 'required|string',
+        'distance_km' => 'required|integer|min:1',
+    ], [
+        'recipient_name.required' => 'Nama penerima wajib diisi.',
+        'phone_number.required' => 'Nomor handphone wajib diisi.',
+        'phone_number.digits_between' => 'Nomor handphone harus 10 hingga 13 digit.',
+        'address.required' => 'Alamat lengkap wajib diisi.',
+    ]);
+
     $orderNumber = 'ORD-' . strtoupper(Str::random(8));
     $subtotal = collect($cart)->sum(fn($i) => $i['price'] * $i['qty']);
     $distanceKm = (int) $request->input('distance_km', 3);
@@ -836,6 +874,20 @@ Route::get('/pelanggan/profil', function () {
 Route::post('/pelanggan/profil/update', function (Request $request) {
     if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
     
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'phone' => 'required|digits_between:10,13',
+        'address' => 'required|string',
+    ], [
+        'name.required' => 'Nama lengkap wajib diisi.',
+        'email.required' => 'Email wajib diisi.',
+        'email.email' => 'Format email tidak valid.',
+        'phone.required' => 'Nomor telepon wajib diisi.',
+        'phone.digits_between' => 'Nomor handphone harus 10 hingga 13 digit.',
+        'address.required' => 'Alamat lengkap wajib diisi.',
+    ]);
+    
     $user = Auth::user();
     $data = [
         'name' => $request->name,
@@ -879,6 +931,22 @@ Route::get('/admin/profil', function () {
 
 Route::post('/admin/profil/update', function (Request $request) {
     if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
+    
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'phone' => 'required|digits_between:10,13',
+        'address' => 'required|string',
+        'daerah' => 'required|string',
+    ], [
+        'name.required' => 'Nama lengkap wajib diisi.',
+        'email.required' => 'Email wajib diisi.',
+        'email.email' => 'Format email tidak valid.',
+        'phone.required' => 'Nomor telepon wajib diisi.',
+        'phone.digits_between' => 'Nomor handphone harus 10 hingga 13 digit.',
+        'address.required' => 'Alamat lengkap wajib diisi.',
+        'daerah.required' => 'Access region wajib diisi.',
+    ]);
     
     $admin = null;
     if (session()->has('admin_id')) {
@@ -932,10 +1000,25 @@ Route::get('/pelanggan/pesanan', function () {
     return view('pelanggan.pesanan');
 });
 Route::match(['get', 'post'], '/pelanggan/pembayaran', function (Request $request) { 
+    if ($request->isMethod('post')) {
+        $request->validate([
+            'recipient_name' => 'required|string|max:255',
+            'phone_number' => 'required|digits_between:10,13',
+            'address' => 'required|string',
+            'distance_km' => 'required|integer|min:1',
+        ], [
+            'recipient_name.required' => 'Nama penerima wajib diisi.',
+            'phone_number.required' => 'Nomor handphone wajib diisi.',
+            'phone_number.digits_between' => 'Nomor handphone harus 10 hingga 13 digit.',
+            'address.required' => 'Alamat lengkap wajib diisi.',
+        ]);
+    }
     return view('pelanggan.pembayaran', ['request' => $request]); 
 });
 Route::get('/pelanggan/riwayat', function () {
     if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
+    
+    auto_complete_old_orders();
     
     $orders = Order::where('user_id', Auth::id())
                    ->with(['items.book', 'returnRequest'])
@@ -1025,6 +1108,8 @@ Route::get('/pelanggan/invoice/{id}/unduh', function ($id) {
 Route::get('/pelanggan/status', function () {
     if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
     
+    auto_complete_old_orders();
+    
     $orders = Order::where('user_id', Auth::id())
                    ->orderBy('created_at', 'desc')
                    ->get();
@@ -1058,12 +1143,17 @@ Route::post('/pelanggan/pengembalian/simpan', function (Request $request) {
         'order_id' => 'required|exists:orders,id',
         'reason' => 'required|string|min:10',
         'video_proof' => 'required|mimes:mp4,mov,avi,webm|max:51200', // max 50MB
+        'bank_name' => 'required|string|max:255',
+        'bank_account_number' => 'required|numeric',
     ], [
         'reason.required' => 'Alasan pengembalian wajib diisi.',
         'reason.min' => 'Alasan pengembalian minimal harus 10 karakter.',
         'video_proof.required' => 'Bukti video wajib diunggah.',
         'video_proof.mimes' => 'Format video harus berupa mp4, mov, avi, atau webm.',
         'video_proof.max' => 'Video gagal diunggah karena ukuran file melebihi 50 MB',
+        'bank_name.required' => 'Nama bank wajib diisi.',
+        'bank_account_number.required' => 'Nomor rekening wajib diisi.',
+        'bank_account_number.numeric' => 'Nomor rekening harus berupa angka.',
     ]);
     
     $order = Order::where('id', $request->order_id)
@@ -1083,7 +1173,9 @@ Route::post('/pelanggan/pengembalian/simpan', function (Request $request) {
         'user_id' => Auth::id(),
         'reason' => $request->reason,
         'video_proof' => $videoUrl,
-        'status' => 'Pending'
+        'status' => 'Pending',
+        'bank_name' => $request->bank_name,
+        'bank_account_number' => $request->bank_account_number,
     ]);
     
     // Update order status to 'Pengajuan Pending'

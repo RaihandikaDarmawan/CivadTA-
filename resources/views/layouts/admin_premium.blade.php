@@ -91,7 +91,6 @@
         }
 
         .stat-card { 
-            background: white;
             border-radius: 32px;
             border: 1px solid rgba(16, 185, 129, 0.1);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
@@ -126,12 +125,6 @@
                     <h1 class="font-black text-lg text-white leading-tight tracking-tighter">Arya Duta Tangerang</h1>
                 </div>
             </div>
-            
-            <!-- Quick Back Link -->
-            <a href="{{ url('/') }}" class="absolute -bottom-4 left-1/2 -translate-x-1/2 px-5 py-2.5 bg-emerald-500 text-emerald-950 rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl hover:bg-white hover:scale-105 transition-all active:scale-95 flex items-center gap-2 z-10 whitespace-nowrap">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-3.5 h-3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
-                Halaman Utama
-            </a>
         </div>
 
         <!-- Navigation -->
@@ -175,11 +168,11 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="ml-0 lg:ml-[340px] min-h-screen relative z-10">
+    <main id="main-content" class="ml-0 lg:ml-[340px] min-h-screen relative z-10 transition-all duration-500 ease-in-out">
         <!-- Topbar -->
         <header class="h-20 lg:h-28 glass-nav sticky top-0 z-40 flex items-center justify-between px-3 lg:px-12 shadow-2xl">
             <div class="flex items-center gap-1.5 md:gap-4 min-w-0">
-                <button id="sidebar-toggle" class="lg:hidden text-white p-1 md:p-2 hover:bg-white/10 rounded-xl transition-all shrink-0">
+                <button id="sidebar-toggle" class="text-white p-1 md:p-2 hover:bg-white/10 rounded-xl transition-all shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 md:w-7 md:h-7">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                     </svg>
@@ -307,11 +300,20 @@
     <script>
         const sidebar = document.getElementById('admin-sidebar');
         const sidebarToggle = document.getElementById('sidebar-toggle');
+        const mainContent = document.getElementById('main-content');
         
-        if(sidebarToggle && sidebar) {
+        if(sidebarToggle && sidebar && mainContent) {
             sidebarToggle.addEventListener('click', (e) => {
                 e.stopPropagation();
-                sidebar.classList.toggle('-translate-x-full');
+                if (window.innerWidth >= 1024) {
+                    sidebar.classList.toggle('lg:translate-x-0');
+                    sidebar.classList.toggle('lg:-translate-x-full');
+                    mainContent.classList.toggle('lg:ml-[340px]');
+                    mainContent.classList.toggle('lg:ml-0');
+                } else {
+                    sidebar.classList.toggle('-translate-x-full');
+                    sidebar.classList.toggle('translate-x-0');
+                }
             });
 
             // Close sidebar when clicking outside on mobile
@@ -319,6 +321,7 @@
                 if (window.innerWidth < 1024) {
                     if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
                         sidebar.classList.add('-translate-x-full');
+                        sidebar.classList.remove('translate-x-0');
                     }
                 }
             });

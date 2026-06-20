@@ -36,7 +36,7 @@
                                 <span class="text-emerald-400 font-bold text-xs uppercase tracking-wider">• {{ $ret->created_at->format('d M Y, H:i') }}</span>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div>
                                     <span class="text-[9px] uppercase tracking-widest font-black text-emerald-400 block mb-1">Pelanggan</span>
                                     <p class="font-black text-emerald-950 text-[15px]">{{ $ret->user->name }}</p>
@@ -45,6 +45,11 @@
                                 <div>
                                     <span class="text-[9px] uppercase tracking-widest font-black text-emerald-400 block mb-1">Total Pembayaran</span>
                                     <p class="font-black text-emerald-950 text-[15px]">Rp {{ number_format($ret->order->total_amount, 0, ',', '.') }}</p>
+                                </div>
+                                <div>
+                                    <span class="text-[9px] uppercase tracking-widest font-black text-emerald-400 block mb-1">Rekening Pengembalian</span>
+                                    <p class="font-black text-emerald-950 text-[15px]">{{ $ret->bank_name ?? '-' }}</p>
+                                    <p class="text-emerald-700/60 font-bold text-[12px]">{{ $ret->bank_account_number ?? '-' }}</p>
                                 </div>
                             </div>
 

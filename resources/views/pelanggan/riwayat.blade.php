@@ -69,6 +69,9 @@
                                         {{ $order->tracking_link }}
                                     </a>
                                 </div>
+                                @if(in_array($order->status, ['Dikirim', 'Sedang Dikirim', 'Pesanan Sedang Dikirim']))
+                                    <p class="text-[11px] text-emerald-300/80 font-bold mt-2 max-w-md">Mohon lakukan konfirmasi penerimaan pesanan setelah barang diterima. Apabila dalam 2 hari tidak ada konfirmasi, status pesanan akan otomatis diperbarui menjadi selesai</p>
+                                @endif
                             @endif
                         </div>
                     </div>
@@ -188,10 +191,14 @@
                 <div class="mt-8 pt-8 border-t border-emerald-950/5">
                     <h4 class="text-[11px] font-black text-emerald-950 uppercase tracking-[0.3em] mb-4">Informasi Pengembalian Barang</h4>
                     <div class="bg-white p-6 rounded-[32px] border border-emerald-950/5 space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
                                 <span class="text-[9px] uppercase tracking-widest font-black text-emerald-400 block mb-1">Alasan Pengembalian</span>
                                 <p class="text-[13px] font-bold text-emerald-950 leading-relaxed">{{ $order->returnRequest->reason }}</p>
+                            </div>
+                            <div>
+                                <span class="text-[9px] uppercase tracking-widest font-black text-emerald-400 block mb-1">Rekening Pengembalian</span>
+                                <p class="text-[13px] font-bold text-emerald-950 leading-relaxed">{{ $order->returnRequest->bank_name ?? '-' }} ({{ $order->returnRequest->bank_account_number ?? '-' }})</p>
                             </div>
                             <div>
                                 <span class="text-[9px] uppercase tracking-widest font-black text-emerald-400 block mb-2">Bukti Video</span>

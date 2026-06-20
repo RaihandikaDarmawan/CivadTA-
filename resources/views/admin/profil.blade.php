@@ -54,7 +54,7 @@
 
 @section('content')
 
-<div class="max-w-4xl mx-auto" x-data="{ editing: false }">
+<div class="max-w-4xl mx-auto" x-data="{ editing: {{ $errors->any() ? 'true' : 'false' }} }">
 
     <!-- Action Bar -->
     <div class="mb-8 flex justify-end">
@@ -117,6 +117,15 @@
         <div x-show="editing" x-cloak>
             <form action="{{ url('/admin/profil/update') }}" method="POST" enctype="multipart/form-data" class="p-8 sm:p-12">
                 @csrf
+                @if($errors->any())
+                <div class="mb-8 p-6 bg-red-50 border border-red-100 text-red-600 text-[13px] rounded-3xl font-bold animate-in fade-in slide-in-from-top-2">
+                    <ul class="list-disc pl-5 space-y-1">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
                 <input type="hidden" name="cropped_photo" id="cropped_photo_admin">
 
                 <div class="flex flex-col md:flex-row gap-12 items-start">
@@ -156,7 +165,9 @@
 
                         <div>
                             <label class="block text-[10px] font-black text-emerald-900 uppercase tracking-[0.2em] mb-3 ml-2">Nomor Telepon</label>
-                            <input type="text" name="phone" value="{{ $admin->phone }}"
+                            <input type="tel" name="phone" value="{{ old('phone', $admin->phone) }}" required
+                                   minlength="10" maxlength="13" pattern="[0-9]{10,13}" inputmode="numeric"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                    class="w-full px-6 py-4 bg-emerald-50 border-2 border-emerald-950 rounded-[20px] focus:bg-white focus:outline-none font-bold text-emerald-950 transition-all">
                         </div>
 

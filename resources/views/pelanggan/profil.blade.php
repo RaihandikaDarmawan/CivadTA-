@@ -44,7 +44,7 @@
 @endsection
 
 @section('content')
-<div class="max-w-4xl mx-auto py-8 md:py-16 px-6" x-data="{ editing: false }">
+<div class="max-w-4xl mx-auto py-8 md:py-16 px-6" x-data="{ editing: {{ $errors->any() ? 'true' : 'false' }} }">
     <header class="mb-12 flex flex-col md:flex-row justify-between items-center md:items-end gap-6 text-center md:text-left">
         <div>
             <h1 class="text-[32px] md:text-[48px] font-black text-emerald-950 tracking-tighter mb-3 leading-none">Profil Saya</h1>
@@ -101,6 +101,15 @@
         <div x-show="editing" class="p-8 md:p-20 bg-emerald-50/20" x-cloak>
             <form action="{{ url('/pelanggan/profil/update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                @if($errors->any())
+                <div class="mb-8 p-6 bg-red-50 border border-red-100 text-red-600 text-[13px] rounded-3xl font-bold animate-in fade-in slide-in-from-top-2">
+                    <ul class="list-disc pl-5 space-y-1">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
                 <input type="hidden" name="cropped_photo" id="cropped_photo">
                 
                 <div class="flex flex-col md:flex-row gap-12 md:gap-20">
@@ -133,7 +142,9 @@
 
                         <div class="space-y-2">
                             <label class="text-[11px] font-black text-emerald-900 uppercase tracking-widest ml-1">Nomor Telepon</label>
-                            <input type="text" name="phone" value="{{ $user->phone }}"
+                            <input type="tel" name="phone" value="{{ old('phone', $user->phone) }}" required
+                                   minlength="10" maxlength="13" pattern="[0-9]{10,13}" inputmode="numeric"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                    class="w-full px-6 py-4 bg-white border-2 border-emerald-950 rounded-[20px] focus:outline-none font-bold text-emerald-950 transition-all">
                         </div>
 

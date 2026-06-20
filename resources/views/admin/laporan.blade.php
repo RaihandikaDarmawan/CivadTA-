@@ -54,21 +54,21 @@
         <div class="bg-emerald-950 p-6 md:p-10 rounded-[32px] md:rounded-[40px] shadow-2xl relative overflow-hidden group flex flex-col items-center text-center">
             <div class="relative z-10">
                 <p class="text-[9px] md:text-[11px] font-black text-white/60 uppercase tracking-[0.2em] mb-3">Total Pendapatan</p>
-                <h3 class="text-xl md:text-[40px] font-black text-white tracking-tighter leading-none">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</h3>
+                <h3 class="text-xl md:text-[40px] font-black text-white tracking-tighter leading-none">{{ number_format($totalRevenue, 0, ',', '.') }} <span class="text-[20px] md:text-[20px] text-white/60 ml-1">Rp</span></h3>
             </div>
             <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full group-hover:scale-150 transition-transform duration-700 -z-0"></div>
         </div>
         <div class="bg-emerald-950 p-6 md:p-10 rounded-[32px] md:rounded-[40px] shadow-2xl relative overflow-hidden group flex flex-col items-center text-center">
             <div class="relative z-10">
                 <p class="text-[9px] md:text-[11px] font-black text-white/60 uppercase tracking-[0.2em] mb-3">Jumlah Transaksi</p>
-                <h3 class="text-xl md:text-[40px] font-black text-white tracking-tighter leading-none">{{ $totalOrders }} <span class="text-[10px] md:text-[14px] text-white/60 ml-1">Order</span></h3>
+                <h3 class="text-xl md:text-[40px] font-black text-white tracking-tighter leading-none">{{ $totalOrders }} <span class="text-[10px] md:text-[20px] text-white/60 ml-1">Order</span></h3>
             </div>
             <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full group-hover:scale-150 transition-transform duration-700 -z-0"></div>
         </div>
         <div class="bg-emerald-950 p-6 md:p-10 rounded-[32px] md:rounded-[40px] shadow-2xl relative overflow-hidden group flex flex-col items-center text-center">
             <div class="relative z-10">
                 <p class="text-[9px] md:text-[11px] font-black text-white/60 uppercase tracking-[0.2em] mb-3">Buku Terjual</p>
-                <h3 class="text-xl md:text-[40px] font-black text-white tracking-tighter leading-none">{{ $totalBooks }} <span class="text-[10px] md:text-[14px] text-white/60 ml-1">B u k u</span></h3>
+                <h3 class="text-xl md:text-[40px] font-black text-white tracking-tighter leading-none">{{ $totalBooks }} <span class="text-[10px] md:text-[20px] text-white/60 ml-1">Buku</span></h3>
             </div>
             <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full group-hover:scale-150 transition-transform duration-700 -z-0"></div>
         </div>

@@ -76,6 +76,13 @@
                     @csrf
                     <input type="hidden" name="order_id" value="{{ $order->id }}">
                     
+                    <!-- Shipping Destination Text -->
+                    <div class="p-6 bg-emerald-50 border border-emerald-100 rounded-3xl mb-4">
+                        <p class="text-[13px] font-bold text-emerald-950 leading-relaxed">
+                            Silahkan mengirimkan ke alamat ini: <strong>Jl. Karyawan 1 No.71, Karang Tengah, Banten, Kota Tangerang - 15157</strong>
+                        </p>
+                    </div>
+
                     <!-- Reason -->
                     <div class="flex flex-col gap-2">
                         <label for="reason" class="text-[11px] font-black text-emerald-950 uppercase tracking-[0.2em]">Alasan Pengembalian <span class="text-rose-500">*</span></label>
@@ -101,6 +108,21 @@
                                 <span class="font-black text-emerald-950 text-[14px] leading-tight block mb-1" id="file-label-text">Pilih atau Tarik Berkas Video</span>
                                 <span class="text-[11px] font-bold text-emerald-700/60 block" id="file-sub-text">Mendukung MP4, MOV, AVI, atau WEBM (Maks. 50MB)</span>
                             </label>
+                        </div>
+                    </div>
+
+                    <!-- Bank Details -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-emerald-950/5">
+                        <div class="flex flex-col gap-2">
+                            <label for="bank_name" class="text-[11px] font-black text-emerald-950 uppercase tracking-[0.2em]">Nama Bank <span class="text-rose-500">*</span></label>
+                            <input type="text" name="bank_name" id="bank_name" value="{{ old('bank_name') }}" required placeholder="Contoh: BCA, Mandiri, BRI..."
+                                   class="w-full px-6 py-4 rounded-2xl border-2 border-emerald-950/10 focus:border-emerald-950 focus:ring-0 outline-none text-[14px] font-bold text-emerald-950 transition-all placeholder:text-emerald-950/20">
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label for="bank_account_number" class="text-[11px] font-black text-emerald-950 uppercase tracking-[0.2em]">Nomor Rekening <span class="text-rose-500">*</span></label>
+                            <input type="text" name="bank_account_number" id="bank_account_number" value="{{ old('bank_account_number') }}" required placeholder="Contoh: 1234567890"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')" inputmode="numeric"
+                                   class="w-full px-6 py-4 rounded-2xl border-2 border-emerald-950/10 focus:border-emerald-950 focus:ring-0 outline-none text-[14px] font-bold text-emerald-950 transition-all placeholder:text-emerald-950/20">
                         </div>
                     </div>
                     

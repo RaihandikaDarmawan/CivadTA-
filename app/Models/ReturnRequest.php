@@ -14,6 +14,8 @@ class ReturnRequest extends Model
         'video_proof',
         'status',
         'admin_notes',
+        'bank_name',
+        'bank_account_number',
     ];
 
     public function order(): BelongsTo
