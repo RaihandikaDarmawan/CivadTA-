@@ -112,7 +112,7 @@
                 const statusData = row.getAttribute('data-status');
                 
                 const matchesSearch = searchData.includes(searchTerm);
-                const matchesStatus = statusFilter === 'Semua Status Transaksi' || statusData === statusFilter;
+                const matchesStatus = statusFilter === 'Semua Status Pesanan' || statusFilter === 'Semua Status Transaksi' || statusData === statusFilter;
 
                 if (matchesSearch && matchesStatus) {
                     row.classList.remove('hidden');
@@ -148,12 +148,14 @@
             </div>
             <select id="statusFilter" onchange="filterTable()" 
                     class="w-full bg-emerald-50/50 border-4 border-emerald-950 rounded-[18px] py-6 px-10 text-[16px] font-black text-emerald-950 focus:outline-none focus:ring-8 focus:ring-emerald-500/5 transition-all appearance-none cursor-pointer">
-                <option>Semua Status Transaksi</option>
-                <option>Pending</option>
-                <option>Verifikasi</option>
+                <option>Semua Status Pesanan</option>
+                <option>Sedang Dikemas</option>
                 <option>Sedang Dikirim</option>
                 <option>Selesai</option>
                 <option>Dibatalkan</option>
+                <option>Pengajuan Pending</option>
+                <option>Dikembalikan</option>
+                <option>Pengembalian Ditolak</option>
             </select>
         </div>
     </div>
@@ -179,24 +181,34 @@
                         // Map database status to new display labels if needed
                         $statusMap = [
                             'Menunggu Verifikasi' => 'Pending',
+                            'Pending' => 'Pending',
                             'Terverifikasi' => 'Verifikasi',
+                            'Verifikasi' => 'Verifikasi',
+                            'Pesanan Sedang Dikemas' => 'Sedang Dikemas',
+                            'Sedang Dikemas' => 'Sedang Dikemas',
                             'Dikirim' => 'Sedang Dikirim',
+                            'Sedang Dikirim' => 'Sedang Dikirim',
+                            'Pesanan Sedang Dikirim' => 'Sedang Dikirim',
                             'Selesai' => 'Selesai',
                             'Ditolak' => 'Dibatalkan',
-                            // Add direct mappings too
-                            'Pending' => 'Pending',
-                            'Verifikasi' => 'Verifikasi',
-                            'Sedang Dikirim' => 'Sedang Dikirim',
-                            'Dibatalkan' => 'Dibatalkan'
+                            'Dibatalkan' => 'Dibatalkan',
+                            'Cancelled' => 'Dibatalkan',
+                            'Pengajuan Pending' => 'Pengajuan Pending',
+                            'Dikembalikan' => 'Dikembalikan',
+                            'Pengembalian Ditolak' => 'Pengembalian Ditolak'
                         ];
                         $displayStatus = $statusMap[$order->status] ?? $order->status;
 
                         $statusColors = [
                             'Pending' => 'amber',
                             'Verifikasi' => 'emerald',
+                            'Sedang Dikemas' => 'purple',
                             'Sedang Dikirim' => 'blue',
                             'Selesai' => 'emerald',
                             'Dibatalkan' => 'rose',
+                            'Pengajuan Pending' => 'orange',
+                            'Dikembalikan' => 'indigo',
+                            'Pengembalian Ditolak' => 'rose'
                         ];
                         $accentColor = $statusColors[$displayStatus] ?? 'emerald';
                     @endphp
@@ -242,9 +254,13 @@
                                 $colors = [
                                     'Pending' => 'bg-amber-100 text-amber-700 border-amber-200',
                                     'Verifikasi' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
+                                    'Sedang Dikemas' => 'bg-purple-100 text-purple-700 border-purple-200',
                                     'Sedang Dikirim' => 'bg-blue-100 text-blue-700 border-blue-200',
                                     'Selesai' => 'bg-emerald-950 text-white border-emerald-950 shadow-emerald-950/20',
                                     'Dibatalkan' => 'bg-rose-100 text-rose-700 border-rose-200',
+                                    'Pengajuan Pending' => 'bg-orange-100 text-orange-700 border-orange-200',
+                                    'Dikembalikan' => 'bg-indigo-100 text-indigo-700 border-indigo-200',
+                                    'Pengembalian Ditolak' => 'bg-rose-950 text-white border-rose-950 shadow-rose-950/20',
                                 ];
                                 $colorClass = $colors[$displayStatus] ?? 'bg-slate-100 text-slate-800 border-slate-200';
                             @endphp

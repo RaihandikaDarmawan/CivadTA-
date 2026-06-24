@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('pelanggan')->onDelete('cascade');
             $table->string('order_number')->unique();
             $table->integer('total_amount');
             $table->string('status')->default('Menunggu Verifikasi');

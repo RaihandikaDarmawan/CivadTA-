@@ -41,7 +41,7 @@
             <input type="hidden" name="latitude" value="{{ $request->latitude }}">
             <input type="hidden" name="longitude" value="{{ $request->longitude }}">
             <input type="hidden" name="distance_km" value="{{ $request->distance_km ?? 3 }}">
-            <input type="hidden" name="use_points" value="{{ $request->use_points ?? 0 }}">
+            <input type="hidden" name="points_to_redeem" value="{{ $request->points_to_redeem ?? 0 }}">
 
             <div class="flex flex-col xl:flex-row gap-12">
                 <div class="flex-grow space-y-8">
@@ -117,14 +117,25 @@
                                 <span class="font-bold text-emerald-900">Total Produk</span>
                                 <span class="font-black text-emerald-950">Rp {{ number_format(collect(session('cart', []))->sum(fn($i) => $i['price'] * $i['qty']), 0, ',', '.') }}</span>
                             </div>
+                            @php
+                                $distance = (int) ($request->distance_km ?? 3);
+                                $shippingCost = $distance <= 0 ? 0 : ($distance <= 4 ? 11800 : 11800 + ($distance - 4) * 2800);
+                            @endphp
                             <div class="flex justify-between items-center text-[14px]">
-                                <span class="font-bold text-emerald-900">Biaya Pengiriman ({{ $request->distance_km ?? 3 }} km)</span>
-                                <span class="font-black text-emerald-500">Rp {{ number_format(($request->distance_km ?? 3) * 2800, 0, ',', '.') }}</span>
+                                <span class="font-bold text-emerald-900">Biaya Pengiriman ({{ $distance }} km)</span>
+                                <span class="font-black text-emerald-500">Rp {{ number_format($shippingCost, 0, ',', '.') }}</span>
                             </div>
-                            @if($request->use_points == '1' && Auth::user()->points >= 100)
+                            @php
+                                $pointsToRedeem = (int) ($request->points_to_redeem ?? 0);
+                                $pointsDiscount = 0;
+                                if ($pointsToRedeem >= 100 && $pointsToRedeem <= Auth::user()->points && $pointsToRedeem % 50 === 0) {
+                                    $pointsDiscount = $pointsToRedeem * 100;
+                                }
+                            @endphp
+                            @if($pointsDiscount > 0)
                             <div class="flex justify-between items-center text-[14px]">
-                                <span class="font-bold text-rose-600 uppercase tracking-widest text-[11px]">Potongan Poin Loyalty</span>
-                                <span class="font-black text-rose-600">- Rp 10.000</span>
+                                <span class="font-bold text-rose-600 uppercase tracking-widest text-[11px]">Potongan Poin Loyalty ({{ $pointsToRedeem }} Poin)</span>
+                                <span class="font-black text-rose-600">- Rp {{ number_format($pointsDiscount, 0, ',', '.') }}</span>
                             </div>
                             @endif
                         </div>
@@ -135,11 +146,15 @@
                             <p id="total_pembayaran" class="text-[32px] font-black tracking-tighter text-center leading-none relative z-10">
                                 @php
                                     $subtotal = collect(session('cart', []))->sum(fn($i) => $i['price'] * $i['qty']);
-                                    $shipping = ($request->distance_km ?? 3) * 2800;
+                                    $distance = (int) ($request->distance_km ?? 3);
+                                    $shipping = $distance <= 0 ? 0 : ($distance <= 4 ? 11800 : 11800 + ($distance - 4) * 2800);
                                     $discount = session('active_discount', 0);
-                                    if ($request->use_points == '1' && Auth::user()->points >= 100) {
-                                        $discount += 10000;
+                                    $pointsToRedeem = (int) ($request->points_to_redeem ?? 0);
+                                    $pointsDiscount = 0;
+                                    if ($pointsToRedeem >= 100 && $pointsToRedeem <= Auth::user()->points && $pointsToRedeem % 50 === 0) {
+                                        $pointsDiscount = $pointsToRedeem * 100;
                                     }
+                                    $discount += $pointsDiscount;
                                     $grandTotal = max(0, $subtotal + $shipping - $discount);
                                 @endphp
                                 Rp {{ number_format($grandTotal, 0, ',', '.') }}

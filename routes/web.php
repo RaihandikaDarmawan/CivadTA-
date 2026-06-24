@@ -8,7 +8,6 @@ use App\Models\Admin;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Notification;
-use App\Models\Banner;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -54,7 +53,6 @@ function auto_complete_old_orders() {
 
 // Landing Page
 Route::get('/', function (Request $request) {
-    $banners = Banner::where('is_active', true)->orderBy('order_priority', 'asc')->get();
     $search = $request->input('search');
     
     $query = Book::query();
@@ -68,7 +66,6 @@ Route::get('/', function (Request $request) {
     
     return view('welcome', [
         'dummyBooks' => $query->get(),
-        'banners' => $banners,
         'search' => $search
     ]);
 });
@@ -85,8 +82,8 @@ Route::get('/register', function () {
 Route::post('/register', function (Request $request) {
     $request->validate([
         'name' => 'required|string|max:255',
-        'username' => 'required|string|max:255|unique:users',
-        'email' => 'required|string|email|max:255|unique:users',
+        'username' => 'required|string|max:255|unique:pelanggan',
+        'email' => 'required|string|email|max:255|unique:pelanggan',
         'password' => [
             'required',
             'string',
@@ -735,13 +732,15 @@ Route::post('/pelanggan/konfirmasi-pembayaran', function (Request $request) {
     $orderNumber = 'ORD-' . strtoupper(Str::random(8));
     $subtotal = collect($cart)->sum(fn($i) => $i['price'] * $i['qty']);
     $distanceKm = (int) $request->input('distance_km', 3);
-    $shipping = $distanceKm * 2800;
+    $shipping = $distanceKm <= 0 ? 0 : ($distanceKm <= 4 ? 11800 : 11800 + ($distanceKm - 4) * 2800);
     
     $discount = session('active_discount', 0);
-    $usePoints = $request->input('use_points') == '1';
-    if ($usePoints && $user->points >= 100) {
-        $discount += 10000;
+    $pointsToRedeem = (int) $request->input('points_to_redeem', 0);
+    $pointsDiscount = 0;
+    if ($pointsToRedeem >= 100 && $pointsToRedeem <= $user->points && $pointsToRedeem % 50 === 0) {
+        $pointsDiscount = $pointsToRedeem * 100;
     }
+    $discount += $pointsDiscount;
     $total = max(0, $subtotal + $shipping - $discount);
 
     // Konfigurasi Midtrans
@@ -751,7 +750,7 @@ Route::post('/pelanggan/konfirmasi-pembayaran', function (Request $request) {
     Config::$is3ds = true;
 
     $order = null;
-    DB::transaction(function () use ($user, $orderNumber, $total, $cart, &$order, $request, $shipping, $usePoints) {
+    DB::transaction(function () use ($user, $orderNumber, $total, $cart, &$order, $request, $shipping, $pointsToRedeem) {
         $order = Order::create([
             'user_id' => $user->id,
             'order_number' => $orderNumber,
@@ -767,8 +766,8 @@ Route::post('/pelanggan/konfirmasi-pembayaran', function (Request $request) {
             'shipping_cost' => $shipping,
         ]);
 
-        if ($usePoints && $user->points >= 100) {
-            $user->decrement('points', 100);
+        if ($pointsToRedeem >= 100 && $pointsToRedeem <= $user->points && $pointsToRedeem % 50 === 0) {
+            $user->decrement('points', $pointsToRedeem);
         }
 
         foreach ($cart as $item) {

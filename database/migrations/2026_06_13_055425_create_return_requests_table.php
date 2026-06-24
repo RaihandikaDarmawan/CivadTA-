@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('return_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('pelanggan')->onDelete('cascade');
             $table->text('reason');
             $table->string('video_proof');
             $table->string('status')->default('Pending'); // Pending, Disetujui, Ditolak

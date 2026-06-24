@@ -163,29 +163,6 @@
         </div>
     </section>
 
-    <!-- Banner Slider -->
-    @if(isset($banners) && $banners->count() > 0)
-    <section class="pb-16 md:pb-24 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="swiper mySwiper rounded-[40px] md:rounded-[60px] shadow-2xl overflow-hidden h-[240px] md:h-[540px]">
-                <div class="swiper-wrapper">
-                    @foreach($banners as $banner)
-                    <div class="swiper-slide relative">
-                        <img src="{{ $banner->image }}" class="w-full h-full object-cover" alt="Promo">
-                        <div class="absolute inset-0 bg-emerald-950/30"></div>
-                        @if($banner->link)
-                        <a href="{{ $banner->link }}" class="absolute inset-0 z-10"></a>
-                        @endif
-                    </div>
-                    @endforeach
-                </div>
-                <div class="swiper-pagination"></div>
-                <!-- Navigation Arrows -->
-                <div class="swiper-button-next !text-white !w-14 !h-14 bg-emerald-950/20 backdrop-blur-md rounded-full after:!text-xl hover:bg-emerald-500 transition-all"></div>
-                <div class="swiper-button-prev !text-white !w-14 !h-14 bg-emerald-950/20 backdrop-blur-md rounded-full after:!text-xl hover:bg-emerald-500 transition-all"></div>
-            </div>
-        </div>
-    @endif
 
     <!-- Catalog Section -->
     <section id="katalog" class="py-24 bg-emerald-50">

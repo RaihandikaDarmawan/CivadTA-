@@ -138,7 +138,7 @@
                             <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-emerald-950/30 group-focus-within:text-emerald-950 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
                             </div>
-                            <input type="text" name="username" placeholder="johndoe" value="{{ old('username') }}" required class="w-full pl-14 pr-6 py-5 input-dynamic rounded-[28px] text-[15px] font-bold text-emerald-950">
+                            <input type="text" name="username" placeholder="Username" value="{{ old('username') }}" required class="w-full pl-14 pr-6 py-5 input-dynamic rounded-[28px] text-[15px] font-bold text-emerald-950">
                         </div>
                     </div>
                     <div class="space-y-2">
@@ -186,8 +186,8 @@
                         </div>
                         <select name="daerah" class="w-full pl-16 pr-10 py-5 input-dynamic rounded-[28px] text-[16px] font-bold text-emerald-950 appearance-none cursor-pointer">
                             <option value="Jakarta">Jakarta</option>
-                            <option value="Bandung">Tangerang</option>
-                            <option value="Surabaya">Bekasi</option>
+                            <option value="Tangerang">Tangerang</option>
+                            <option value="Bekasi">Bekasi</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 pr-6 flex items-center pointer-events-none text-emerald-950">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>

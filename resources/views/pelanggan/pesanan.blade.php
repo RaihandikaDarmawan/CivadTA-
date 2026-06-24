@@ -155,8 +155,14 @@
         function updateSummary() {
             let jarakInput = document.getElementById('jarak');
             let jarak = parseInt(jarakInput.value) || 0;
-            let biayaPerKm = 2800;
-            let biayaPengiriman = jarak * biayaPerKm;
+            let biayaPengiriman = 0;
+            if (jarak > 0) {
+                if (jarak <= 4) {
+                    biayaPengiriman = 11800;
+                } else {
+                    biayaPengiriman = 11800 + (jarak - 4) * 2800;
+                }
+            }
             
             // Calculate totalProduk from UI elements
             let totalProduk = 0;
@@ -177,9 +183,24 @@
             
             let diskon = {{ session('active_discount', 0) }};
             
-            const usePointsCheckbox = document.getElementById('use_points');
-            if (usePointsCheckbox && usePointsCheckbox.checked) {
-                diskon += 10000;
+            const pointsSelect = document.getElementById('points_to_redeem');
+            let pointsToRedeem = 0;
+            if (pointsSelect) {
+                pointsToRedeem = parseInt(pointsSelect.value) || 0;
+            }
+            
+            let pointDiscount = 0;
+            if (pointsToRedeem >= 100 && pointsToRedeem % 50 === 0) {
+                pointDiscount = pointsToRedeem * 100;
+            }
+            
+            diskon += pointDiscount;
+            
+            if (pointDiscount > 0) {
+                const poinDiscountAmountEl = document.getElementById('poin_discount_amount');
+                if (poinDiscountAmountEl) {
+                    poinDiscountAmountEl.innerText = '- Rp ' + pointDiscount.toLocaleString('id-ID');
+                }
                 document.getElementById('poin_discount_row').classList.remove('hidden');
             } else {
                 if (document.getElementById('poin_discount_row')) {
@@ -291,7 +312,7 @@
                                     <span class="text-[14px] font-black">km</span>
                                 </div>
                             </div>
-                            <p class="text-[11px] font-bold text-emerald-900 mt-2 ml-1 italic">*Biaya kirim: Rp 2.800 / KM</p>
+                            <p class="text-[11px] font-bold text-emerald-900 mt-2 ml-1 italic">*Biaya kirim: Rp 11.800 untuk 4 km pertama, selanjutnya Rp 2.800 / km</p>
                         </div>
                     </div>
                 </div>
@@ -315,29 +336,33 @@
 
                 <!-- Gunakan Poin Loyalty -->
                 <div class="bg-white p-6 md:p-10 rounded-[40px] border border-emerald-100 shadow-xl">
-                    <div class="flex items-center justify-between gap-4">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 bg-emerald-50 text-emerald-950 rounded-2xl flex items-center justify-center border-2 border-emerald-100 shadow-sm">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-emerald-950"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0-1.268-.63-2.39-1.593-3.068a3.745 3.745 0 00-1.043-3.296 3.745 3.745 0 00-3.296-1.043A3.745 3.745 0 0012 3c-1.268 0-2.39.63-3.068 1.593a3.746 3.746 0 00-3.296 1.043 3.745 3.745 0 00-1.043 3.296A3.745 3.745 0 003 12c0 1.268.63 2.39 1.593 3.068a3.745 3.745 0 001.043 3.296 3.746 3.746 0 003.296 1.043A3.746 3.746 0 0012 21c1.268 0 2.39-.63 3.068-1.593a3.746 3.746 0 003.296-1.043 3.745 3.745 0 001.043-3.296A3.745 3.745 0 0021 12z" /></svg>
                             </div>
                             <div>
                                 <h3 class="text-[18px] font-black text-emerald-950 tracking-tight">Gunakan Poin</h3>
-                                <p class="text-[11px] font-bold text-emerald-900 uppercase tracking-widest mt-0.5">Poin Anda: {{ Auth::user()->points ?? 0 }} Poin</p>
+                                <p class="text-[11px] font-bold text-emerald-900 uppercase tracking-widest mt-0.5 font-sans">Poin Anda: {{ Auth::user()->points ?? 0 }} Poin</p>
                             </div>
                         </div>
-                        <div>
+                        <div class="w-full sm:w-auto">
                             @if((Auth::user()->points ?? 0) >= 100)
-                                <label class="inline-flex items-center cursor-pointer gap-3 bg-emerald-50 px-5 py-3 rounded-2xl border border-emerald-100 hover:bg-emerald-100/50 transition-all select-none">
-                                    <input type="checkbox" id="use_points" name="use_points" value="1" onchange="updateSummary()" class="w-5 h-5 rounded-lg border-2 border-emerald-950 text-emerald-950 focus:ring-emerald-500 focus:ring-2 focus:ring-offset-0 cursor-pointer">
-                                    <span class="text-[12px] font-black text-emerald-950 uppercase tracking-wider">Gunakan 100 Poin</span>
-                                </label>
+                                <div class="flex flex-col gap-1 w-full">
+                                    <select id="points_to_redeem" name="points_to_redeem" onchange="updateSummary()" class="w-full sm:w-auto px-5 py-3 rounded-2xl bg-emerald-50 border-2 border-emerald-950 text-[13px] font-black text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer select-none">
+                                        <option value="0">Jangan gunakan poin</option>
+                                        @for ($p = 100; $p <= Auth::user()->points; $p += 50)
+                                            <option value="{{ $p }}">Gunakan {{ $p }} Poin (Potongan Rp {{ number_format($p * 100, 0, ',', '.') }})</option>
+                                        @endfor
+                                    </select>
+                                </div>
                             @else
                                 <span class="text-[11px] font-bold text-emerald-900/50 italic bg-emerald-50 px-4 py-2.5 rounded-xl border border-emerald-50/50">Butuh min. 100 Poin</span>
                             @endif
                         </div>
                     </div>
                     @if((Auth::user()->points ?? 0) >= 100)
-                        <p class="text-[11px] font-bold text-emerald-900 mt-3 ml-1 italic">*Menggunakan 100 poin akan memotong total belanja Anda sebesar Rp 10.000</p>
+                        <p class="text-[11px] font-bold text-emerald-900 mt-3 ml-1 italic">*Minimal penukaran 100 poin, berlaku kelipatan 50 poin. Setiap 1 poin bernilai Rp 100 potongan harga.</p>
                     @endif
                 </div>
             </div>
@@ -397,7 +422,7 @@
                             @endif
                             <div id="poin_discount_row" class="flex justify-between items-center text-[14px] hidden">
                                 <span class="font-bold text-rose-400 uppercase tracking-widest text-[11px]">Potongan Poin</span>
-                                <span class="font-black text-rose-400 text-[16px]">- Rp 10.000</span>
+                                <span id="poin_discount_amount" class="font-black text-rose-400 text-[16px]">- Rp 0</span>
                             </div>
                         </div>
 

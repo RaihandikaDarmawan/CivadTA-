@@ -57,7 +57,7 @@
                     <tr class="text-[11px] font-black uppercase tracking-[0.2em] text-emerald-900 bg-emerald-50/50">
                         <th class="px-10 py-6">Profil Pelanggan</th>
                         <th class="px-10 py-6">ID Username</th>
-                        <th class="px-10 py-6">Kontak & Wilayah</th>
+                        <th class="px-10 py-6">Kontak & Daerah</th>
                         <th class="px-10 py-6">Alamat Domisili</th>
                         <th class="px-10 py-6 text-center">Loyalty Points</th>
                     </tr>
