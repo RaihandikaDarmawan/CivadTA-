@@ -122,7 +122,8 @@
                     <img src="{{ asset('logo.jpg') }}" alt="Logo AD" class="h-8 w-auto">
                 </div>
                 <div class="flex flex-col min-w-0">
-                    <h1 class="font-black text-lg text-white leading-tight tracking-tighter">Arya Duta Tangerang</h1>
+                    <h1 class="font-black text-lg text-white leading-tight tracking-tighter">CIVAD</h1>
+                    <span class="text-white/60 font-medium text-[10px] tracking-normal mt-0.5 truncate">CV. Arya Duta Tangerang</span>
                 </div>
             </div>
         </div>
@@ -136,6 +137,7 @@
                     ['url' => '/admin/manajemen-user', 'label' => 'Data Pelanggan', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />'],
                     ['url' => '/admin/manajemen-pesanan', 'label' => 'Manajemen Pesanan', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />'],
                     ['url' => '/admin/manajemen-pengembalian', 'label' => 'Manajemen Pengembalian', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />'],
+                    ['url' => '/admin/manajemen-ulasan', 'label' => 'Manajemen Ulasan', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499c-.195-.39-.6-.628-1.036-.628s-.841.238-1.036.628L6.877 7.575l-4.475.65c-.43.063-.787.353-.923.76-.137.408-.035.856.262 1.162l3.238 3.155-.765 4.457c-.073.428.1.86.46 1.11.36.25.845.267 1.22.046l4.004-2.105 4.004 2.105c.376.221.86.204 1.22-.046.36-.25.533-.682.46-1.11l-.765-4.457 3.238-3.155c.297-.306.399-.754.262-1.162-.136-.407-.493-.697-.923-.76l-4.475-.65-2.032-4.076Z" />'],
                     ['url' => '/admin/laporan-penjualan', 'label' => 'Laporan Penjualan', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0V3.75m0 12.75V21m7.5-17.25V21m-7.5-12.75h7.5m-7.5 3h7.5" />'],
                 ];
             @endphp

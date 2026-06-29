@@ -722,17 +722,55 @@ Route::post('/pelanggan/konfirmasi-pembayaran', function (Request $request) {
         'phone_number' => 'required|digits_between:10,13',
         'address' => 'required|string',
         'distance_km' => 'required|integer|min:1',
+        'shipping_service' => 'required|string|in:GoSend Same Day,GoSend Instant',
     ], [
         'recipient_name.required' => 'Nama penerima wajib diisi.',
         'phone_number.required' => 'Nomor handphone wajib diisi.',
-        'phone_number.digits_between' => 'Nomor handphone harus 10 hingga 13 digit.',
+        'phone_number.digits_between' => 'pastikan nomor anda minimal 10-13 digit',
         'address.required' => 'Alamat lengkap wajib diisi.',
+        'shipping_service.required' => 'Opsi pengiriman wajib dipilih.',
     ]);
+
+    // Validate stock before creating order
+    foreach ($cart as $item) {
+        $book = Book::find($item['id']);
+        if (!$book || $item['qty'] > $book->stock) {
+            return redirect('/pelanggan/keranjang')->with('error', 'stok tidak mencukupi, tolong ubah jumlah stok');
+        }
+    }
 
     $orderNumber = 'ORD-' . strtoupper(Str::random(8));
     $subtotal = collect($cart)->sum(fn($i) => $i['price'] * $i['qty']);
     $distanceKm = (int) $request->input('distance_km', 3);
-    $shipping = $distanceKm <= 0 ? 0 : ($distanceKm <= 4 ? 11800 : 11800 + ($distanceKm - 4) * 2800);
+    $shippingService = $request->input('shipping_service', 'GoSend Same Day');
+    
+    $shipping = 0;
+    if ($distanceKm > 0) {
+        if ($shippingService === 'GoSend Same Day') {
+            if ($distanceKm <= 3) {
+                $shipping = 12000;
+            } elseif ($distanceKm <= 15) {
+                $shipping = 18000;
+            } else {
+                $shipping = (int) ($distanceKm * 1200);
+            }
+        } elseif ($shippingService === 'GoSend Instant') {
+            if ($distanceKm <= 20) {
+                $shipping = (int) max(20000, $distanceKm * 2500);
+            } else {
+                $shipping = (int) ($distanceKm * 3000);
+            }
+        } else {
+            // fallback / GoSend Same Day
+            if ($distanceKm <= 3) {
+                $shipping = 12000;
+            } elseif ($distanceKm <= 15) {
+                $shipping = 18000;
+            } else {
+                $shipping = (int) ($distanceKm * 1200);
+            }
+        }
+    }
     
     $discount = session('active_discount', 0);
     $pointsToRedeem = (int) $request->input('points_to_redeem', 0);
@@ -750,7 +788,7 @@ Route::post('/pelanggan/konfirmasi-pembayaran', function (Request $request) {
     Config::$is3ds = true;
 
     $order = null;
-    DB::transaction(function () use ($user, $orderNumber, $total, $cart, &$order, $request, $shipping, $pointsToRedeem) {
+    DB::transaction(function () use ($user, $orderNumber, $total, $cart, &$order, $request, $shipping, $pointsToRedeem, $shippingService) {
         $order = Order::create([
             'user_id' => $user->id,
             'order_number' => $orderNumber,
@@ -764,6 +802,7 @@ Route::post('/pelanggan/konfirmasi-pembayaran', function (Request $request) {
             'longitude' => $request->input('longitude'),
             'distance_km' => $request->input('distance_km'),
             'shipping_cost' => $shipping,
+            'shipping_service' => $shippingService,
         ]);
 
         if ($pointsToRedeem >= 100 && $pointsToRedeem <= $user->points && $pointsToRedeem % 50 === 0) {
@@ -883,7 +922,7 @@ Route::post('/pelanggan/profil/update', function (Request $request) {
         'email.required' => 'Email wajib diisi.',
         'email.email' => 'Format email tidak valid.',
         'phone.required' => 'Nomor telepon wajib diisi.',
-        'phone.digits_between' => 'Nomor handphone harus 10 hingga 13 digit.',
+        'phone.digits_between' => 'pastikan nomor anda minimal 10-13 digit',
         'address.required' => 'Alamat lengkap wajib diisi.',
     ]);
     
@@ -942,7 +981,7 @@ Route::post('/admin/profil/update', function (Request $request) {
         'email.required' => 'Email wajib diisi.',
         'email.email' => 'Format email tidak valid.',
         'phone.required' => 'Nomor telepon wajib diisi.',
-        'phone.digits_between' => 'Nomor handphone harus 10 hingga 13 digit.',
+        'phone.digits_between' => 'pastikan nomor anda minimal 10-13 digit',
         'address.required' => 'Alamat lengkap wajib diisi.',
         'daerah.required' => 'Access region wajib diisi.',
     ]);
@@ -1005,12 +1044,24 @@ Route::match(['get', 'post'], '/pelanggan/pembayaran', function (Request $reques
             'phone_number' => 'required|digits_between:10,13',
             'address' => 'required|string',
             'distance_km' => 'required|integer|min:1',
+            'shipping_service' => 'required|string|in:GoSend Same Day,GoSend Instant',
         ], [
             'recipient_name.required' => 'Nama penerima wajib diisi.',
             'phone_number.required' => 'Nomor handphone wajib diisi.',
-            'phone_number.digits_between' => 'Nomor handphone harus 10 hingga 13 digit.',
+            'phone_number.digits_between' => 'pastikan nomor anda minimal 10-13 digit',
             'address.required' => 'Alamat lengkap wajib diisi.',
+            'shipping_service.required' => 'Opsi pengiriman wajib dipilih.',
+            'shipping_service.in' => 'Opsi pengiriman tidak valid.',
         ]);
+
+        // Validate stock backend side
+        $cart = session('cart', []);
+        foreach ($cart as $id => $item) {
+            $book = Book::find($id);
+            if (!$book || $item['qty'] > $book->stock) {
+                return redirect('/pelanggan/keranjang')->with('error', 'stok tidak mencukupi, tolong ubah jumlah stok');
+            }
+        }
     }
     return view('pelanggan.pembayaran', ['request' => $request]); 
 });
@@ -1020,7 +1071,7 @@ Route::get('/pelanggan/riwayat', function () {
     auto_complete_old_orders();
     
     $orders = Order::where('user_id', Auth::id())
-                   ->with(['items.book', 'returnRequest'])
+                   ->with(['items.book', 'returnRequest', 'review'])
                    ->orderBy('created_at', 'desc')
                    ->get();
 
@@ -1198,3 +1249,223 @@ Route::get('/admin/notifications/read-all', function() {
     Notification::where('role', 'admin')->update(['is_read' => true]);
     return back();
 });
+
+// Chat Routes
+Route::get('/pelanggan/chat/{order_id}', function ($order_id) {
+    if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
+    $order = Order::where('id', $order_id)->where('user_id', Auth::id())->firstOrFail();
+    
+    if ($order->status === 'Selesai') {
+        return redirect('/pelanggan/riwayat')->with('error', 'Chat tidak tersedia untuk pesanan yang telah selesai.');
+    }
+    
+    // Mark all admin messages for this order as read
+    \App\Models\OrderMessage::where('order_id', $order->id)
+                ->where('sender_type', 'admin')
+                ->update(['is_read' => true]);
+
+    return view('pelanggan.chat', ['order' => $order]);
+})->name('pelanggan.chat');
+
+Route::post('/pelanggan/chat/{order_id}/send', function (Request $request, $order_id) {
+    if (session('role') !== 'pelanggan') return response()->json(['error' => 'Akses ditolak!'], 403);
+    $order = Order::where('id', $order_id)->where('user_id', Auth::id())->firstOrFail();
+    
+    if ($order->status === 'Selesai') {
+        return response()->json(['error' => 'Chat tidak tersedia untuk pesanan yang telah selesai.'], 403);
+    }
+    
+    $request->validate([
+        'message' => 'nullable|required_without:image|string|max:2000',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+    ], [
+        'image.image' => 'File harus berupa gambar.',
+        'image.mimes' => 'Format gambar harus jpeg, png, jpg, gif, atau webp.',
+        'image.max' => 'Ukuran gambar maksimal adalah 2 MB.',
+        'message.required_without' => 'Pesan atau gambar harus diisi.'
+    ]);
+
+    $imagePath = null;
+    if ($request->hasFile('image')) {
+        $path = $request->file('image')->store('chats', 'public');
+        $imagePath = '/storage/' . $path;
+    }
+
+    $msg = \App\Models\OrderMessage::create([
+        'order_id' => $order->id,
+        'sender_type' => 'pelanggan',
+        'sender_id' => Auth::id(),
+        'message' => $request->message,
+        'image' => $imagePath,
+        'is_read' => false
+    ]);
+
+    // Send a Notification to admin
+    $notifText = $request->message ? Str::limit($request->message, 50) : 'Mengirim sebuah gambar';
+    Notification::send('admin', 'Pesan Baru Pelanggan #' . $order->order_number, 'Pesan: ' . $notifText, null, 'info', '/admin/chat/' . $order->id);
+
+    return response()->json([
+        'success' => true,
+        'message' => $msg
+    ]);
+})->name('pelanggan.chat.send');
+
+Route::get('/admin/chat/{order_id}', function ($order_id) {
+    if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
+    $order = Order::findOrFail($order_id);
+
+    if ($order->status === 'Selesai') {
+        return redirect('/admin/manajemen-pesanan')->with('error', 'Chat tidak tersedia untuk pesanan yang telah selesai.');
+    }
+
+    // Mark all customer messages for this order as read
+    \App\Models\OrderMessage::where('order_id', $order->id)
+                ->where('sender_type', 'pelanggan')
+                ->update(['is_read' => true]);
+
+    return view('admin.chat', ['order' => $order]);
+})->name('admin.chat');
+
+Route::post('/admin/chat/{order_id}/send', function (Request $request, $order_id) {
+    if (session('role') !== 'admin') return response()->json(['error' => 'Akses ditolak!'], 403);
+    $order = Order::findOrFail($order_id);
+    
+    if ($order->status === 'Selesai') {
+        return response()->json(['error' => 'Chat tidak tersedia untuk pesanan yang telah selesai.'], 403);
+    }
+    
+    $request->validate([
+        'message' => 'nullable|required_without:image|string|max:2000',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+    ], [
+        'image.image' => 'File harus berupa gambar.',
+        'image.mimes' => 'Format gambar harus jpeg, png, jpg, gif, atau webp.',
+        'image.max' => 'Ukuran gambar maksimal adalah 2 MB.',
+        'message.required_without' => 'Pesan atau gambar harus diisi.'
+    ]);
+
+    $imagePath = null;
+    if ($request->hasFile('image')) {
+        $path = $request->file('image')->store('chats', 'public');
+        $imagePath = '/storage/' . $path;
+    }
+
+    $adminId = session('admin_id') ?? Admin::where('name', session('username'))->first()->id;
+
+    $msg = \App\Models\OrderMessage::create([
+        'order_id' => $order->id,
+        'sender_type' => 'admin',
+        'sender_id' => $adminId,
+        'message' => $request->message,
+        'image' => $imagePath,
+        'is_read' => false
+    ]);
+
+    // Send a Notification to customer
+    $notifText = $request->message ? Str::limit($request->message, 50) : 'Mengirim sebuah gambar';
+    Notification::send('pelanggan', 'Pesan Baru dari Admin CIVAD', 'Admin: ' . $notifText, $order->user_id, 'info', '/pelanggan/chat/' . $order->id);
+
+    return response()->json([
+        'success' => true,
+        'message' => $msg
+    ]);
+})->name('admin.chat.send');
+
+Route::get('/chat/{order_id}/messages', function ($order_id) {
+    $role = session('role');
+    if ($role === 'pelanggan') {
+        $order = Order::where('id', $order_id)->where('user_id', Auth::id())->first();
+        if (!$order) return response()->json(['error' => 'Akses ditolak!'], 403);
+        
+        if ($order->status === 'Selesai') {
+            return response()->json(['error' => 'Chat tidak tersedia untuk pesanan yang telah selesai.'], 403);
+        }
+        
+        // Mark all admin messages for this order as read
+        \App\Models\OrderMessage::where('order_id', $order->id)
+                    ->where('sender_type', 'admin')
+                    ->update(['is_read' => true]);
+
+    } elseif ($role === 'admin') {
+        $order = Order::find($order_id);
+        if (!$order) return response()->json(['error' => 'Not Found'], 404);
+
+        if ($order->status === 'Selesai') {
+            return response()->json(['error' => 'Chat tidak tersedia untuk pesanan yang telah selesai.'], 403);
+        }
+
+        // Mark all customer messages for this order as read
+        \App\Models\OrderMessage::where('order_id', $order->id)
+                    ->where('sender_type', 'pelanggan')
+                    ->update(['is_read' => true]);
+    } else {
+        return response()->json(['error' => 'Akses ditolak!'], 403);
+    }
+
+    $messages = \App\Models\OrderMessage::where('order_id', $order_id)
+                            ->orderBy('created_at', 'asc')
+                            ->get()
+                            ->map(function ($msg) {
+                                return [
+                                    'id' => $msg->id,
+                                    'sender_type' => $msg->sender_type,
+                                    'message' => $msg->message,
+                                    'image' => $msg->image,
+                                    'time' => $msg->created_at->format('H:i'),
+                                ];
+                            });
+
+    return response()->json(['messages' => $messages]);
+});
+
+// Review Routes
+Route::post('/pelanggan/ulasan/simpan', function (Request $request) {
+    if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
+    
+    $request->validate([
+        'order_id' => 'required|exists:orders,id',
+        'rating' => 'required|integer|min:1|max:5',
+        'comment' => 'nullable|string|max:1000',
+    ]);
+
+    $order = Order::where('id', $request->order_id)
+                  ->where('user_id', Auth::id())
+                  ->where('status', 'Selesai')
+                  ->firstOrFail();
+
+    // Check if already reviewed
+    if ($order->review) {
+        return redirect()->back()->with('error', 'Ulasan untuk pesanan ini sudah diisi.');
+    }
+
+    \App\Models\Review::create([
+        'order_id' => $order->id,
+        'user_id' => Auth::id(),
+        'rating' => $request->rating,
+        'comment' => $request->comment,
+    ]);
+
+    // Notify Admin
+    Notification::send('admin', 'Ulasan Baru untuk Pesanan #' . $order->order_number, 'Pelanggan ' . Auth::user()->name . ' memberikan rating ' . $request->rating . ' bintang.', null, 'success', '/admin/manajemen-ulasan');
+
+    return redirect()->back()->with('success', 'Ulasan berhasil dikirim!')->with('title', 'Ulasan Berhasil');
+})->name('pelanggan.ulasan.simpan');
+
+Route::get('/admin/manajemen-ulasan', function () {
+    if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
+    
+    $reviews = \App\Models\Review::with(['order', 'user'])->orderBy('created_at', 'desc')->get();
+    
+    return view('admin.ulasan', ['reviews' => $reviews]);
+})->name('admin.manajemen-ulasan');
+
+Route::post('/admin/ulasan/delete', function (Request $request) {
+    if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
+    
+    $review = \App\Models\Review::findOrFail($request->input('id'));
+    $review->delete();
+    
+    return redirect()->back()->with('success', 'Ulasan berhasil dihapus.');
+})->name('admin.ulasan.delete');
+
+

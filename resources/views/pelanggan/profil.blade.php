@@ -144,7 +144,8 @@
                             <label class="text-[11px] font-black text-emerald-900 uppercase tracking-widest ml-1">Nomor Telepon</label>
                             <input type="tel" name="phone" value="{{ old('phone', $user->phone) }}" required
                                    minlength="10" maxlength="13" pattern="[0-9]{10,13}" inputmode="numeric"
-                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                   oninvalid="this.setCustomValidity('pastikan nomor anda minimal 10-13 digit')"
+                                   oninput="this.setCustomValidity(''); this.value = this.value.replace(/[^0-9]/g, '')"
                                    class="w-full px-6 py-4 bg-white border-2 border-emerald-950 rounded-[20px] focus:outline-none font-bold text-emerald-950 transition-all">
                         </div>
 

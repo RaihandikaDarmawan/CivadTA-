@@ -56,7 +56,9 @@
                     <img src="{{ asset('logo.jpg') }}" alt="Logo AD" class="h-12 w-auto">
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-white font-black text-3xl tracking-tighter leading-none">Arya Duta Tangerang</span></div>
+                    <span class="text-white font-black text-3xl tracking-tighter leading-none">CIVAD</span>
+                    <span class="text-white/60 font-medium text-xs tracking-normal mt-1">CV. Arya Duta Tangerang</span>
+                </div>
             </div>
 
             <div class="max-w-xl">

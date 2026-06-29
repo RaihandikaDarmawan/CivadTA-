@@ -4,17 +4,32 @@
 
 @section('scripts')
     <script>
-        function openDetailModal(order) {
+        function openDetailModal(order, unreadChatCount = 0) {
             document.getElementById('modal-order-number').innerText = order.order_number;
             document.getElementById('modal-customer-name').innerText = order.recipient_name || (order.user ? order.user.name : '-');
             document.getElementById('modal-phone-number').innerText = order.phone_number || '-';
             document.getElementById('modal-order-date').innerText = new Date(order.created_at).toLocaleString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' WIB';
             document.getElementById('modal-distance').innerText = order.distance_km ? order.distance_km + ' km' : '-';
+            document.getElementById('modal-shipping-service').innerText = order.shipping_service || 'Kurir Standar';
             document.getElementById('modal-total-payment').innerText = 'Rp ' + new Number(order.total_amount).toLocaleString('id-ID');
             document.getElementById('modal-order-id-input').value = order.id;
             document.getElementById('modal-rejection-reason').value = order.rejection_reason || '';
             document.getElementById('modal-customer-address').innerText = order.address || '-';
             document.getElementById('modal-tracking-link-input').value = order.tracking_link || '';
+            document.getElementById('modal-chat-btn').href = '/admin/chat/' + order.id;
+            if (order.status === 'Selesai') {
+                document.getElementById('modal-chat-btn').classList.add('hidden');
+            } else {
+                document.getElementById('modal-chat-btn').classList.remove('hidden');
+            }
+
+            const modalBadge = document.getElementById('modal-chat-badge');
+            if (unreadChatCount > 0) {
+                modalBadge.innerText = unreadChatCount;
+                modalBadge.classList.remove('hidden');
+            } else {
+                modalBadge.classList.add('hidden');
+            }
 
             const mapsBtn = document.getElementById('modal-maps-link');
             const noMaps = document.getElementById('no-maps-link');
@@ -56,13 +71,27 @@
             const btnSelesai = document.getElementById('btn-selesai');
             const btnReject = document.getElementById('reject-btn');
             const btnConfirmReject = document.getElementById('confirm-reject-btn');
+            const trackingInput = document.getElementById('modal-tracking-link-input');
             
             btnVerifikasi.classList.remove('hidden');
             btnSedangDikirim.classList.remove('hidden');
             btnSelesai.classList.remove('hidden');
             btnReject.classList.remove('hidden');
+            
+            // Enable tracking input by default
+            trackingInput.disabled = false;
+            trackingInput.placeholder = "Masukkan link perjalanan pelacakan (misal: https://resi.com/123)";
 
             if (order.status !== 'Pending') {
+                btnVerifikasi.classList.add('hidden');
+            }
+
+            if (order.status === 'Pesanan Sedang Dikemas' || order.status === 'Sedang Dikemas') {
+                btnSelesai.classList.add('hidden');
+            }
+
+            if (order.status === 'Sedang Dikirim' || order.status === 'Pesanan Sedang Dikirim' || order.status === 'Dikirim') {
+                btnSedangDikirim.classList.add('hidden');
                 btnVerifikasi.classList.add('hidden');
             }
 
@@ -72,6 +101,10 @@
                 btnSelesai.classList.add('hidden');
                 btnReject.classList.add('hidden');
                 btnConfirmReject.classList.add('hidden');
+                
+                // Disable editing of tracking link
+                trackingInput.disabled = true;
+                trackingInput.placeholder = "Pelacakan Selesai / Tidak Tersedia";
             }
 
             document.getElementById('detailModal').classList.remove('hidden');
@@ -269,14 +302,32 @@
                             </span>
                         </td>
                         <td class="px-10 py-8 text-center">
-                            @if(strtolower($order->status) === 'pengajuan pending')
-                                <span class="text-emerald-950 font-bold">-</span>
-                            @else
-                                <button onclick='openDetailModal(@json($order))' class="px-8 py-3.5 bg-emerald-950 text-white font-black text-[13px] rounded-2xl shadow-xl hover:bg-emerald-900 transition-all active:scale-95 flex items-center gap-2 mx-auto uppercase tracking-tighter">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-9.75 0h9.75" /></svg>
-                                    {{ in_array($order->status, ['Selesai', 'Dikembalikan', 'Pengembalian Ditolak']) ? 'Lihat Detail' : 'Kelola' }}
-                                </button>
-                            @endif
+                            @php
+                                $unreadChatCount = \App\Models\OrderMessage::where('order_id', $order->id)
+                                    ->where('sender_type', 'pelanggan')
+                                    ->where('is_read', false)
+                                    ->count();
+                            @endphp
+                            <div class="flex flex-wrap items-center justify-center gap-3">
+                                @if(strtolower($order->status) !== 'pengajuan pending')
+                                    <button onclick='openDetailModal(@json($order), {{ $unreadChatCount }})' class="px-6 py-3.5 bg-emerald-950 text-white font-black text-[13px] rounded-2xl shadow-xl hover:bg-emerald-900 transition-all active:scale-95 flex items-center gap-2 uppercase tracking-tighter shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-9.75 0h9.75" /></svg>
+                                        {{ in_array($order->status, ['Selesai', 'Dikembalikan', 'Pengembalian Ditolak']) ? 'Detail' : 'Kelola' }}
+                                    </button>
+                                @endif
+                                
+                                @if($order->status !== 'Selesai')
+                                    <a href="{{ route('admin.chat', $order->id) }}" class="px-6 py-3.5 bg-white text-emerald-950 border-2 border-emerald-950 font-black text-[13px] rounded-2xl shadow-xl hover:bg-emerald-50 transition-all active:scale-95 flex items-center gap-2 uppercase tracking-tighter relative shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4.5 h-4.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 0 1-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z" /></svg>
+                                        <span>Chat</span>
+                                        @if($unreadChatCount > 0)
+                                            <span class="absolute -top-2 -right-2 bg-rose-500 text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-white shadow-lg animate-bounce">
+                                                {{ $unreadChatCount }}
+                                            </span>
+                                        @endif
+                                    </a>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                     @empty
@@ -354,6 +405,10 @@
                                     <span class="text-[11px] font-black text-emerald-600 uppercase tracking-widest opacity-60">Estimasi Jarak</span>
                                     <p id="modal-distance" class="text-[14px] font-bold text-emerald-900">-</p>
                                 </div>
+                                <div class="space-y-1">
+                                    <span class="text-[11px] font-black text-emerald-600 uppercase tracking-widest opacity-60">Layanan Pengiriman</span>
+                                    <p id="modal-shipping-service" class="text-[14px] font-black text-emerald-950">-</p>
+                                </div>
                                 <div class="pt-6 border-t border-emerald-50">
                                     <span class="text-[11px] font-black text-emerald-600 uppercase tracking-widest opacity-60 block mb-3">Titik Navigasi</span>
                                     <a id="modal-maps-link" href="#" target="_blank" class="w-full flex items-center justify-center gap-3 px-6 py-4 bg-emerald-50 text-emerald-950 text-[13px] font-black rounded-2xl hover:bg-emerald-950 hover:text-white transition-all border border-emerald-100 hidden">
@@ -389,6 +444,11 @@
                         </div>
 
                         <div class="flex flex-wrap items-center gap-4">
+                            <a href="#" id="modal-chat-btn" class="px-10 py-5 bg-white text-emerald-950 border-2 border-emerald-950 text-[15px] font-black rounded-[24px] hover:bg-emerald-50 transition-all active:scale-95 flex items-center gap-2 relative">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 0 1-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z" /></svg>
+                                <span>Chat Pelanggan</span>
+                                <span id="modal-chat-badge" class="absolute -top-2.5 -right-2.5 bg-rose-500 text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-white shadow-lg animate-bounce hidden">0</span>
+                            </a>
                             <button type="submit" id="btn-verifikasi" name="status" value="Verifikasi" class="px-10 py-5 bg-emerald-600 text-white text-[15px] font-black rounded-[24px] hover:bg-emerald-700 transition-all shadow-2xl shadow-emerald-500/20 active:scale-95">Verifikasi</button>
                             <button type="submit" id="btn-sedang-dikirim" name="status" value="Sedang Dikirim" onclick="return validateTrackingLink()" class="px-10 py-5 bg-blue-600 text-white text-[15px] font-black rounded-[24px] hover:bg-blue-700 transition-all shadow-2xl shadow-blue-500/20 active:scale-95">Sedang Dikirim</button>
                             <button type="submit" id="btn-selesai" name="status" value="Selesai" class="px-10 py-5 bg-emerald-950 text-white text-[15px] font-black rounded-[24px] hover:bg-emerald-900 transition-all shadow-2xl shadow-emerald-950/20 active:scale-95">Selesai</button>

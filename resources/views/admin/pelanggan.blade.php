@@ -91,12 +91,6 @@
                                 <span class="px-5 py-2.5 bg-emerald-950 text-white text-[14px] font-black rounded-2xl shadow-xl min-w-[120px] text-center tracking-tighter">
                                     {{ number_format($customer->points ?? 0, 0, ',', '.') }} <span class="text-[10px] text-emerald-400 ml-1">PTS</span>
                                 </span>
-                                <div class="flex items-center gap-2">
-                                    <input type="number" placeholder="Adjust" class="w-24 bg-emerald-50/50 border border-emerald-100 rounded-xl px-4 py-2 text-[12px] font-black text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-950/10 transition-all text-center">
-                                    <button class="w-10 h-10 flex items-center justify-center bg-emerald-100 text-emerald-950 rounded-xl hover:bg-emerald-950 hover:text-white transition-all shadow-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-                                    </button>
-                                </div>
                             </div>
                         </td>
                     </tr>

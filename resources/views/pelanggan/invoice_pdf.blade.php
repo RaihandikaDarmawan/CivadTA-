@@ -257,7 +257,8 @@
                     </svg>
                 </div>
                 <div class="company-details">
-                    <h1 class="company-name">Arya Duta Tangerang</h1>
+                    <h1 class="company-name">CIVAD</h1>
+                    <p class="company-tagline">CV. Arya Duta Tangerang</p>
                 </div>
             </td>
             <td class="header-invoice-td">
@@ -375,7 +376,7 @@
                     @endif
                     @if($order->shipping_cost > 0)
                         <tr>
-                            <td class="summary-label">Ongkos Kirim</td>
+                            <td class="summary-label">Ongkos Kirim ({{ $order->shipping_service ?? 'Kurir Standar' }} - {{ $order->distance_km ?? 0 }} km)</td>
                             <td class="summary-value">Rp {{ number_format($order->shipping_cost, 0, ',', '.') }}</td>
                         </tr>
                     @endif

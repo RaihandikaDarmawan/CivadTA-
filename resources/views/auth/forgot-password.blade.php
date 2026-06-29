@@ -56,8 +56,8 @@
                     <img src="{{ asset('logo.jpg') }}" alt="Logo AD" class="h-12 w-auto">
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-white font-black text-3xl tracking-tighter leading-none">Arya Duta</span>
-                    <span class="text-emerald-400 font-bold text-[10px] uppercase tracking-[0.4em] mt-1.5">Official Platform</span>
+                    <span class="text-white font-black text-3xl tracking-tighter leading-none">CIVAD</span>
+                    <span class="text-white/60 font-medium text-xs tracking-normal mt-1">CV. Arya Duta Tangerang</span>
                 </div>
             </div>
 

@@ -77,9 +77,14 @@
                             <p class="font-black text-emerald-900 text-[20px] tracking-tighter">Rp {{ number_format($book->base_price, 0, ',', '.') }}</p>
                         </td>
                         <td class="px-8 py-6 text-center">
-                            <span class="inline-block px-5 py-2.5 bg-white text-emerald-950 text-[15px] font-black rounded-2xl border-2 border-emerald-100 shadow-sm">
+                            <span class="inline-block px-5 py-2.5 bg-white text-[15px] font-black rounded-2xl border-2 shadow-sm @if($book->stock == 0) text-rose-600 border-rose-200 bg-rose-50/30 @elseif($book->stock <= 10) text-amber-600 border-amber-200 bg-amber-50/30 @else text-emerald-950 border-emerald-100 @endif">
                                 {{ $book->stock }} <span class="text-[10px] opacity-50 ml-1 uppercase">Unit</span>
                             </span>
+                            @if($book->stock == 0)
+                                <span class="block mt-1.5 text-[11px] font-black text-rose-500 uppercase tracking-wider">stok sudah habis terjual</span>
+                            @elseif($book->stock <= 10)
+                                <span class="block mt-1.5 text-[11px] font-black text-amber-500 uppercase tracking-wider">stok sudah mulai menipis</span>
+                            @endif
                         </td>
                         <td class="px-8 py-6">
                             <div class="flex items-center justify-center gap-2">

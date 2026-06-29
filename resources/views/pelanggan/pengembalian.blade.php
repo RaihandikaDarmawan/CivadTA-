@@ -101,12 +101,12 @@
                         <div class="relative group/upload">
                             <input type="file" name="video_proof" id="video_proof" accept="video/*" required class="hidden" onchange="updateFileName(this)">
                             
-                            <label for="video_proof" class="flex flex-col items-center justify-center border-2 border-dashed border-emerald-950/20 hover:border-emerald-950 rounded-[32px] p-8 cursor-pointer transition-all duration-300 bg-emerald-50/10 hover:bg-emerald-50/30 text-center">
-                                <div class="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-950 flex items-center justify-center mb-4 border border-emerald-100 group-hover/upload:scale-110 transition-transform duration-300">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+                            <label for="video_proof" class="flex flex-col items-center justify-center border-2 border-dashed border-emerald-950/20 hover:border-emerald-950 rounded-2xl py-6 px-4 cursor-pointer transition-all duration-300 bg-emerald-50/10 hover:bg-emerald-50/30 text-center">
+                                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-950 flex items-center justify-center mb-2.5 border border-emerald-100 group-hover/upload:scale-110 transition-transform duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
                                 </div>
-                                <span class="font-black text-emerald-950 text-[14px] leading-tight block mb-1" id="file-label-text">Pilih atau Tarik Berkas Video</span>
-                                <span class="text-[11px] font-bold text-emerald-700/60 block" id="file-sub-text">Mendukung MP4, MOV, AVI, atau WEBM (Maks. 50MB)</span>
+                                <span class="font-black text-emerald-950 text-[13px] leading-tight block mb-0.5" id="file-label-text">Pilih atau Tarik Berkas Video</span>
+                                <span class="text-[10px] font-bold text-emerald-700/60 block" id="file-sub-text">Mendukung MP4, MOV, AVI, atau WEBM (Maks. 50MB)</span>
                             </label>
                         </div>
                     </div>

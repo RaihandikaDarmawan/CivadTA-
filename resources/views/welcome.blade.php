@@ -76,7 +76,8 @@
                     <img src="{{ asset('logo.jpg') }}" alt="Logo AD" class="h-8 w-auto">
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-white font-black text-xl tracking-tighter leading-none">Arya Duta Tangerang</span>
+                    <span class="text-white font-black text-xl tracking-tighter leading-none">CIVAD</span>
+                    <span class="text-white/60 font-medium text-[10px] tracking-normal mt-0.5">CV. Arya Duta Tangerang</span>
                 </div>
             </div>
             
@@ -167,7 +168,7 @@
     <!-- Catalog Section -->
     <section id="katalog" class="py-24 bg-emerald-50">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-6">
                 <div>
                     <h2 class="text-5xl font-black text-emerald-950 tracking-tighter leading-none mb-4">Katalog Buku</h2>
                     <p class="text-emerald-600 font-bold uppercase tracking-[0.2em] text-xs">Temukan referensi belajar terbaik untuk siswa</p>
@@ -181,20 +182,20 @@
             </div>
 
             <!-- Search Bar -->
-            <form action="{{ url('/#katalog') }}" method="GET" class="mb-12 max-w-2xl">
+            <form action="{{ url('/#katalog') }}" method="GET" class="mb-12 max-w-lg">
                 <div class="relative flex items-center group">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 absolute left-6 text-emerald-950/40 group-focus-within:text-emerald-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 absolute left-4 text-emerald-950/40 group-focus-within:text-emerald-600 transition-colors">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                     </svg>
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari judul buku, penulis, atau jenjang..." class="w-full bg-white border-2 border-emerald-950 rounded-[24px] py-5 pl-16 pr-[200px] text-[15px] font-bold text-emerald-950 focus:outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/5 transition-all placeholder:text-emerald-950/30">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari judul buku, penulis, atau jenjang..." class="w-full bg-white border-2 border-emerald-950 rounded-2xl py-3 pl-12 pr-[140px] text-[13px] font-bold text-emerald-950 focus:outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/5 transition-all placeholder:text-emerald-950/30">
                     
-                    <div class="absolute right-3 flex items-center gap-3">
+                    <div class="absolute right-2 flex items-center gap-2">
                         @if(request('search'))
-                            <a href="{{ url('/#katalog') }}" class="text-emerald-950/50 hover:text-rose-500 transition-colors font-black text-xs uppercase tracking-widest mr-2">
+                            <a href="{{ url('/#katalog') }}" class="text-emerald-950/50 hover:text-rose-500 transition-colors font-black text-[10px] uppercase tracking-widest mr-1.5">
                                 ✕ Reset
                             </a>
                         @endif
-                        <button type="submit" class="bg-emerald-950 hover:bg-emerald-900 text-white font-black text-xs uppercase tracking-widest px-6 py-3.5 rounded-[18px] transition-all duration-300">
+                        <button type="submit" class="bg-emerald-950 hover:bg-emerald-900 text-white font-black text-[10px] uppercase tracking-widest px-4 py-2 rounded-xl transition-all duration-300">
                             Cari
                         </button>
                     </div>
@@ -413,7 +414,10 @@
                         <div class="bg-white p-2 rounded-xl">
                             <img src="{{ asset('logo.jpg') }}" alt="Logo" class="h-10 w-auto">
                         </div>
-                        <span class="text-3xl font-black tracking-tighter">Arya Duta</span>
+                        <div class="flex flex-col">
+                            <span class="text-3xl font-black tracking-tighter leading-none">CIVAD</span>
+                            <span class="text-emerald-100/60 font-medium text-xs tracking-normal mt-1">CV. Arya Duta Tangerang</span>
+                        </div>
                     </div>
                     <p class="text-emerald-100/60 max-w-sm leading-relaxed font-medium">
                      Jl. Karyawan 1 No.71 Karang Tengah. Banten, Kota Tangerang - 15157  

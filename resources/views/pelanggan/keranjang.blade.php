@@ -105,7 +105,7 @@
         <p class="text-emerald-900 font-bold text-[12px] md:text-[14px] uppercase tracking-[0.3em]">Tersimpan <span class="text-emerald-600">{{ count(session('cart', [])) }}</span> Item Pilihan</p>
     </div>
 
-    @if(session('error'))
+    @if(session('error') && trim(session('error')) !== 'stok tidak mencukupi, tolong ubah jumlah stok')
     <div class="mb-8 p-6 bg-red-50 border border-red-200 rounded-[24px] flex items-center gap-4 text-red-700 font-bold">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>
         <span>{{ session('error') }}</span>

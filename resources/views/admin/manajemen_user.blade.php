@@ -128,12 +128,15 @@
                                     <span class="px-5 py-2.5 bg-emerald-950 text-white text-[14px] font-black rounded-2xl shadow-xl min-w-[120px] text-center tracking-tighter border-2 border-emerald-800">
                                         {{ number_format($customer->points ?? 0, 0, ',', '.') }} <span class="text-[10px] text-white ml-1">PTS</span>
                                     </span>
-                                    <form action="{{ route('admin.user.update-points') }}" method="POST" class="flex items-center gap-2">
+                                    
+                                    <!-- Form Tambah Point -->
+                                    <form action="{{ route('admin.user.update-points') }}" method="POST" class="flex items-center gap-1.5 mt-1">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $customer->id }}">
-                                        <input type="number" name="points" placeholder="Tambah" required class="w-24 bg-emerald-50 border-2 border-emerald-950 rounded-xl px-4 py-2 text-[12px] font-black text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-950/10 transition-all text-center">
-                                        <button type="submit" class="w-10 h-10 flex items-center justify-center bg-emerald-950 text-white rounded-xl hover:bg-emerald-800 transition-all shadow-sm border-2 border-emerald-950">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                                        <input type="number" name="points" placeholder="+ Poin" required min="1"
+                                               class="w-16 bg-emerald-50/50 border-2 border-emerald-950 rounded-lg px-1.5 py-1 text-[11px] font-bold text-emerald-950 focus:outline-none text-center placeholder:text-emerald-950/40">
+                                        <button type="submit" class="bg-emerald-950 text-white w-6 h-6 flex items-center justify-center rounded-lg text-[12px] font-black hover:bg-emerald-900 transition-all shadow-sm shrink-0" title="Tambah Poin">
+                                            +
                                         </button>
                                     </form>
                                 </div>

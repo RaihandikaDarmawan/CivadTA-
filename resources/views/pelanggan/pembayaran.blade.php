@@ -41,6 +41,7 @@
             <input type="hidden" name="latitude" value="{{ $request->latitude }}">
             <input type="hidden" name="longitude" value="{{ $request->longitude }}">
             <input type="hidden" name="distance_km" value="{{ $request->distance_km ?? 3 }}">
+            <input type="hidden" name="shipping_service" value="{{ $request->shipping_service ?? 'GoSend Same Day' }}">
             <input type="hidden" name="points_to_redeem" value="{{ $request->points_to_redeem ?? 0 }}">
 
             <div class="flex flex-col xl:flex-row gap-12">
@@ -119,10 +120,30 @@
                             </div>
                             @php
                                 $distance = (int) ($request->distance_km ?? 3);
-                                $shippingCost = $distance <= 0 ? 0 : ($distance <= 4 ? 11800 : 11800 + ($distance - 4) * 2800);
+                                $shippingService = $request->shipping_service ?? 'GoSend Same Day';
+                                $shippingCost = 0;
+                                if ($distance > 0) {
+                                    if ($shippingService === 'GoSend Same Day') {
+                                        if ($distance <= 3) {
+                                            $shippingCost = 12000;
+                                        } elseif ($distance <= 15) {
+                                            $shippingCost = 18000;
+                                        } else {
+                                            $shippingCost = (int) ($distance * 1200);
+                                        }
+                                    } elseif ($shippingService === 'GoSend Instant') {
+                                        if ($distance <= 20) {
+                                            $shippingCost = (int) max(20000, $distance * 2500);
+                                        } else {
+                                            $shippingCost = (int) ($distance * 3000);
+                                        }
+                                    } else {
+                                        $shippingCost = $distance <= 4 ? 11800 : 11800 + ($distance - 4) * 2800;
+                                    }
+                                }
                             @endphp
                             <div class="flex justify-between items-center text-[14px]">
-                                <span class="font-bold text-emerald-900">Biaya Pengiriman ({{ $distance }} km)</span>
+                                <span class="font-bold text-emerald-900">Biaya Pengiriman ({{ $shippingService }} - {{ $distance }} km)</span>
                                 <span class="font-black text-emerald-500">Rp {{ number_format($shippingCost, 0, ',', '.') }}</span>
                             </div>
                             @php
@@ -147,7 +168,27 @@
                                 @php
                                     $subtotal = collect(session('cart', []))->sum(fn($i) => $i['price'] * $i['qty']);
                                     $distance = (int) ($request->distance_km ?? 3);
-                                    $shipping = $distance <= 0 ? 0 : ($distance <= 4 ? 11800 : 11800 + ($distance - 4) * 2800);
+                                    $shippingService = $request->shipping_service ?? 'GoSend Same Day';
+                                    $shipping = 0;
+                                    if ($distance > 0) {
+                                        if ($shippingService === 'GoSend Same Day') {
+                                            if ($distance <= 3) {
+                                                $shipping = 12000;
+                                            } elseif ($distance <= 15) {
+                                                $shipping = 18000;
+                                            } else {
+                                                $shipping = (int) ($distance * 1200);
+                                            }
+                                        } elseif ($shippingService === 'GoSend Instant') {
+                                            if ($distance <= 20) {
+                                                $shipping = (int) max(20000, $distance * 2500);
+                                            } else {
+                                                $shipping = (int) ($distance * 3000);
+                                            }
+                                        } else {
+                                            $shipping = $distance <= 4 ? 11800 : 11800 + ($distance - 4) * 2800;
+                                        }
+                                    }
                                     $discount = session('active_discount', 0);
                                     $pointsToRedeem = (int) ($request->points_to_redeem ?? 0);
                                     $pointsDiscount = 0;

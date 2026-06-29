@@ -24,6 +24,7 @@ class Order extends Model
         'longitude',
         'distance_km',
         'shipping_cost',
+        'shipping_service',
         'points_awarded',
         'tracking_link',
     ];
@@ -41,5 +42,15 @@ class Order extends Model
     public function returnRequest(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(ReturnRequest::class);
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(OrderMessage::class);
+    }
+
+    public function review(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Review::class);
     }
 }
