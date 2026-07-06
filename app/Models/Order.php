@@ -53,4 +53,25 @@ class Order extends Model
     {
         return $this->hasOne(Review::class);
     }
+
+    public static function autoCompleteOldOrders()
+    {
+        $shippingOrders = self::whereIn('status', ['Dikirim', 'Sedang Dikirim', 'Pesanan Sedang Dikirim'])->get();
+        foreach ($shippingOrders as $o) {
+            if ($o->updated_at->addDays(2)->isPast()) {
+                $o->status = 'Selesai';
+                if (!$o->points_awarded) {
+                    $user = $o->user;
+                    if ($user) {
+                        $pointsEarned = floor($o->total_amount / 10000);
+                        $user->increment('points', $pointsEarned);
+                        $o->points_awarded = true;
+                    }
+                }
+                $o->save();
+                Notification::send('pelanggan', 'Pesanan Otomatis Selesai', 'Pesanan #' . $o->order_number . ' telah diselesaikan oleh sistem secara otomatis.', $o->user_id, 'success', '/pelanggan/riwayat');
+                Notification::send('admin', 'Pesanan Otomatis Selesai #' . $o->order_number, 'Pesanan telah otomatis diselesaikan sistem setelah 2 hari pengiriman.', null, 'success', '/admin/manajemen-pesanan');
+            }
+        }
+    }
 }

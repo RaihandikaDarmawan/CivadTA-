@@ -1,0 +1,655 @@
+<?xml version="1.0"?>
+<?mso-application myexcel?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Antigravity AI</Author>
+  <LastAuthor>Antigravity AI</LastAuthor>
+  <Created>2026-07-05T16:05:00Z</Created>
+  <Version>16.00</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>12435</WindowHeight>
+  <WindowWidth>28800</WindowWidth>
+  <WindowTopX>0</WindowTopX>
+  <WindowTopY>0</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:CharSet="1" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="Title">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Font ss:FontName="Calibri" ss:Size="16" ss:Bold="1" ss:Color="#1F4E78"/>
+  </Style>
+  <Style ss:ID="Header">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#000000"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#000000"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Size="11" ss:Color="#FFFFFF" ss:Bold="1"/>
+   <Interior ss:Color="#1F4E78" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="Bordered">
+   <Alignment ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#D9D9D9"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#D9D9D9"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#D9D9D9"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#D9D9D9"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="BorderedCenter">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#D9D9D9"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#D9D9D9"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#D9D9D9"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#D9D9D9"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="Pass">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#D9D9D9"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#D9D9D9"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#D9D9D9"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#D9D9D9"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Color="#006100" ss:Bold="1"/>
+   <Interior ss:Color="#C6EFCE" ss:Pattern="Solid"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Blackbox Testing CivadTA">
+  <Table ss:ExpandedColumnCount="10" x:FullColumns="1" x:FullRows="1" ss:DefaultRowHeight="20">
+   <Column ss:Width="100"/>
+   <Column ss:Width="100"/>
+   <Column ss:Width="180"/>
+   <Column ss:Width="70"/>
+   <Column ss:Width="200"/>
+   <Column ss:Width="180"/>
+   <Column ss:Width="40"/>
+   <Column ss:Width="300"/>
+   <Column ss:Width="300"/>
+   <Column ss:Width="70"/>
+   <Row ss:Height="25">
+    <Cell ss:MergeAcross="9" ss:StyleID="Title"><Data ss:Type="String">Tabel Pengujian Black Box - CivadTA (CV Arya Duta Tangerang)</Data></Cell>
+   </Row>
+   <Row ss:Height="10">
+    <!-- Empty row for spacing -->
+   </Row>
+   <Row ss:Height="25">
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Scenario ID</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Case ID</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Test</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Type</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Test Case</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Pre Condition</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Steps</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Short Description</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Expected Result</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Status (Pass/Fail)</Data></Cell>
+   </Row>
+
+   <!-- Scenario 1: Registrasi -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="7" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.Reg.001</Data></Cell>
+    <Cell ss:MergeDown="7" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.Reg.001</Data></Cell>
+    <Cell ss:MergeDown="7" ss:StyleID="Bordered"><Data ss:Type="String">Cek registrasi pelanggan baru dengan data valid</Data></Cell>
+    <Cell ss:MergeDown="7" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="7" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan berhasil mendaftarkan akun baru ke sistem</Data></Cell>
+    <Cell ss:MergeDown="7" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan belum memiliki akun pada sistem</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka halaman registrasi /register</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Sistem menampilkan halaman form registrasi pelanggan</Data></Cell>
+    <Cell ss:MergeDown="7" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Input nama lengkap &quot;John Doe&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Kolom nama terisi &quot;John Doe&quot;</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Input username unik &quot;johndoe&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Kolom username terisi &quot;johndoe&quot;</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">4</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Input email unik &quot;johndoe@example.com&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Kolom email terisi &quot;johndoe@example.com&quot;</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">5</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Input password yang valid &quot;Password123&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Kolom password terisi &quot;Password123&quot; (disamarkan)</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">6</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Input konfirmasi password yang sama &quot;Password123&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Kolom konfirmasi password terisi</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">7</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pilih daerah pengiriman &quot;Tangerang&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Kolom daerah terpilih &quot;Tangerang&quot;</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">8</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Daftar&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Sistem memproses data, mengirim email konfirmasi, dan menampilkan halaman login dengan pesan sukses.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 2: Login -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="4" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.Login.001</Data></Cell>
+    <Cell ss:MergeDown="4" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.Login.001</Data></Cell>
+    <Cell ss:MergeDown="4" ss:StyleID="Bordered"><Data ss:Type="String">Cek validasi login dengan data valid</Data></Cell>
+    <Cell ss:MergeDown="4" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="4" ss:StyleID="Bordered"><Data ss:Type="String">Pengguna berhasil login menggunakan kredensial yang valid</Data></Cell>
+    <Cell ss:MergeDown="4" ss:StyleID="Bordered"><Data ss:Type="String">Pengguna sudah memiliki akun terdaftar pada sistem</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka halaman login /login</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Sistem menampilkan form login</Data></Cell>
+    <Cell ss:MergeDown="4" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Input username &quot;johndoe&quot; atau &quot;admin&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Kolom username terisi dengan benar</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Input password &quot;Password123&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Kolom password terisi dengan benar</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">4</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pilih role (&quot;Pelanggan&quot; atau &quot;Admin&quot;)</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Role terpilih dengan benar</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">5</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Login&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Sistem memvalidasi kredensial, mencocokkan hash password, dan mengarahkan ke dashboard masing-masing.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 3: Melihat data pelanggan -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="1" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.ViewCust.001</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.ViewCust.001</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="Bordered"><Data ss:Type="String">Melihat daftar pelanggan terdaftar</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="Bordered"><Data ss:Type="String">Admin dapat melihat daftar seluruh pelanggan terdaftar</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="Bordered"><Data ss:Type="String">Admin sudah berhasil masuk (login) ke dashboard admin</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka menu &quot;Manajemen User&quot; /admin/manajemen-user</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman Manajemen User terbuka menampilkan sub-tabel Admin dan Pelanggan</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Lihat daftar pelanggan pada tabel</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Daftar seluruh pelanggan (nama, email, daerah, poin, dll.) ditampilkan dengan lengkap.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 4: Mengelola buku -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.ManageBook.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.ManageBook.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Mengelola data buku (Tambah Buku)</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Admin berhasil menambahkan data buku baru ke database</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Admin sudah login dan berada di halaman manajemen buku</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka halaman &quot;Manajemen Buku&quot; /admin/manajemen-buku</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman manajemen buku termuat dan menampilkan daftar buku saat ini</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Tambah Buku&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Modal form tambah buku baru muncul ke layar</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Isi data judul, penulis, kategori, kelas, harga, stok, gambar, dan deskripsi buku</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Seluruh kolom input terisi dengan data buku baru</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">4</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Simpan&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Sistem menyimpan buku baru ke database, memuat ulang tabel buku, dan menampilkan pesan sukses.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 5: Mengelola pesanan -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.ManageOrder.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.ManageOrder.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Memperbarui status pesanan pelanggan</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Admin berhasil memperbarui status pesanan menjadi Sedang Dikirim</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Terdapat pesanan masuk dari pelanggan dengan status Pending</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka halaman &quot;Manajemen Pesanan&quot; /admin/manajemen-pesanan</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman manajemen pesanan terbuka menampilkan tabel daftar pesanan masuk</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pilih pesanan berstatus Pending dan klik &quot;Update Status&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Form/modal update status pesanan ditampilkan</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pilih status &quot;Sedang Dikirim&quot; dan input tracking link kurir</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Status terpilih dan kolom tracking link terisi link pelacakan</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">4</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Perbarui Status&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Sistem mengupdate status pesanan menjadi Sedang Dikirim, menyimpan tracking link, mengirimkan notifikasi ke pelanggan, dan menampilkan pesan sukses.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 6: Melakukan verifikasi pengembalian -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.VerifyReturn.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.VerifyReturn.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Verifikasi pengajuan retur (Disetujui)</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Admin menyetujui pengajuan pengembalian buku dari pelanggan</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan telah mengajukan retur buku (status pesanan: Pengajuan Pending)</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka menu &quot;Manajemen Pengembalian&quot; di dashboard admin</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman manajemen pengembalian terbuka menampilkan tabel pengajuan retur</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik &quot;Detail&quot; pada salah satu pengajuan</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Detail alasan, detail bank refund, dan bukti video terlampir muncul</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pilih opsi verifikasi &quot;Disetujui&quot; dan tulis catatan admin</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Status persetujuan dipilih dan catatan terisi</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">4</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Simpan&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Status pengembalian diupdate menjadi Disetujui, status pesanan berubah menjadi Dikembalikan, dan notifikasi terkirim ke pelanggan.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 7: Melihat laporan penjualan -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.SalesReport.001</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.SalesReport.001</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Melihat dan mengekspor laporan penjualan</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Admin berhasil melihat rekap laporan penjualan dan mengunduh berkas CSV</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Admin sudah masuk ke sistem</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka menu &quot;Laporan Penjualan&quot; /admin/laporan-penjualan</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman laporan penjualan memuat data transaksi selesai</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pilih filter periode (misal: &quot;Bulan ini&quot;)</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Data penjualan disaring, menghitung total pendapatan, jumlah pesanan, dan jumlah buku secara otomatis</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Export Report&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Sistem memproses file dan otomatis mengunduh berkas laporan berformat CSV ke komputer admin.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 8: Melihat katalog buku -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.ViewCatalog.001</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.ViewCatalog.001</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Membuka katalog buku pelanggan</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan dapat menjelajahi daftar buku di katalog</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan membuka halaman beranda</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka halaman &quot;Beranda&quot; /pelanggan/beranda setelah login</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman beranda termuat dengan daftar buku terpopuler</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Gulir layar untuk melihat list buku</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Berbagai judul buku lengkap dengan sampul, kategori, kelas, dan harga tampil di layar</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik salah satu buku</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman detail buku terbuka menampilkan informasi detail buku dan sisa stok.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 9: Melakukan pencarian -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.SearchBook.001</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.SearchBook.001</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Mencari buku di katalog</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan berhasil mencari buku berdasarkan kata kunci pencarian</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan berada di halaman beranda katalog buku</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik kolom search di bagian atas katalog</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Kursor aktif pada kolom pencarian</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Input kata kunci pencarian (misal: &quot;Fisika&quot;)</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Teks pencarian terisi kata &quot;Fisika&quot;</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik ikon cari atau tekan Enter</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman menampilkan daftar buku yang judulnya mengandung kata &quot;Fisika&quot;.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 10: Mengelola keranjang belanja -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.ManageCart.001</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.ManageCart.001</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Mengelola item dalam keranjang belanja</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan berhasil mengubah jumlah dan menghapus item di keranjang</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan memiliki buku di keranjang belanja</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka halaman &quot;Keranjang&quot; /pelanggan/keranjang</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman keranjang belanja menampilkan daftar item yang siap dipesan</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Ubah kuantitas (qty) salah satu buku</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Jumlah item diperbarui dan subtotal harga otomatis terhitung ulang</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Hapus&quot; pada salah satu buku</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Item terhapus dari keranjang belanja dan counter keranjang di navbar berkurang.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 11: Melakukan pemesanan -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.PlaceOrder.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.PlaceOrder.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Melakukan checkout pesanan belanja</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan berhasil mengirimkan pesanan belanja ke sistem</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan memiliki item di keranjang belanja</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Checkout&quot; di halaman keranjang belanja</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Form pesanan/checkout ditampilkan</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Isi nama penerima, nomor telepon, alamat pengiriman, jarak km, dan metode GoSend</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Formulir terisi dengan data pengiriman yang lengkap</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Input penukaran poin (opsional, kelipatan 50)</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Kolom penukaran poin terisi</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">4</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Buat Pesanan&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Sistem memproses pesanan baru, mengurangi stok buku, mencatat diskon poin, dan mengarahkan ke halaman pembayaran.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 12: Melakukan pembayaran -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.MakePayment.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.MakePayment.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Melakukan pembayaran menggunakan Midtrans Snap</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan berhasil membayar pesanan melalui payment gateway</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan berada di halaman pembayaran Midtrans Snap</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka halaman pembayaran midtrans</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman menampilkan detail nominal tagihan dan opsi pembayaran Midtrans</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Bayar Sekarang&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pop-up widget Midtrans Snap muncul menampilkan pilihan metode (Gopay/Transfer/VA)</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pilih &quot;Virtual Account BCA&quot; dan salin nomor VA</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Detail nomor Virtual Account BCA tergenerate</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">4</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Lakukan transfer pembayaran sandbox</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pembayaran terdeteksi sukses, status pesanan berubah menjadi Pesanan Sedang Dikemas, dan diarahkan kembali ke riwayat belanja.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 13: Memantau status pesanan -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.TrackOrder.001</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.TrackOrder.001</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Memantau status pesanan (Lacak)</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan dapat melihat pelacakan pengiriman kurir</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Pesanan pelanggan telah dikirim oleh admin (status: Sedang Dikirim)</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka menu &quot;Status Pesanan&quot; atau membuka riwayat pesanan</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Sistem menampilkan daftar pesanan aktif beserta statusnya</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Lihat status pesanan</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Status pesanan tertulis &quot;Pesanan Sedang Dikirim&quot; lengkap dengan link pelacakan kurir</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik &quot;Lacak Pengiriman&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Sistem membuka link eksternal peta/kurir pelacakan GoSend secara real-time.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 14: Melihat riwayat transaksi -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="1" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.ViewHistory.001</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.ViewHistory.001</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="Bordered"><Data ss:Type="String">Membuka riwayat transaksi</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan dapat melihat daftar transaksi belanja yang pernah dilakukan</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan sudah login ke sistem</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka menu &quot;Riwayat&quot; /pelanggan/riwayat</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman riwayat transaksi termuat</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Gulir daftar riwayat pesanan</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Menampilkan daftar seluruh pesanan (selesai/batal/aktif) lengkap dengan nomor pesanan, tanggal, total bayar, dan invoice.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 15: Mengajukan pengembalian -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="4" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.SubmitReturn.001</Data></Cell>
+    <Cell ss:MergeDown="4" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.SubmitReturn.001</Data></Cell>
+    <Cell ss:MergeDown="4" ss:StyleID="Bordered"><Data ss:Type="String">Mengajukan pengembalian buku (Retur)</Data></Cell>
+    <Cell ss:MergeDown="4" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="4" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan berhasil mengirimkan pengajuan retur buku cacat</Data></Cell>
+    <Cell ss:MergeDown="4" ss:StyleID="Bordered"><Data ss:Type="String">Pesanan pelanggan berstatus Dikirim/Sedang Dikirim</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka menu riwayat transaksi, lalu klik &quot;Ajukan Pengembalian&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman form pengembalian buku ditampilkan</Data></Cell>
+    <Cell ss:MergeDown="4" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Input alasan retur &quot;Buku robek di halaman 15-20&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Kolom alasan terisi (min 10 karakter)</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Upload file video unboxing (.mp4)</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">File video berhasil terupload</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">4</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Input nama bank dan nomor rekening untuk refund</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Detail rekening terisi lengkap</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">5</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Kirim Pengajuan&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Sistem menyimpan data pengajuan, mengubah status pesanan menjadi Pengajuan Pending, dan mengirim notifikasi ke admin.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 16: Menambah poin -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.AddPoints.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.AddPoints.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Menambahkan poin loyalty pelanggan secara manual</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Admin berhasil memberikan poin loyalty tambahan ke pelanggan</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Admin berada di halaman manajemen user</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka halaman &quot;Manajemen User&quot; /admin/manajemen-user</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Tabel data pelanggan ditampilkan lengkap dengan kolom poin loyalty saat ini</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Update Poin&quot; pada baris pelanggan terkait</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Modal pop-up update poin terbuka</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Masukkan jumlah poin tambahan (misal: 100)</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Kolom input poin terisi dengan angka 100</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">4</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Simpan&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Sistem menambahkan 100 poin ke saldo pelanggan di database, mengirim notifikasi, dan tabel memperbarui total poin.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 17: Melakukan chat -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.OrderChat.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.OrderChat.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Berkomunikasi via chat pesanan</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan dan Admin dapat saling mengirim pesan secara real-time</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Pesanan aktif terdaftar di sistem</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan klik &quot;Chat dengan Admin&quot; pada detail pesanan</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman chatroom pesanan pelanggan termuat</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan ketik &quot;Apakah pesanan bisa dikirim sekarang?&quot; lalu klik kirim</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pesan tampil di chatroom pelanggan, tersimpan, dan mengirimkan notifikasi ke admin</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Admin membuka rute chat /admin/chat/{order_id}</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman chatroom admin termuat menampilkan pesan pelanggan</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">4</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Admin mengetik balasan &quot;Tentu, pesanan segera dikirim sore ini&quot; lalu klik kirim</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pesan balasan tampil, tersimpan di database, dan notifikasi terkirim ke pelanggan.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 18: Memberi ulasan -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.GiveReview.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.GiveReview.001</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Beri Ulasan</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Pelanggan berhasil mengirimkan ulasan produk buku setelah transaksi selesai</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Bordered"><Data ss:Type="String">Pesanan pelanggan berstatus Selesai dan belum pernah diulas</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka halaman riwayat transaksi, lalu klik &quot;Beri Ulasan&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Form/modal ulasan buku terbuka</Data></Cell>
+    <Cell ss:MergeDown="3" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pilih rating bintang (misal: 5)</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Pilihan rating bintang 5 terpilih</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Ketik ulasan &quot;Buku sangat bagus, kertas bersih dan cetakan jernih.&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Kolom komentar ulasan terisi</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">4</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Kirim Ulasan&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Ulasan tersimpan di database, terhubung ke buku terkait, status ulasan ditandai, dan pesan sukses muncul.</Data></Cell>
+   </Row>
+
+   <!-- Scenario 19: Mengelola ulasan -->
+   <Row ss:Height="22">
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">TS.ManageReview.001</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">TC.ManageReview.001</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Mengelola ulasan pelanggan</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="BorderedCenter"><Data ss:Type="String">Positive</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Admin berhasil melihat ulasan masuk dan menghapus ulasan melanggar</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Bordered"><Data ss:Type="String">Admin sudah login</Data></Cell>
+    <Cell ss:StyleID="BorderedCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Buka halaman &quot;Manajemen Ulasan&quot; /admin/manajemen-ulasan</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Halaman memuat daftar seluruh rating dan komentar buku dari pelanggan</Data></Cell>
+    <Cell ss:MergeDown="2" ss:StyleID="Pass"><Data ss:Type="String">Pass</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik tombol &quot;Hapus Ulasan&quot; pada ulasan melanggar</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Dialog konfirmasi penghapusan muncul</Data></Cell>
+   </Row>
+   <Row ss:Height="22">
+    <Cell ss:Index="7" ss:StyleID="BorderedCenter"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Klik &quot;Ya, Hapus&quot;</Data></Cell>
+    <Cell ss:StyleID="Bordered"><Data ss:Type="String">Ulasan berhasil dihapus dari database, tabel memuat ulang data terbaru, dan pesan sukses ditampilkan.</Data></Cell>
+   </Row>
+
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>1</ActiveRow>
+     <ActiveCol>1</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

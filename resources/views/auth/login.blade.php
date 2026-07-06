@@ -92,9 +92,28 @@
                 <p class="text-emerald-950 font-medium opacity-70">Masuk ke akun pengguna anda.</p>
             </div>
 
-            @if(session('error'))
-            <div class="mb-8 p-4 bg-red-50 border border-red-100 text-red-600 text-[13px] rounded-2xl font-bold flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
-                {{ session('error') }}
+            <!-- Inline Error Alert Box displayed above the form -->
+            @if(session('error') || $errors->any())
+            <div class="mb-8 p-5 bg-red-50 border-2 border-red-500 text-red-600 text-[13px] rounded-[28px] font-bold animate-in fade-in slide-in-from-top-2">
+                <div class="flex items-start gap-3">
+                    <div class="w-5 h-5 bg-red-100 text-red-600 rounded-full flex items-center justify-center shrink-0 mt-0.5 shadow-inner">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3 h-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        @if(session('error'))
+                            <p>{{ session('error') }}</p>
+                        @endif
+                        @if($errors->any())
+                            <ul class="list-disc pl-4 space-y-1 text-red-600">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                </div>
             </div>
             @endif
 
