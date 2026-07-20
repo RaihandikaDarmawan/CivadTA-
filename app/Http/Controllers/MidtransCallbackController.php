@@ -29,8 +29,9 @@ class MidtransCallbackController extends Controller
                 // Award points to user if not already awarded
                 $user = $order->user;
                 if ($user && !$order->points_awarded) {
-                    // 1 Point for every 10,000 IDR
-                    $pointsEarned = floor($order->total_amount / 10000);
+                    // 1 Point for every 10,000 IDR of product subtotal
+                    $subtotal = $order->items->sum(fn($item) => $item->price * $item->quantity);
+                    $pointsEarned = floor($subtotal / 10000);
                     $user->increment('points', $pointsEarned);
                     $order->points_awarded = true;
 

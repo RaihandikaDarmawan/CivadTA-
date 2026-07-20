@@ -58,9 +58,14 @@
                     <span class="px-4 py-1.5 bg-emerald-50 text-emerald-950 text-[10px] font-black uppercase tracking-widest rounded-full border border-emerald-100">
                         {{ $book['class'] }}
                     </span>
-                    <div class="flex items-center gap-1.5 text-emerald-900 ml-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
-                        <span class="text-[12px] font-black">Stok Ready</span>
+                    <div class="flex items-center gap-1.5 {{ $book['stock'] <= 0 ? 'text-red-600' : 'text-emerald-900' }} ml-auto">
+                        @if($book['stock'] <= 0)
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4.5 h-4.5"><path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                            <span class="text-[12px] font-black">Stok Habis</span>
+                        @else
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                            <span class="text-[12px] font-black">Stok Ready</span>
+                        @endif
                     </div>
                 </div>
 
@@ -74,24 +79,30 @@
 
                 <form action="{{ url('/pelanggan/keranjang/tambah') }}" method="POST" class="mt-auto">
                     @csrf
-                    <input type="hidden" name="id" value="{{ $book['id'] }}">
+                    <input type="hidden" name="buku_id" value="{{ $book['id'] }}">
                     
                     <div class="flex flex-col sm:flex-row items-stretch gap-4">
-                        <div class="flex items-center bg-white border-2 border-emerald-950 rounded-2xl p-1.5 shadow-sm">
-                            <button type="button" onclick="decreaseQty()" class="w-12 h-12 flex items-center justify-center text-emerald-950 hover:bg-emerald-50 rounded-xl transition-all">
+                        <div class="flex items-center bg-white border-2 border-emerald-950 rounded-2xl p-1.5 shadow-sm {{ $book['stock'] <= 0 ? 'opacity-50 pointer-events-none' : '' }}">
+                            <button type="button" onclick="decreaseQty()" class="w-12 h-12 flex items-center justify-center text-emerald-950 hover:bg-emerald-50 rounded-xl transition-all" {{ $book['stock'] <= 0 ? 'disabled' : '' }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" /></svg>
                             </button>
-                            <input type="number" name="qty" id="qty" value="1" min="1" max="{{ $book['stock'] }}" onchange="updateSubtotal()" class="w-16 text-center border-0 focus:ring-0 text-xl font-black text-emerald-950 bg-transparent">
-                            <button type="button" onclick="increaseQty()" class="w-12 h-12 flex items-center justify-center text-emerald-950 hover:bg-emerald-50 rounded-xl transition-all">
+                            <input type="number" name="qty" id="qty" value="{{ $book['stock'] <= 0 ? 0 : 1 }}" min="{{ $book['stock'] <= 0 ? 0 : 1 }}" max="{{ $book['stock'] }}" onchange="updateSubtotal()" class="w-16 text-center border-0 focus:ring-0 text-xl font-black text-emerald-950 bg-transparent" {{ $book['stock'] <= 0 ? 'disabled' : '' }}>
+                            <button type="button" onclick="increaseQty()" class="w-12 h-12 flex items-center justify-center text-emerald-950 hover:bg-emerald-50 rounded-xl transition-all" {{ $book['stock'] <= 0 ? 'disabled' : '' }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                             </button>
                         </div>
-                        <button type="submit" class="flex-grow bg-emerald-950 text-white px-8 py-5 rounded-2xl font-black text-[16px] hover:bg-emerald-800 transition-all shadow-xl shadow-emerald-950/20 flex items-center justify-center gap-4 group">
-                            Tambah ke Keranjang
-                            <div class="w-6 h-6 bg-white/10 rounded-lg flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-                            </div>
-                        </button>
+                        @if($book['stock'] <= 0)
+                            <button type="button" disabled class="flex-grow bg-slate-300 text-slate-600 px-8 py-5 rounded-2xl font-black text-[16px] flex items-center justify-center gap-4 cursor-not-allowed">
+                                Stok Habis
+                            </button>
+                        @else
+                            <button type="submit" class="flex-grow bg-emerald-950 text-white px-8 py-5 rounded-2xl font-black text-[16px] hover:bg-emerald-800 transition-all shadow-xl shadow-emerald-950/20 flex items-center justify-center gap-4 group">
+                                Tambah ke Keranjang
+                                <div class="w-6 h-6 bg-white/10 rounded-lg flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                                </div>
+                            </button>
+                        @endif
                     </div>
                     
                     <div class="mt-6 flex items-center justify-between px-2">
@@ -109,10 +120,10 @@
             <section>
                 <div class="flex items-center gap-4 mb-8">
                     <div class="w-2 h-10 bg-emerald-500 rounded-full"></div>
-                    <h3 class="text-[28px] font-black text-emerald-950 tracking-tight">Sinopsis & Deskripsi</h3>
+                    <h3 class="text-[28px] font-black text-emerald-950 tracking-tight">Deskripsi</h3>
                 </div>
                 <div class="prose prose-emerald max-w-none text-emerald-800/80 leading-relaxed font-medium text-[16px]">
-                    {{ $book['description'] }}
+                    {{ $book['desc'] }}
                 </div>
             </section>
         </div>

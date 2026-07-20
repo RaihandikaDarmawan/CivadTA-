@@ -39,7 +39,7 @@ class ReturnRequestController extends Controller
             'reason' => 'required|string|min:10',
             'video_proof' => 'required|mimes:mp4,mov,avi,webm|max:51200', // max 50MB
             'bank_name' => 'required|string|min:3|max:255',
-            'bank_account_number' => 'required|numeric|digits_between:5,20',
+            'bank_account_number' => 'required|numeric|digits_between:10,16',
         ], [
             'reason.required' => 'Alasan pengembalian wajib diisi.',
             'reason.min' => 'Alasan pengembalian minimal harus 10 karakter.',
@@ -49,8 +49,8 @@ class ReturnRequestController extends Controller
             'bank_name.required' => 'Nama bank wajib diisi.',
             'bank_name.min' => 'Nama bank minimal harus 3 karakter.',
             'bank_account_number.required' => 'Nomor rekening wajib diisi.',
-            'bank_account_number.numeric' => 'Nomor rekening harus berupa angka.',
-            'bank_account_number.digits_between' => 'Nomor rekening harus antara 5 sampai 20 digit.',
+            'bank_account_number.numeric' => 'Nomor rekening harus berupa angka dengan jumlah digit 10-16.',
+            'bank_account_number.digits_between' => 'Nomor rekening harus berupa angka dengan jumlah digit 10-16.',
         ]);
         
         $order = Order::where('id', $request->order_id)

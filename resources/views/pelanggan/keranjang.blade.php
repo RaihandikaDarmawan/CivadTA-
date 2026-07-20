@@ -17,6 +17,17 @@
                 let subtotal = price * qty;
                 
                 document.getElementById('subtotal-' + id).innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
+                
+                // Update summary side column if it exists
+                let summaryQty = document.getElementById('summary-qty-' + id);
+                let summarySubtotal = document.getElementById('summary-subtotal-' + id);
+                if (summaryQty) {
+                    summaryQty.innerText = qty + ' Unit';
+                }
+                if (summarySubtotal) {
+                    summarySubtotal.innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
+                }
+                
                 totalProduk += subtotal;
 
                 // Check if qty exceeds stock
@@ -58,7 +69,7 @@
                 }
                 if (checkoutBtn) {
                     checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                    checkoutBtn.setAttribute('href', '{{ url("/pelanggan/pesanan") }}');
+                    checkoutBtn.setAttribute('href', '{{ url("/pelanggan/pesanan?from=cart") }}');
                     checkoutBtn.onclick = null;
                 }
             }
@@ -86,6 +97,37 @@
                     }
                 });
             }
+        }
+
+        function onManualQtyChange(id, value) {
+            let input = document.getElementById('qty-' + id);
+            let val = parseInt(value);
+
+            if (isNaN(val) || val <= 0) {
+                alert('jumlah pembelian harus lebih dari nol');
+                input.value = 1;
+                val = 1;
+            } else if (val > 50) {
+                alert('jumlah pembelian maksimal 50');
+                input.value = 50;
+                val = 50;
+            }
+
+            // Update session via AJAX
+            fetch('{{ url("/pelanggan/keranjang/update") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ id: id, qty: val })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateCart();
+                }
+            });
         }
 
         window.onload = updateCart;
@@ -161,7 +203,7 @@
                             <button type="button" onclick="changeQty('{{ $id }}', -1)" class="w-10 h-10 flex items-center justify-center bg-white border border-emerald-100 rounded-xl text-emerald-600 hover:text-emerald-950 transition-all shadow-sm active:scale-90">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" /></svg>
                             </button>
-                            <input type="number" id="qty-{{ $id }}" value="{{ $item['qty'] }}" min="1" readonly class="w-12 h-10 text-center border-0 p-0 text-[16px] font-black text-emerald-950 bg-transparent">
+                            <input type="number" id="qty-{{ $id }}" value="{{ $item['qty'] }}" min="1" max="50" onchange="onManualQtyChange('{{ $id }}', this.value)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="w-12 h-10 text-center border-0 p-0 text-[16px] font-black text-emerald-950 bg-transparent focus:ring-0 outline-none">
                             <button type="button" onclick="changeQty('{{ $id }}', 1)" class="w-10 h-10 flex items-center justify-center bg-white border border-emerald-100 rounded-xl text-emerald-600 hover:text-emerald-950 transition-all shadow-sm active:scale-90">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                             </button>
@@ -198,13 +240,13 @@
                     </div>
                     
                     <div class="space-y-6 mb-12 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
-                        @foreach(session('cart', []) as $item)
+                        @foreach(session('cart', []) as $id => $item)
                         <div class="flex justify-between items-start gap-4">
                             <div class="flex flex-col">
                                 <span class="text-white font-black text-[14px] line-clamp-1 mb-1">{{ $item['title'] }}</span>
-                                <span class="text-emerald-400/60 text-[11px] font-bold uppercase tracking-widest">{{ $item['qty'] }} Unit</span>
+                                <span id="summary-qty-{{ $id }}" class="text-emerald-400/60 text-[11px] font-bold uppercase tracking-widest">{{ $item['qty'] }} Unit</span>
                             </div>
-                            <span class="font-black text-white text-[14px] whitespace-nowrap">Rp {{ number_format($item['price'] * $item['qty'], 0, ',', '.') }}</span>
+                            <span id="summary-subtotal-{{ $id }}" class="font-black text-white text-[14px] whitespace-nowrap">Rp {{ number_format($item['price'] * $item['qty'], 0, ',', '.') }}</span>
                         </div>
                         @endforeach
                     </div>
@@ -225,7 +267,7 @@
                         <p class="text-[12px] text-emerald-200/60 leading-relaxed font-bold">Biaya pengiriman dihitung otomatis berdasarkan jarak tempuh ke lokasi Anda.</p>
                     </div>
 
-                    <a href="{{ url('/pelanggan/pesanan') }}" id="checkout-btn" class="w-full block text-center bg-white text-emerald-950 py-5 rounded-2xl text-[16px] font-black hover:bg-emerald-50 transition-all shadow-xl active:scale-95 group">
+                    <a href="{{ url('/pelanggan/pesanan?from=cart') }}" id="checkout-btn" class="w-full block text-center bg-white text-emerald-950 py-5 rounded-2xl text-[16px] font-black hover:bg-emerald-50 transition-all shadow-xl active:scale-95 group">
                         Pesan
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 inline-block ml-2 group-hover:translate-x-1 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
                     </a>

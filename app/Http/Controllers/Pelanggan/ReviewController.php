@@ -18,9 +18,10 @@ class ReviewController extends Controller
         $request->validate([
             'order_id' => 'required|exists:orders,id',
             'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string|min:5|max:1000',
+            'comment' => 'required|string|min:5|max:1000',
         ], [
-            'comment.min' => 'Komentar ulasan minimal harus 5 karakter.',
+            'comment.required' => 'komentar minimal terdiri dari 5 karakter.',
+            'comment.min' => 'komentar minimal terdiri dari 5 karakter.',
         ]);
 
         $order = Order::where('id', $request->order_id)

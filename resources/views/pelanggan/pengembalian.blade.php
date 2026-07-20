@@ -72,7 +72,7 @@
                 </div>
                 @endif
                 
-                <form action="{{ route('pelanggan.pengembalian.simpan') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+                <form action="{{ route('pelanggan.pengembalian.simpan') }}" method="POST" enctype="multipart/form-data" class="space-y-8" onsubmit="return validateReturnForm(event)">
                     @csrf
                     <input type="hidden" name="order_id" value="{{ $order->id }}">
                     
@@ -121,8 +121,9 @@
                         <div class="flex flex-col gap-2">
                             <label for="bank_account_number" class="text-[11px] font-black text-emerald-950 uppercase tracking-[0.2em]">Nomor Rekening <span class="text-rose-500">*</span></label>
                             <input type="text" name="bank_account_number" id="bank_account_number" value="{{ old('bank_account_number') }}" required placeholder="Contoh: 1234567890"
-                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')" inputmode="numeric"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')" inputmode="numeric" minlength="10" maxlength="16"
                                    class="w-full px-6 py-4 rounded-2xl border-2 border-emerald-950/10 focus:border-emerald-950 focus:ring-0 outline-none text-[14px] font-bold text-emerald-950 transition-all placeholder:text-emerald-950/20">
+                            <p id="rekening-error" class="text-rose-500 text-[11px] font-bold ml-1 hidden">Nomor rekening harus berupa angka dengan jumlah digit 10-16.</p>
                         </div>
                     </div>
                     
@@ -173,5 +174,41 @@
             fileSub.classList.add('text-emerald-700/60');
         }
     }
+
+    function validateReturnForm(event) {
+        const rekInput = document.getElementById('bank_account_number');
+        const rekError = document.getElementById('rekening-error');
+        const value = rekInput.value.trim();
+        
+        const isNumeric = /^\d+$/.test(value);
+        if (!isNumeric || value.length < 10 || value.length > 16) {
+            rekError.classList.remove('hidden');
+            rekInput.classList.add('border-rose-500', 'focus:border-rose-500');
+            rekInput.classList.remove('border-emerald-950/10', 'focus:border-emerald-950');
+            rekInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return false;
+        }
+        
+        rekError.classList.add('hidden');
+        rekInput.classList.remove('border-rose-500', 'focus:border-rose-500');
+        rekInput.classList.add('border-emerald-950/10', 'focus:border-emerald-950');
+        return true;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const rekInput = document.getElementById('bank_account_number');
+        if (rekInput) {
+            rekInput.addEventListener('input', () => {
+                const rekError = document.getElementById('rekening-error');
+                const value = rekInput.value.trim();
+                const isNumeric = /^\d+$/.test(value);
+                if (isNumeric && value.length >= 10 && value.length <= 16) {
+                    rekError.classList.add('hidden');
+                    rekInput.classList.remove('border-rose-500', 'focus:border-rose-500');
+                    rekInput.classList.add('border-emerald-950/10', 'focus:border-emerald-950');
+                }
+            });
+        }
+    });
 </script>
 @endsection

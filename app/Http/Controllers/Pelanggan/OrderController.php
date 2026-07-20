@@ -40,8 +40,13 @@ class OrderController extends Controller
     {
         if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
         
-        $cart = session('cart', []);
-        foreach ($cart as $id => $item) {
+        if (request()->query('from') === 'cart' || !session()->has('checkout_type')) {
+            session(['checkout_type' => 'cart']);
+            session(['checkout_items' => session('cart', [])]);
+        }
+        
+        $items = session('checkout_items', []);
+        foreach ($items as $id => $item) {
             $book = Book::find($id);
             if (!$book || $item['qty'] > $book->stock) {
                 return redirect('/pelanggan/keranjang')->with('error', 'stok tidak mencukupi, tolong ubah jumlah stok');
@@ -52,7 +57,7 @@ class OrderController extends Controller
 
     public function confirmPayment(Request $request)
     {
-        $cart = session('cart', []);
+        $cart = session('checkout_items', []);
         if (empty($cart)) return redirect('/pelanggan/dashboard');
 
         $user = Auth::user();
@@ -68,7 +73,7 @@ class OrderController extends Controller
             'recipient_name.required' => 'Nama penerima wajib diisi.',
             'recipient_name.min' => 'Nama penerima minimal harus 3 karakter.',
             'phone_number.required' => 'Nomor handphone wajib diisi.',
-            'phone_number.digits_between' => 'pastikan nomor anda minimal 10-13 digit',
+            'phone_number.digits_between' => 'nomor telepon harus terdiri dari 10-13 digit',
             'address.required' => 'Alamat lengkap wajib diisi.',
             'address.min' => 'Alamat minimal harus 5 karakter.',
             'shipping_service.required' => 'Opsi pengiriman wajib dipilih.',
@@ -164,9 +169,12 @@ class OrderController extends Controller
                 }
             });
 
-            session(['cart' => []]);
-            session(['cart_count' => 0]);
+            if (session('checkout_type', 'cart') === 'cart') {
+                session(['cart' => []]);
+                session(['cart_count' => 0]);
+            }
             session(['active_discount' => 0]);
+            session()->forget(['checkout_type', 'checkout_items']);
 
             // Notify Admins about new order
             Notification::send('admin', 'Pesanan Baru #' . $orderNumber, 'Pelanggan ' . $user->name . ' baru saja melakukan pemesanan sebesar Rp ' . number_format($total, 0, ',', '.'), null, 'info', '/admin/manajemen-pesanan');
@@ -235,12 +243,15 @@ class OrderController extends Controller
             $order->snap_token = $snapToken;
             $order->save();
 
-            session(['cart' => []]);
+            if (session('checkout_type', 'cart') === 'cart') {
+                session(['cart' => []]);
+                session(['cart_count' => 0]);
+            }
             
             // Notify Admins about new order
             Notification::send('admin', 'Pesanan Baru #' . $orderNumber, 'Pelanggan ' . $user->name . ' baru saja melakukan pemesanan sebesar Rp ' . number_format($total, 0, ',', '.'), null, 'info', '/admin/manajemen-pesanan');
-            session(['cart_count' => 0]);
             session(['active_discount' => 0]);
+            session()->forget(['checkout_type', 'checkout_items']);
 
             return view('pelanggan.pembayaran_midtrans', [
                 'order' => $order,
@@ -382,7 +393,9 @@ class OrderController extends Controller
 
     public function history()
     {
-        if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
+        if (session('role') !== 'pelanggan') {
+            return redirect('/login')->with('error', 'Silakan login terlebih dahulu.');
+        }
         
         Order::autoCompleteOldOrders();
         
@@ -404,7 +417,8 @@ class OrderController extends Controller
                         // Award points if not already awarded
                         $user = $order->user;
                         if ($user && !$order->points_awarded) {
-                            $pointsEarned = floor($order->total_amount / 10000);
+                            $subtotal = $order->items->sum(fn($item) => $item->price * $item->quantity);
+                            $pointsEarned = floor($subtotal / 10000);
                             $user->increment('points', $pointsEarned);
                             $order->points_awarded = true;
                             
@@ -441,7 +455,8 @@ class OrderController extends Controller
             if (!$order->points_awarded) {
                 $user = $order->user;
                 if ($user) {
-                    $pointsEarned = floor($order->total_amount / 10000);
+                    $subtotal = $order->items->sum(fn($item) => $item->price * $item->quantity);
+                    $pointsEarned = floor($subtotal / 10000);
                     $user->increment('points', $pointsEarned);
                     $order->points_awarded = true;
                 }
@@ -474,14 +489,9 @@ class OrderController extends Controller
 
     public function status()
     {
-        if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
-        
-        Order::autoCompleteOldOrders();
-        
-        $orders = Order::where('user_id', Auth::id())
-                       ->orderBy('created_at', 'desc')
-                       ->get();
-                       
-        return view('pelanggan.status', ['orders' => $orders]);
+        if (session('role') !== 'pelanggan') {
+            return redirect('/login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+        return redirect('/pelanggan/riwayat');
     }
 }

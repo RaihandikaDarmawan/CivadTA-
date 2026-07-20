@@ -13,7 +13,8 @@ echo "Found " . $orders->count() . " orders to process.\n";
 foreach ($orders as $order) {
     $user = $order->user;
     if ($user) {
-        $pointsEarned = floor($order->total_amount / 10000);
+        $subtotal = $order->items->sum(fn($item) => $item->price * $item->quantity);
+        $pointsEarned = floor($subtotal / 10000);
         $user->increment('points', $pointsEarned);
         $order->points_awarded = true;
         $order->save();

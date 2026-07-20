@@ -52,6 +52,14 @@ class UserController extends Controller
     {
         if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
         
+        $request->validate([
+            'points' => 'required|integer|min:1',
+        ], [
+            'points.required' => 'jumlah poin harus berupa angka positif.',
+            'points.integer' => 'jumlah poin harus berupa angka positif.',
+            'points.min' => 'jumlah poin harus berupa angka positif.',
+        ]);
+
         $user = User::findOrFail($request->input('id'));
         $pointsToAdd = (int) $request->input('points');
         

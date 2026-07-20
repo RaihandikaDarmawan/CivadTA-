@@ -25,6 +25,17 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+        
+        /* Hide HTML5 Up/Down Spinners */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
     </style>
 
     <script>
@@ -40,7 +51,7 @@
 
             // Warehouse marker
             L.marker(GUDANG_COORDS).addTo(map)
-                .bindPopup('<b>Gudang Arya Duta</b><br>Titik Pengiriman Utama').openPopup();
+                .bindPopup('<b>Lokasi Arya Duta cabang Tangerang</b><br>Titik Pengiriman Utama').openPopup();
 
             map.on('click', function(e) {
                 setMarker(e.latlng);
@@ -67,6 +78,9 @@
             
             let jarakInput = document.getElementById('jarak');
             jarakInput.value = roundedDist;
+            jarakInput.readOnly = true;
+            jarakInput.classList.remove('bg-white', 'border-emerald-950');
+            jarakInput.classList.add('bg-emerald-50/50', 'border-emerald-950/20', 'text-emerald-950/60', 'cursor-not-allowed');
             
             updateSummary();
 
@@ -296,6 +310,25 @@
         window.onload = function() {
             initMap();
             updateSummary();
+
+            document.getElementById('alamat_lengkap').addEventListener('input', function() {
+                if (this.value.trim() === '') {
+                    if (marker) {
+                        map.removeLayer(marker);
+                        marker = null;
+                    }
+                    document.getElementById('lat_input').value = '';
+                    document.getElementById('lng_input').value = '';
+                    
+                    let jarakInput = document.getElementById('jarak');
+                    jarakInput.value = '-';
+                    jarakInput.readOnly = false;
+                    jarakInput.classList.remove('bg-emerald-50/50', 'border-emerald-950/20', 'text-emerald-950/60', 'cursor-not-allowed');
+                    jarakInput.classList.add('bg-white', 'border-emerald-950');
+                    
+                    updateSummary();
+                }
+            });
         }
     </script>
 @endsection
@@ -340,8 +373,8 @@
                         <div class="space-y-2.5">
                             <label class="text-[12px] font-black text-emerald-900 uppercase tracking-widest ml-1">No. Handphone</label>
                             <input type="tel" name="phone_number" value="{{ old('phone_number', Auth::user()->phone ?? '') }}" placeholder="Contoh: 0812..." 
-                                   minlength="10" maxlength="13" pattern="[0-9]{10,13}" inputmode="numeric"
-                                   oninvalid="this.setCustomValidity('pastikan nomor anda minimal 10-13 digit')"
+                                   minlength="10" maxlength="30" pattern="[0-9]{10,13}" inputmode="numeric"
+                                   oninvalid="this.setCustomValidity('nomor telepon harus terdiri dari 10-13 digit')"
                                    oninput="this.setCustomValidity(''); this.value = this.value.replace(/[^0-9]/g, '')"
                                    class="w-full px-5 py-3 rounded-xl bg-white border-2 border-emerald-950 focus:outline-none text-[15px] font-bold text-emerald-950 transition-all placeholder:text-emerald-950/20" required>
                         </div>
@@ -350,13 +383,27 @@
 
                 <!-- Lokasi Pengiriman -->
                 <div class="bg-white p-5 md:p-8 rounded-3xl border border-emerald-100 shadow-xl">
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 115 0z" /></svg>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-emerald-50">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 115 0z" /></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-[18px] font-black text-emerald-950 tracking-tight">Detail Lokasi</h3>
+                                <p class="text-[11px] font-bold text-emerald-900 uppercase tracking-widest mt-0.5">Alamat & Jarak</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-[18px] font-black text-emerald-950 tracking-tight">Detail Lokasi</h3>
-                            <p class="text-[11px] font-bold text-emerald-900 uppercase tracking-widest mt-0.5">Alamat & Jarak</p>
+                        <div class="flex items-start gap-2 max-w-md bg-emerald-50/50 hover:bg-emerald-50 p-3 rounded-2xl border border-emerald-100/50 transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-emerald-700 mt-0.5 shrink-0">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 115 0z" />
+                            </svg>
+                            <div class="flex flex-col">
+                                <span class="text-[9px] font-bold text-emerald-800 uppercase tracking-wider mb-0.5">Alamat Lokasi Penjualan</span>
+                                <a href="https://maps.app.goo.gl/HBUQsD1jCrT7zENd7" target="_blank" rel="noopener noreferrer" class="text-[12px] font-bold text-emerald-950 hover:text-emerald-700 transition-colors duration-200 leading-tight decoration-emerald-700/30 hover:underline">
+                                    Jl. Karyawan 1 No.71, Karang Tengah, Banten, Kota Tangerang - 15157
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -481,7 +528,7 @@
                         </h2>
                         
                         <div class="space-y-2.5 mb-4 max-h-[180px] overflow-y-auto pr-1 custom-scrollbar">
-                            @foreach(session('cart', []) as $item)
+                            @foreach(session('checkout_items', []) as $item)
                             @php
                                 $book = \App\Models\Book::find($item['id']);
                                 $stock = $book ? $book->stock : 0;

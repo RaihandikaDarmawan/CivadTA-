@@ -24,41 +24,64 @@
                             let html = '';
                             data.messages.forEach(msg => {
                                 const isMe = msg.sender_type === 'admin';
-                                let contentHtml = '';
+                                const bubbles = [];
+                                
                                 if (msg.message) {
-                                    contentHtml += `<p class="text-[14px] font-bold leading-relaxed whitespace-pre-wrap">${escapeHtml(msg.message)}</p>`;
+                                    bubbles.push({
+                                        type: 'text',
+                                        html: `<p class="text-[14px] font-bold leading-relaxed whitespace-pre-wrap">${escapeHtml(msg.message)}</p>`
+                                    });
                                 }
+                                
                                 if (msg.image) {
-                                    contentHtml += `
-                                        <div class="mt-2 rounded-xl overflow-hidden max-w-xs border border-emerald-900/10 shadow-sm cursor-zoom-in" onclick="window.open('${msg.image}', '_blank')">
-                                            <img src="${msg.image}" alt="Chat Image" class="w-full max-h-60 object-cover hover:scale-[1.02] transition-transform">
-                                        </div>
-                                    `;
+                                    bubbles.push({
+                                        type: 'image',
+                                        html: `
+                                            <div class="rounded-xl overflow-hidden max-w-xs cursor-zoom-in" onclick="window.open('${msg.image}', '_blank')">
+                                                <img src="${msg.image}" alt="Chat Image" class="w-full max-h-60 object-cover hover:scale-[1.02] transition-transform">
+                                            </div>
+                                        `
+                                    });
                                 }
 
-                                if (isMe) {
-                                    html += `
-                                        <div class="flex justify-end mb-4 animate-in fade-in slide-in-from-right-4 duration-300">
-                                            <div class="max-w-[70%]">
-                                                <div class="bg-emerald-950 text-white rounded-[24px] rounded-tr-none px-6 py-4 shadow-md">
-                                                    ${contentHtml}
+                                bubbles.forEach((bubble, idx) => {
+                                    const isLast = idx === bubbles.length - 1;
+                                    const marginBottom = isLast ? 'mb-4' : 'mb-1.5';
+                                    
+                                    if (isMe) {
+                                        const paddingClass = bubble.type === 'image' 
+                                            ? 'p-1.5 bg-emerald-950 text-white rounded-[20px] border border-emerald-900/10' 
+                                            : 'bg-emerald-950 text-white rounded-[24px] px-6 py-4';
+                                        const roundClass = isLast ? 'rounded-tr-none' : '';
+                                        
+                                        html += `
+                                            <div class="flex justify-end ${marginBottom} animate-in fade-in slide-in-from-right-4 duration-300">
+                                                <div class="max-w-[70%] flex flex-col items-end">
+                                                    <div class="${paddingClass} ${roundClass} shadow-md">
+                                                        ${bubble.html}
+                                                    </div>
+                                                    ${isLast ? `<p class="text-[10px] text-emerald-900/40 font-bold uppercase tracking-widest text-right mt-1.5">${msg.time}</p>` : ''}
                                                 </div>
-                                                <p class="text-[10px] text-emerald-900/40 font-bold uppercase tracking-widest text-right mt-1.5">${msg.time}</p>
                                             </div>
-                                        </div>
-                                    `;
-                                } else {
-                                    html += `
-                                        <div class="flex justify-start mb-4 animate-in fade-in slide-in-from-left-4 duration-300">
-                                            <div class="max-w-[70%]">
-                                                <div class="bg-white border border-emerald-100 text-emerald-950 rounded-[24px] rounded-tl-none px-6 py-4 shadow-sm">
-                                                    ${contentHtml}
+                                        `;
+                                    } else {
+                                        const paddingClass = bubble.type === 'image' 
+                                            ? 'p-1.5 bg-white border border-emerald-100 text-emerald-955 rounded-[20px]' 
+                                            : 'bg-white border border-emerald-100 text-emerald-955 rounded-[24px] px-6 py-4';
+                                        const roundClass = isLast ? 'rounded-tl-none' : '';
+                                        
+                                        html += `
+                                            <div class="flex justify-start ${marginBottom} animate-in fade-in slide-in-from-left-4 duration-300">
+                                                <div class="max-w-[70%] flex flex-col items-start">
+                                                    <div class="${paddingClass} ${roundClass} shadow-sm">
+                                                        ${bubble.html}
+                                                    </div>
+                                                    ${isLast ? `<p class="text-[10px] text-emerald-900/40 font-bold uppercase tracking-widest text-left mt-1.5">${msg.time} • Pelanggan</p>` : ''}
                                                 </div>
-                                                <p class="text-[10px] text-emerald-900/40 font-bold uppercase tracking-widest text-left mt-1.5">${msg.time} • Pelanggan</p>
                                             </div>
-                                        </div>
-                                    `;
-                                }
+                                        `;
+                                    }
+                                });
                             });
                             
                             chatMessages.innerHTML = html;

@@ -50,7 +50,8 @@ class OrderController extends Controller
         if ($request->input('status') === 'Selesai' && !$order->points_awarded) {
             $user = $order->user;
             if ($user) {
-                $pointsEarned = floor($order->total_amount / 10000);
+                $subtotal = $order->items->sum(fn($item) => $item->price * $item->quantity);
+                $pointsEarned = floor($subtotal / 10000);
                 $user->increment('points', $pointsEarned);
                 $order->points_awarded = true;
             }

@@ -17,7 +17,7 @@
             document.getElementById('modal-customer-address').innerText = order.address || '-';
             document.getElementById('modal-tracking-link-input').value = order.tracking_link || '';
             document.getElementById('modal-chat-btn').href = '/admin/chat/' + order.id;
-            if (order.status === 'Selesai') {
+            if (order.status === 'Selesai' || order.status === 'Dibatalkan' || order.status === 'Dikembalikan') {
                 document.getElementById('modal-chat-btn').classList.add('hidden');
             } else {
                 document.getElementById('modal-chat-btn').classList.remove('hidden');
@@ -312,11 +312,11 @@
                                 @if(strtolower($order->status) !== 'pengajuan pending')
                                     <button onclick='openDetailModal(@json($order), {{ $unreadChatCount }})' class="px-6 py-3.5 bg-emerald-950 text-white font-black text-[13px] rounded-2xl shadow-xl hover:bg-emerald-900 transition-all active:scale-95 flex items-center gap-2 uppercase tracking-tighter shrink-0">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-9.75 0h9.75" /></svg>
-                                        {{ in_array($order->status, ['Selesai', 'Dikembalikan', 'Pengembalian Ditolak']) ? 'Detail' : 'Kelola' }}
+                                        {{ in_array($order->status, ['Selesai', 'Dikembalikan', 'Pengembalian Ditolak', 'Dibatalkan']) ? 'Detail' : 'Kelola' }}
                                     </button>
                                 @endif
                                 
-                                @if($order->status !== 'Selesai')
+                                @if($order->status !== 'Selesai' && $order->status !== 'Dibatalkan' && $order->status !== 'Dikembalikan')
                                     <a href="{{ route('admin.chat', $order->id) }}" class="px-6 py-3.5 bg-white text-emerald-950 border-2 border-emerald-950 font-black text-[13px] rounded-2xl shadow-xl hover:bg-emerald-50 transition-all active:scale-95 flex items-center gap-2 uppercase tracking-tighter relative shrink-0">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4.5 h-4.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 0 1-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z" /></svg>
                                         <span>Chat</span>

@@ -83,11 +83,11 @@
                     </div>
                     <div class="text-center md:text-left">
                         <p class="text-[10px] font-black text-emerald-800/40 uppercase tracking-[0.3em] mb-2">Email Aktif</p>
-                        <p class="text-[18px] font-bold text-emerald-900">{{ $user->email }}</p>
+                        <p class="text-[18px] font-bold text-emerald-900 break-all">{{ $user->email }}</p>
                     </div>
                     <div class="text-center md:text-left">
                         <p class="text-[10px] font-black text-emerald-800/40 uppercase tracking-[0.3em] mb-2">Nomor Telepon</p>
-                        <p class="text-[18px] font-bold text-emerald-900">{{ $user->phone ?? '-' }}</p>
+                        <p class="text-[18px] font-bold text-emerald-900 break-all">{{ $user->phone ?? '-' }}</p>
                     </div>
                     <div class="sm:col-span-2 text-center md:text-left">
                         <p class="text-[10px] font-black text-emerald-800/40 uppercase tracking-[0.3em] mb-2">Alamat Pengiriman</p>

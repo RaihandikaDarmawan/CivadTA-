@@ -148,7 +148,7 @@
                     </div>
                     <div class="flex flex-col">
                         <span class="text-white font-black text-lg sm:text-xl tracking-tighter leading-none">CIVAD</span>
-                        <span class="text-white/60 font-medium text-[9px] sm:text-[10px] tracking-normal mt-0.5">CV. Arya Duta Tangerang</span>
+                        <span class="text-white/60 font-medium text-[9px] sm:text-[10px] tracking-normal mt-0.5">CV. Arya Duta cabang Tangerang</span>
                     </div>
                 </a>
             </div>

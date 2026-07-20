@@ -28,7 +28,14 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|min:3|max:255',
             'username' => 'required|string|min:3|max:255|unique:pelanggan',
-            'email' => 'required|string|email|max:255|unique:pelanggan',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                'unique:pelanggan',
+                'regex:/^[^@]+@[^@]+\.[^@]+$/'
+            ],
             'password' => [
                 'required',
                 'string',
@@ -39,6 +46,8 @@ class AuthController extends Controller
                     ->numbers(),
             ],
         ], [
+            'email.email' => 'The email must be a valid email address.',
+            'email.regex' => 'The email must be a valid email address.',
             'password.confirmed' => 'Konfirmasi kolom kata sandi tidak sesuai.',
             'password.min' => 'Kata sandi minimal harus 8 karakter.',
             'password.letters' => 'Kata sandi harus mengandung setidaknya satu huruf.',

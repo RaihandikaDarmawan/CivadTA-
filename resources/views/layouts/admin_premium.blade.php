@@ -123,7 +123,7 @@
                 </div>
                 <div class="flex flex-col min-w-0">
                     <h1 class="font-black text-lg text-white leading-tight tracking-tighter">CIVAD</h1>
-                    <span class="text-white/60 font-medium text-[10px] tracking-normal mt-0.5 truncate">CV. Arya Duta Tangerang</span>
+                    <span class="text-white/60 font-medium text-[10px] tracking-normal mt-0.5 truncate">CV. Arya Duta cabang Tangerang</span>
                 </div>
             </div>
         </div>
@@ -287,6 +287,37 @@
                     <p class="text-[10px] uppercase tracking-[0.3em] text-white font-black mb-1">System Notification</p>
                     <p class="text-white font-bold text-lg leading-tight">{{ session('success') }}</p>
                 </div>
+            </div>
+            @endif
+
+            @if(session('error'))
+            <div class="mb-10 p-6 bg-rose-950 rounded-[32px] flex items-center gap-6 shadow-2xl border border-rose-800/30 animate-in fade-in zoom-in-95 duration-500">
+                <div class="w-14 h-14 rounded-2xl bg-rose-500 text-white flex items-center justify-center shadow-lg shadow-rose-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-7 h-7"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-[0.3em] text-white font-black mb-1">Error Notification</p>
+                    <p class="text-white font-bold text-lg leading-tight">{{ session('error') }}</p>
+                </div>
+            </div>
+            @endif
+
+            @if($errors->any())
+            <div class="mb-10 p-6 bg-rose-950 rounded-[32px] shadow-2xl border border-rose-800/30 animate-in fade-in zoom-in-95 duration-500">
+                <div class="flex items-center gap-6 mb-4">
+                    <div class="w-14 h-14 rounded-2xl bg-rose-500 text-white flex items-center justify-center shadow-lg shadow-rose-500/30">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-7 h-7"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>
+                    </div>
+                    <div>
+                        <p class="text-[10px] uppercase tracking-[0.3em] text-white font-black mb-1">Validation Errors</p>
+                        <p class="text-white font-bold text-lg leading-tight">Ada kesalahan pada data yang Anda masukkan:</p>
+                    </div>
+                </div>
+                <ul class="list-disc list-inside text-rose-200 font-medium text-[14px] space-y-1 ml-20">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
             @endif
 

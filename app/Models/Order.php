@@ -63,7 +63,8 @@ class Order extends Model
                 if (!$o->points_awarded) {
                     $user = $o->user;
                     if ($user) {
-                        $pointsEarned = floor($o->total_amount / 10000);
+                        $subtotal = $o->items->sum(fn($item) => $item->price * $item->quantity);
+                        $pointsEarned = floor($subtotal / 10000);
                         $user->increment('points', $pointsEarned);
                         $o->points_awarded = true;
                     }

@@ -28,6 +28,16 @@
             document.getElementById('modal-review-order-number').innerText = '#' + orderNumber;
             setRating(5); // Default to 5 stars
             document.getElementById('comment-input').value = '';
+            
+            // Clear any error states
+            const commentInput = document.getElementById('comment-input');
+            const commentError = document.getElementById('comment-error');
+            if (commentError) {
+                commentError.classList.add('hidden');
+                commentInput.classList.remove('border-rose-500', 'focus:border-rose-500');
+                commentInput.classList.add('border-emerald-50/50', 'border-emerald-950/10', 'focus:border-emerald-950');
+            }
+            
             document.getElementById('reviewModal').classList.remove('hidden');
             document.getElementById('reviewModal').classList.add('flex');
             document.body.style.overflow = 'hidden';
@@ -52,10 +62,52 @@
                 }
             }
         }
+
+        function validateReviewForm() {
+            const commentInput = document.getElementById('comment-input');
+            const commentError = document.getElementById('comment-error');
+            const comment = commentInput.value.trim();
+            
+            if (comment.length < 5) {
+                commentError.classList.remove('hidden');
+                commentInput.classList.add('border-rose-500', 'focus:border-rose-500');
+                commentInput.classList.remove('border-emerald-50/50', 'border-emerald-950/10', 'focus:border-emerald-950');
+                return false;
+            }
+            return true;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const commentInput = document.getElementById('comment-input');
+            if (commentInput) {
+                commentInput.addEventListener('input', () => {
+                    const commentError = document.getElementById('comment-error');
+                    const comment = commentInput.value.trim();
+                    if (comment.length >= 5) {
+                        commentError.classList.add('hidden');
+                        commentInput.classList.remove('border-rose-500', 'focus:border-rose-500');
+                        commentInput.classList.add('border-emerald-50/50', 'border-emerald-950/10', 'focus:border-emerald-950');
+                    }
+                });
+            }
+        });
     </script>
 @endsection
 
 @section('content')
+    @if(session('error') || $errors->any())
+    <div class="mb-8 p-6 bg-red-50 border border-red-100 text-red-600 text-[13px] rounded-3xl font-bold animate-in fade-in slide-in-from-top-2">
+        <ul class="list-disc pl-5 space-y-1">
+            @if(session('error'))
+                <li>{{ session('error') }}</li>
+            @endif
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
     <div class="mb-12 text-center md:text-left">
         <h1 class="text-[32px] md:text-[48px] font-black text-emerald-950 tracking-tighter mb-3 leading-none">Riwayat Transaksi</h1>
     </div>
@@ -129,27 +181,27 @@
                     </p>
                 </div>
                 
-                <div class="flex flex-col sm:flex-row items-stretch gap-3 w-full sm:w-auto">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
                     @if($order->status == 'Dikirim' || $order->status == 'Sedang Dikirim' || $order->status == 'Pesanan Sedang Dikirim')
                         @if($order->returnRequest)
                             @php
                                 $retStatus = $order->returnRequest->status;
                                 $retColor = $retStatus === 'Pending' ? 'bg-amber-500' : ($retStatus === 'Disetujui' ? 'bg-emerald-600' : 'bg-rose-600');
                             @endphp
-                            <span class="px-5 py-4 {{ $retColor }} text-white text-[11px] font-black rounded-2xl uppercase tracking-widest text-center shadow-md whitespace-nowrap">
+                            <span class="px-4 py-3.5 {{ $retColor }} text-white text-[11px] font-black rounded-2xl uppercase tracking-widest text-center shadow-md whitespace-nowrap shrink-0">
                                 Retur: {{ $retStatus }}
                             </span>
                         @else
                             <form action="{{ route('pelanggan.pesanan.selesai') }}" method="POST" class="w-full sm:w-auto" onsubmit="return confirm('Sudah menerima pesanan ini? Pengembalian barang tidak dapat diajukan setelah pesanan diselesaikan.')">
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $order->id }}">
-                                <button type="submit" class="w-full px-6 py-4 bg-emerald-950 text-white rounded-2xl font-black text-[13px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-emerald-900 transition-all">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" /></svg>
+                                <button type="submit" class="w-full px-4 md:px-5 py-3.5 bg-emerald-950 text-white rounded-2xl font-black text-[11px] md:text-[12px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-emerald-900 transition-all whitespace-nowrap shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" /></svg>
                                     Diterima
                                 </button>
                             </form>
-                            <a href="{{ route('pelanggan.pengembalian.buat', ['order_id' => $order->id]) }}" class="w-full sm:w-auto px-6 py-4 bg-amber-500 text-white rounded-2xl font-black text-[13px] uppercase tracking-widest hover:bg-amber-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" /></svg>
+                            <a href="{{ route('pelanggan.pengembalian.buat', ['order_id' => $order->id]) }}" class="w-full sm:w-auto px-4 md:px-5 py-3.5 bg-amber-500 text-white rounded-2xl font-black text-[11px] md:text-[12px] uppercase tracking-widest hover:bg-amber-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 whitespace-nowrap shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" /></svg>
                                 Pengajuan Pengembalian
                             </a>
                         @endif
@@ -159,32 +211,32 @@
                                 $retStatus = $order->returnRequest->status;
                                 $retColor = $retStatus === 'Pending' ? 'bg-amber-500' : ($retStatus === 'Disetujui' ? 'bg-emerald-600' : 'bg-rose-600');
                             @endphp
-                            <span class="px-5 py-4 {{ $retColor }} text-white text-[11px] font-black rounded-2xl uppercase tracking-widest text-center shadow-md whitespace-nowrap">
+                            <span class="px-4 py-3.5 {{ $retColor }} text-white text-[11px] font-black rounded-2xl uppercase tracking-widest text-center shadow-md whitespace-nowrap shrink-0">
                                 Retur: {{ $retStatus }}
                             </span>
                         @endif
                     @endif
                     @if($order->status === 'Selesai')
                         @if(!$order->review)
-                            <button onclick="openReviewModal('{{ $order->id }}', '{{ $order->order_number }}')" class="w-full sm:w-auto px-5 py-3.5 bg-amber-500 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-amber-600 transition-all shadow-md shadow-amber-500/15 active:scale-95 text-center">
+                            <button onclick="openReviewModal('{{ $order->id }}', '{{ $order->order_number }}')" class="w-full sm:w-auto px-4 md:px-5 py-3.5 bg-amber-500 text-white rounded-2xl font-black text-[11px] md:text-[12px] uppercase tracking-widest hover:bg-amber-600 transition-all shadow-md shadow-amber-500/15 active:scale-95 text-center whitespace-nowrap shrink-0">
                                 Beri Ulasan
                             </button>
                         @endif
-                        <a href="{{ route('pelanggan.invoice.unduh', $order->id) }}" class="w-full sm:w-auto px-6 py-4 bg-emerald-950 text-white rounded-2xl font-black text-[13px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-emerald-900 transition-all shadow-lg shadow-emerald-950/20">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                        <a href="{{ route('pelanggan.invoice.unduh', $order->id) }}" class="w-full sm:w-auto px-4 md:px-5 py-3.5 bg-emerald-950 text-white rounded-2xl font-black text-[11px] md:text-[12px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-emerald-900 transition-all shadow-lg shadow-emerald-950/20 whitespace-nowrap shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
                             Invoice
                         </a>
                     @endif
 
-                    @if($order->status !== 'Selesai')
+                    @if($order->status !== 'Selesai' && $order->status !== 'Dibatalkan' && $order->status !== 'Dikembalikan')
                         @php
                             $unreadChatCount = \App\Models\OrderMessage::where('order_id', $order->id)
                                 ->where('sender_type', 'admin')
                                 ->where('is_read', false)
                                 ->count();
                         @endphp
-                        <a href="{{ route('pelanggan.chat', $order->id) }}" class="w-full sm:w-auto px-6 py-4 bg-white text-emerald-950 border-2 border-emerald-950 rounded-2xl font-black text-[13px] uppercase tracking-widest hover:bg-emerald-50 transition-all flex items-center justify-center gap-2 relative shadow-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 0 1-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z" /></svg>
+                        <a href="{{ route('pelanggan.chat', $order->id) }}" class="w-full sm:w-auto px-4 md:px-5 py-3.5 bg-white text-emerald-950 border-2 border-emerald-950 rounded-2xl font-black text-[11px] md:text-[12px] uppercase tracking-widest hover:bg-emerald-50 transition-all flex items-center justify-center gap-2 relative shadow-md whitespace-nowrap shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 0 1-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z" /></svg>
                             <span>Chat Admin</span>
                             @if($unreadChatCount > 0)
                                 <span class="absolute -top-2.5 -right-2.5 bg-rose-500 text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-white shadow-lg animate-bounce">
@@ -194,7 +246,7 @@
                         </a>
                     @endif
                     
-                    <button id="btn-{{ $order->id }}" onclick="toggleDetail('{{ $order->id }}')" class="w-full sm:w-auto px-6 py-4 bg-emerald-50 text-emerald-950 rounded-2xl font-black text-[13px] uppercase tracking-widest border border-emerald-100 flex items-center justify-center gap-3 group/btn">
+                    <button id="btn-{{ $order->id }}" onclick="toggleDetail('{{ $order->id }}')" class="w-full sm:w-auto px-4 md:px-5 py-3.5 bg-emerald-50 text-emerald-950 rounded-2xl font-black text-[11px] md:text-[12px] uppercase tracking-widest border border-emerald-100 flex items-center justify-center gap-3 group/btn whitespace-nowrap shrink-0">
                         <span>Rincian</span>
                         <svg id="btn-icon-{{ $order->id }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-y-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
                     </button>
@@ -325,7 +377,7 @@
             </div>
 
             <!-- Body -->
-            <form action="{{ route('pelanggan.ulasan.simpan') }}" method="POST" class="p-10 space-y-6">
+            <form action="{{ route('pelanggan.ulasan.simpan') }}" method="POST" class="p-10 space-y-6" onsubmit="return validateReviewForm()">
                 @csrf
                 <input type="hidden" name="order_id" id="modal-review-order-id">
 
@@ -347,7 +399,8 @@
                 <!-- Text Comment -->
                 <div class="space-y-2">
                     <label for="comment-input" class="block text-[13px] font-black text-emerald-950 uppercase tracking-widest ml-1">Komentar / Ulasan</label>
-                    <textarea name="comment" id="comment-input" rows="4" class="w-full bg-emerald-50/50 border border-emerald-950/10 focus:border-emerald-950 rounded-2xl p-4 text-[14px] font-bold text-emerald-950 focus:outline-none transition-all placeholder:text-emerald-950/25 resize-none" placeholder="Ceritakan pengalaman belanja Anda... (opsional)"></textarea>
+                    <textarea name="comment" id="comment-input" rows="4" class="w-full bg-emerald-50/50 border border-emerald-950/10 focus:border-emerald-950 rounded-2xl p-4 text-[14px] font-bold text-emerald-950 focus:outline-none transition-all placeholder:text-emerald-950/25 resize-none" placeholder="Ceritakan pengalaman belanja Anda..."></textarea>
+                    <p id="comment-error" class="text-rose-500 text-[11px] font-bold ml-1 hidden">komentar minimal terdiri dari 5 karakter.</p>
                 </div>
 
                 <!-- Action Button -->

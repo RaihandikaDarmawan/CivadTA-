@@ -258,7 +258,7 @@
                 </div>
                 <div class="company-details">
                     <h1 class="company-name">CIVAD</h1>
-                    <p class="company-tagline">CV. Arya Duta Tangerang</p>
+                    <p class="company-tagline">CV. Arya Duta cabang Tangerang</p>
                 </div>
             </td>
             <td class="header-invoice-td">

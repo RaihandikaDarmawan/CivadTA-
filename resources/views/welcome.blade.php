@@ -77,7 +77,7 @@
                 </div>
                 <div class="flex flex-col">
                     <span class="text-white font-black text-xl tracking-tighter leading-none">CIVAD</span>
-                    <span class="text-white/60 font-medium text-[10px] tracking-normal mt-0.5">CV. Arya Duta Tangerang</span>
+                    <span class="text-white/60 font-medium text-[10px] tracking-normal mt-0.5">CV. Arya Duta cabang Tangerang</span>
                 </div>
             </div>
             
@@ -118,7 +118,7 @@
                     Yuk Belanja Sekarang
                 </div>
                 <h1 class="text-3xl md:text-6xl lg:text-8xl font-black text-emerald-950 leading-[0.9] tracking-tighter mb-8">
-                    Mencerdaskan Generasi Bangsa.
+                    Mencerdaskan Generasi Bangsa
                 </h1>
 
                 <div class="flex flex-wrap items-center gap-6 justify-center lg:justify-start">
@@ -340,7 +340,7 @@
                     </div>
                     <h3 class="font-black text-emerald-950 mb-10 tracking-tight uppercase tracking-[0.3em] text-[16px]">Jangkauan Pengiriman</h3>
 
-                    <p class="text-[16px] font-medium text-emerald-950/60 mb-8">Siap melayani pengiriman untuk wilayah:</p>
+                    <p class="text-[16px] font-medium text-emerald-950/60 mb-8">Siap melayani pengiriman kilat untuk wilayah:</p>
 
                     <div class="flex flex-wrap gap-4 mb-10">
                         <span class="bg-emerald-950 text-white px-8 py-3 rounded-2xl text-[14px] font-black shadow-xl">Jakarta</span>
@@ -348,9 +348,51 @@
                         <span class="bg-emerald-950 text-white px-8 py-3 rounded-2xl text-[14px] font-black shadow-xl">Bekasi</span>
                     </div>
 
-                    <div class="bg-emerald-50 p-8 rounded-[36px] border-2 border-dashed border-emerald-200 group-hover:border-emerald-950 transition-colors duration-500">
-                        <p class="text-[11px] font-black text-emerald-900/40 uppercase tracking-widest mb-2">Biaya Pengiriman</p>
-                        <p class="text-[28px] font-black text-emerald-950 tracking-tight">Rp 2.800 <span class="text-[14px] font-bold text-emerald-950">/ KM</span></p>
+                    <div class="space-y-6">
+                        <!-- Gojek Same Day -->
+                        <div class="bg-emerald-50 p-6 rounded-[28px] border border-emerald-100 hover:border-emerald-950 transition-all duration-300">
+                            <div class="flex items-center gap-3 mb-4">
+                                <h4 class="text-[15px] font-black text-emerald-950 uppercase tracking-wider">Gojek Same Day</h4>
+                            </div>
+                            <ul class="space-y-2 text-[13px] font-bold text-emerald-950/70">
+                                <li class="flex justify-between items-center bg-white/50 px-4 py-2 rounded-xl">
+                                    <span>Jarak 0 – 3 km</span>
+                                    <span class="font-black text-emerald-950">Rp 12.000</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-white/50 px-4 py-2 rounded-xl">
+                                    <span>Jarak 3.01 – 15 km</span>
+                                    <span class="font-black text-emerald-950">Rp 18.000</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-white/50 px-4 py-2 rounded-xl">
+                                    <span>Jarak > 15 km</span>
+                                    <span class="font-black text-emerald-950">Rp 1.200 / km</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Gojek Instant -->
+                        <div class="bg-emerald-50 p-6 rounded-[28px] border border-emerald-100 hover:border-emerald-950 transition-all duration-300">
+                            <div class="flex items-center gap-3 mb-4">
+                                <h4 class="text-[15px] font-black text-emerald-950 uppercase tracking-wider">Gojek Instant</h4>
+                            </div>
+                            <ul class="space-y-2 text-[13px] font-bold text-emerald-950/70">
+                                <li class="bg-white/50 px-4 py-2.5 rounded-xl mb-2 text-center text-emerald-950 font-black">
+                                    Rp20.000 (8 km pertama) + Rp2.500/ km berikutnya
+                                </li>
+                                <li class="flex justify-between items-center bg-white/50 px-4 py-2 rounded-xl">
+                                    <span>Jarak 0 – 20 km</span>
+                                    <span class="font-black text-emerald-950">Rp 2.500 / km</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-white/50 px-4 py-2 rounded-xl">
+                                    <span>Jarak 20.01 – 40 km</span>
+                                    <span class="font-black text-emerald-950">Rp 3.000 / km</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-white/50 px-4 py-2 rounded-xl text-rose-700 bg-rose-50/50">
+                                    <span>Tarif Minimal</span>
+                                    <span class="font-black">Rp 20.000</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -416,7 +458,7 @@
                         </div>
                         <div class="flex flex-col">
                             <span class="text-3xl font-black tracking-tighter leading-none">CIVAD</span>
-                            <span class="text-emerald-100/60 font-medium text-xs tracking-normal mt-1">CV. Arya Duta Tangerang</span>
+                            <span class="text-emerald-100/60 font-medium text-xs tracking-normal mt-1">CV. Arya Duta cabang Tangerang</span>
                         </div>
                     </div>
                     <p class="text-emerald-100/60 max-w-sm leading-relaxed font-medium">

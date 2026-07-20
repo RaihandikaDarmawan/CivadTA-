@@ -130,10 +130,12 @@
                                     </span>
                                     
                                     <!-- Form Tambah Point -->
-                                    <form action="{{ route('admin.user.update-points') }}" method="POST" class="flex items-center gap-1.5 mt-1">
+                                    <form action="{{ route('admin.user.update-points') }}" method="POST" class="flex items-center gap-1.5 mt-1" onsubmit="return validatePointsForm(this)">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $customer->id }}">
                                         <input type="number" name="points" placeholder="+ Poin" required min="1"
+                                               oninvalid="if (this.validity.valueMissing || this.value === '0') { this.setCustomValidity('kolom tambah poin wajib diisi minimal 1.'); } else { this.setCustomValidity('jumlah poin harus berupa angka positif.'); }"
+                                               oninput="this.setCustomValidity('')"
                                                class="w-16 bg-emerald-50/50 border-2 border-emerald-950 rounded-lg px-1.5 py-1 text-[11px] font-bold text-emerald-950 focus:outline-none text-center placeholder:text-emerald-950/40">
                                         <button type="submit" class="bg-emerald-950 text-white w-6 h-6 flex items-center justify-center rounded-lg text-[12px] font-black hover:bg-emerald-900 transition-all shadow-sm shrink-0" title="Tambah Poin">
                                             +
@@ -186,6 +188,21 @@
     function closeDeleteModal() {
         document.getElementById('modal-delete-user').classList.add('hidden');
         document.body.style.overflow = 'auto';
+    }
+    function validatePointsForm(form) {
+        const pointsInput = form.querySelector('input[name="points"]');
+        const val = pointsInput.value.trim();
+        if (val === '' || val === '0') {
+            alert('kolom tambah poin wajib diisi minimal 1.');
+            pointsInput.focus();
+            return false;
+        }
+        if (val.includes('-') || val.includes('.') || parseInt(val) <= 0 || isNaN(parseInt(val))) {
+            alert('jumlah poin harus berupa angka positif.');
+            pointsInput.focus();
+            return false;
+        }
+        return true;
     }
 </script>
 @endsection

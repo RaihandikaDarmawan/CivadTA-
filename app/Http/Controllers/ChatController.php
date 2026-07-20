@@ -17,8 +17,8 @@ class ChatController extends Controller
         if (session('role') !== 'pelanggan') return redirect('/')->with('error', 'Akses ditolak!');
         $order = Order::where('id', $order_id)->where('user_id', Auth::id())->firstOrFail();
         
-        if ($order->status === 'Selesai') {
-            return redirect('/pelanggan/riwayat')->with('error', 'Chat tidak tersedia untuk pesanan yang telah selesai.');
+        if ($order->status === 'Selesai' || $order->status === 'Dibatalkan' || $order->status === 'Dikembalikan') {
+            return redirect('/pelanggan/riwayat')->with('error', 'Chat tidak tersedia untuk pesanan yang telah selesai, dibatalkan, atau dikembalikan.');
         }
         
         // Mark all admin messages for this order as read
@@ -34,8 +34,8 @@ class ChatController extends Controller
         if (session('role') !== 'pelanggan') return response()->json(['error' => 'Akses ditolak!'], 403);
         $order = Order::where('id', $order_id)->where('user_id', Auth::id())->firstOrFail();
         
-        if ($order->status === 'Selesai') {
-            return response()->json(['error' => 'Chat tidak tersedia untuk pesanan yang telah selesai.'], 403);
+        if ($order->status === 'Selesai' || $order->status === 'Dibatalkan' || $order->status === 'Dikembalikan') {
+            return response()->json(['error' => 'Chat tidak tersedia untuk pesanan yang telah selesai, dibatalkan, atau dikembalikan.'], 403);
         }
         
         $request->validate([
@@ -79,8 +79,8 @@ class ChatController extends Controller
         if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses ditolak!');
         $order = Order::findOrFail($order_id);
 
-        if ($order->status === 'Selesai') {
-            return redirect('/admin/manajemen-pesanan')->with('error', 'Chat tidak tersedia untuk pesanan yang telah selesai.');
+        if ($order->status === 'Selesai' || $order->status === 'Dibatalkan' || $order->status === 'Dikembalikan') {
+            return redirect('/admin/manajemen-pesanan')->with('error', 'Chat tidak tersedia untuk pesanan yang telah selesai, dibatalkan, atau dikembalikan.');
         }
 
         // Mark all customer messages for this order as read
@@ -96,8 +96,8 @@ class ChatController extends Controller
         if (session('role') !== 'admin') return response()->json(['error' => 'Akses ditolak!'], 403);
         $order = Order::findOrFail($order_id);
         
-        if ($order->status === 'Selesai') {
-            return response()->json(['error' => 'Chat tidak tersedia untuk pesanan yang telah selesai.'], 403);
+        if ($order->status === 'Selesai' || $order->status === 'Dibatalkan' || $order->status === 'Dikembalikan') {
+            return response()->json(['error' => 'Chat tidak tersedia untuk pesanan yang telah selesai, dibatalkan, atau dikembalikan.'], 403);
         }
         
         $request->validate([
@@ -145,8 +145,8 @@ class ChatController extends Controller
             $order = Order::where('id', $order_id)->where('user_id', Auth::id())->first();
             if (!$order) return response()->json(['error' => 'Akses ditolak!'], 403);
             
-            if ($order->status === 'Selesai') {
-                return response()->json(['error' => 'Chat tidak tersedia untuk pesanan yang telah selesai.'], 403);
+            if ($order->status === 'Selesai' || $order->status === 'Dibatalkan' || $order->status === 'Dikembalikan') {
+                return response()->json(['error' => 'Chat tidak tersedia untuk pesanan yang telah selesai, dibatalkan, atau dikembalikan.'], 403);
             }
             
             // Mark all admin messages for this order as read
@@ -158,8 +158,8 @@ class ChatController extends Controller
             $order = Order::find($order_id);
             if (!$order) return response()->json(['error' => 'Not Found'], 404);
 
-            if ($order->status === 'Selesai') {
-                return response()->json(['error' => 'Chat tidak tersedia untuk pesanan yang telah selesai.'], 403);
+            if ($order->status === 'Selesai' || $order->status === 'Dibatalkan' || $order->status === 'Dikembalikan') {
+                return response()->json(['error' => 'Chat tidak tersedia untuk pesanan yang telah selesai, dibatalkan, atau dikembalikan.'], 403);
             }
 
             // Mark all customer messages for this order as read

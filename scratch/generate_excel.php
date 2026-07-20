@@ -357,7 +357,7 @@ $xml = '<?xml version="1.0"?>
    <Column ss:Width="300"/>
    <Column ss:Width="70"/>
    <Row ss:Height="25">
-    <Cell ss:MergeAcross="9" ss:StyleID="Title"><Data ss:Type="String">Tabel Pengujian Black Box - CivadTA (CV Arya Duta Tangerang)</Data></Cell>
+    <Cell ss:MergeAcross="9" ss:StyleID="Title"><Data ss:Type="String">Tabel Pengujian Black Box - CivadTA (CV. Arya Duta cabang Tangerang)</Data></Cell>
    </Row>
    <Row ss:Height="10">
     <!-- Empty row for spacing -->
